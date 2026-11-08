@@ -491,6 +491,7 @@
     overflow-wrap: anywhere;
   }
   .project__link--private { color: var(--muted); }
+  .project__link--portfolio { margin-top: 1.2mm; color: var(--gold); }
   .project__body p {
     margin-bottom: 2mm;
     font-size: 8.2pt;
@@ -834,7 +835,8 @@
         <div class="kicker kicker--gold">01 · Computer vision</div>
         <h3>Highway Lane Occupancy &amp; Hogging Detection</h3>
         <p class="scope">Single-camera prototype · prerecorded video · CPU-first · six calibrated lanes</p>
-        <a class="project__link" href="https://github.com/ibrahim119920/highway-lane-analytics">github.com/ibrahim119920/highway-lane-analytics</a>
+        <a class="project__link" href="https://github.com/ibrahim119920/highway-lane-analytics">github.com/ibrahim119920/highway-lane-analytics</a><br>
+        <a class="project__link project__link--portfolio" href="https://michiportfolio.vercel.app/projects/highway-lane-occupancy">Portfolio page · michiportfolio.vercel.app</a>
       </div>
       <div class="project__body">
         <p>Maps highway CCTV vehicles to six normalized lane polygons with YOLO11n and ByteTrack, then emits typed lane events and rule-based lane-hogging indications with snapshot and eight-second clip evidence.</p>
@@ -860,7 +862,8 @@
         <div class="kicker kicker--gold">02 · Streaming data</div>
         <h3>Highway Lane Analytics — Data Pipeline &amp; Dashboard</h3>
         <p class="scope">FastAPI receiver · Kafka · DuckDB / Parquet medallion · Streamlit · local prototype</p>
-        <span class="project__link project__link--private">highway-lane-analytics-data-pipeline · private repository</span>
+        <span class="project__link project__link--private">highway-lane-analytics-data-pipeline · private repository</span><br>
+        <a class="project__link project__link--portfolio" href="https://michiportfolio.vercel.app/projects/highway-lane-occupancy">Portfolio page · highway case study</a>
       </div>
       <div class="project__body">
         <p>A replay-fed data platform that receives the vision project's event batches, validates and de-duplicates them, publishes to Kafka, and builds bronze, silver, and gold layers for a four-page Streamlit dashboard.</p>
@@ -907,7 +910,8 @@
         <div class="kicker kicker--gold">03 · Lakehouse</div>
         <h3>NYC Mobility Lakehouse</h3>
         <p class="scope">Databricks Free Edition · NYC TLC Yellow Taxi · Jan–Sep 2024 · Bronze–Silver–Gold</p>
-        <a class="project__link" href="https://github.com/ibrahim119920/nyc-mobility-lakehouse">github.com/ibrahim119920/nyc-mobility-lakehouse</a>
+        <a class="project__link" href="https://github.com/ibrahim119920/nyc-mobility-lakehouse">github.com/ibrahim119920/nyc-mobility-lakehouse</a><br>
+        <a class="project__link project__link--portfolio" href="https://michiportfolio.vercel.app/projects/nyc-mobility-lakehouse">Portfolio page · michiportfolio.vercel.app</a>
       </div>
       <div class="project__body">
         <p>An idempotent Bronze → Silver → Gold batch pipeline for 30,020,554 NYC TLC Yellow Taxi trips across nine months, built with PySpark, SQL, and Delta Lake.</p>
@@ -933,7 +937,8 @@
         <div class="kicker kicker--gold">04 · Data platform</div>
         <h3>NusaCommerce Data Platform</h3>
         <p class="scope">Architecture and incremental ingestion · synthetic e-commerce data · local runner</p>
-        <a class="project__link" href="https://github.com/ibrahim119920/nusacommerce-data-platform">github.com/ibrahim119920/nusacommerce-data-platform</a>
+        <a class="project__link" href="https://github.com/ibrahim119920/nusacommerce-data-platform">github.com/ibrahim119920/nusacommerce-data-platform</a><br>
+        <a class="project__link project__link--portfolio" href="https://michiportfolio.vercel.app/projects/nusacommerce-data-platform">Portfolio page · michiportfolio.vercel.app</a>
       </div>
       <div class="project__body">
         <p>Designed a data platform for NusaCommerce: PostgreSQL read replica and Payment REST API sources, a Bronze → Silver → Gold → marts → dashboard flow, quality contracts, and freshness SLOs.</p>
@@ -980,7 +985,8 @@
         <div class="kicker kicker--green">01 · Local-first prototype</div>
         <h3>Photobooth — Local-First Kiosk Prototype</h3>
         <p class="scope">Next.js · SQLite · C++ camera bridge · single device, single active session</p>
-        <span class="project__link project__link--private">Private repository</span>
+        <span class="project__link project__link--private">Private repository</span><br>
+        <a class="project__link project__link--portfolio" href="https://michiportfolio.vercel.app/projects/photobooth">Portfolio page · michiportfolio.vercel.app</a>
       </div>
       <div class="project__body">
         <p>A kiosk prototype where Next.js serves the UI and local backend, SQLite and a local folder are the operational source of truth, and a Local Camera Service is the integration boundary to a USB mirrorless camera.</p>
@@ -1009,7 +1015,8 @@
         <div class="kicker kicker--green">02 · Team backend</div>
         <h3>Rekberin — Transaction and Payment Contributions</h3>
         <p class="scope">Public team repository · individual contributions via PRs #28, #38, #44</p>
-        <a class="project__link" href="https://github.com/aufaanggara/rekberin">github.com/aufaanggara/rekberin</a>
+        <a class="project__link" href="https://github.com/aufaanggara/rekberin">github.com/aufaanggara/rekberin</a><br>
+        <a class="project__link project__link--portfolio" href="https://michiportfolio.vercel.app/projects/rekberin">Portfolio page · michiportfolio.vercel.app</a>
       </div>
       <div class="project__body">
         <p>Contributed persisted transaction APIs and payment integration to a game-account marketplace with negotiation, QRIS payment, and a handover flow.</p>
@@ -1067,7 +1074,8 @@
         <div class="chips">
           <span>JavaScript</span><span>Express</span><span>MongoDB</span><span>Mongoose</span><span>Newman</span>
         </div>
-        <a class="project__link" href="https://github.com/ibrahim119920/web-thrift-store">github.com/ibrahim119920/web-thrift-store</a>
+        <a class="project__link" href="https://github.com/ibrahim119920/web-thrift-store">github.com/ibrahim119920/web-thrift-store</a><br>
+        <a class="project__link project__link--portfolio" href="https://michiportfolio.vercel.app/projects/wanttosell">Portfolio page · michiportfolio.vercel.app</a>
       </article>
 
       <article class="minor-card">
@@ -1082,7 +1090,8 @@
         <div class="chips">
           <span>CatBoost</span><span>XGBoost</span><span>PyTorch</span><span>Pandas</span><span>Time series</span>
         </div>
-        <a class="project__link" href="https://github.com/ibrahim119920/TMA-CatBoostRegressor">github.com/ibrahim119920/TMA-CatBoostRegressor</a>
+        <a class="project__link" href="https://github.com/ibrahim119920/TMA-CatBoostRegressor">github.com/ibrahim119920/TMA-CatBoostRegressor</a><br>
+        <a class="project__link project__link--portfolio" href="https://michiportfolio.vercel.app/projects/river-water-level-modeling">Portfolio page · michiportfolio.vercel.app</a>
       </article>
 
       <article class="minor-card">

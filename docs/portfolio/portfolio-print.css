@@ -483,6 +483,7 @@
     overflow-wrap: anywhere;
   }
   .project__link--private { color: var(--muted); }
+  .project__link--portfolio { margin-top: 1.2mm; color: var(--gold); }
   .project__body p {
     margin-bottom: 2mm;
     font-size: 8.2pt;
