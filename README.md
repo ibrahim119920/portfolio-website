@@ -15,6 +15,10 @@ npm run dev
 
 Create a production build with `npm run build`, or serve the built files locally with `npm run preview`.
 
+## Portfolio PDF
+
+A six-page A4 project portfolio is available at `Ahmad-Maulana-Ibrahim-Portfolio.pdf`. Its print source and regeneration instructions are in `docs/portfolio/`.
+
 ## Routes
 
 Every window has a shareable URL. Navigation is handled client-side with the History API, so moving between views never reloads the document, and browser back/forward works.

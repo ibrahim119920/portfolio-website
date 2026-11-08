@@ -1,0 +1,1128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Ahmad Maulana Ibrahim — Selected Project Portfolio</title>
+<meta name="author" content="Ahmad Maulana Ibrahim">
+<meta name="description" content="Selected project portfolio: data engineering, backend systems, and computer vision.">
+<style>
+  @page { size: A4; margin: 0; }
+
+  :root {
+    --ink: #182019;
+    --ink-soft: #4c574e;
+    --muted: #7b857c;
+    --paper: #f3f1e9;
+    --paper-2: #e8e7de;
+    --paper-3: #ddded4;
+    --gold: #b18a3e;
+    --gold-soft: #e3cf9b;
+    --green: #5f7d68;
+    --green-soft: #c7d7cb;
+    --blue: #7288a6;
+    --violet: #8779ad;
+    --line: rgba(24, 32, 25, 0.15);
+    --line-soft: rgba(24, 32, 25, 0.08);
+    --serif: Georgia, 'Times New Roman', serif;
+    --sans: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    --mono: 'Consolas', 'Courier New', monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    color: var(--ink);
+    background: var(--paper);
+    font-family: var(--sans);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  .page {
+    position: relative;
+    width: 210mm;
+    height: 296.8mm;
+    overflow: hidden;
+    page-break-after: always;
+    background: var(--paper);
+  }
+  .page:last-child { page-break-after: auto; }
+
+  .pad { padding: 14mm 15mm 12mm; }
+
+  .kicker, .label {
+    font-family: var(--mono);
+    font-size: 6.8pt;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .kicker--gold { color: var(--gold); }
+  .kicker--green { color: var(--green); }
+
+  .page-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8mm;
+    padding-bottom: 3.5mm;
+    border-bottom: 0.3mm solid var(--line);
+  }
+  .page-head__name {
+    font-family: var(--mono);
+    font-size: 6.8pt;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .page-head__right {
+    font-family: var(--mono);
+    font-size: 6.4pt;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: right;
+  }
+
+  .page-foot {
+    position: absolute;
+    right: 15mm;
+    bottom: 7mm;
+    left: 15mm;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 2.5mm;
+    border-top: 0.25mm solid var(--line-soft);
+    font-family: var(--mono);
+    font-size: 5.8pt;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  h1, h2, h3, h4, p { margin: 0; }
+  h1, h2, h3 { font-weight: 500; }
+  h2 {
+    font-family: var(--serif);
+    font-size: 25pt;
+    line-height: 1.03;
+    letter-spacing: -0.035em;
+  }
+  h2 em { font-style: italic; color: var(--green); }
+  .lede {
+    font-size: 10.2pt;
+    line-height: 1.62;
+    color: var(--ink-soft);
+  }
+  .body-copy p {
+    margin-bottom: 2.2mm;
+    font-size: 8.7pt;
+    line-height: 1.58;
+    color: var(--ink-soft);
+  }
+  .body-copy p:last-child { margin-bottom: 0; }
+
+  /* Cover */
+  .cover {
+    color: #f3f1e9;
+    background: #111611;
+  }
+  .cover__image {
+    position: absolute;
+    top: -9%;
+    left: 0;
+    width: 100%;
+    height: 118%;
+    object-fit: cover;
+    opacity: 0.64;
+  }
+  .cover__shade {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(9, 13, 10, 0.88) 0%, rgba(9, 13, 10, 0.36) 14%, rgba(9, 13, 10, 0) 30%),
+      linear-gradient(90deg, rgba(9, 13, 10, 0.96) 0%, rgba(9, 13, 10, 0.90) 38%, rgba(9, 13, 10, 0.52) 66%, rgba(9, 13, 10, 0.20) 100%),
+      linear-gradient(0deg, rgba(9, 13, 10, 0.88) 0%, rgba(9, 13, 10, 0.08) 42%, rgba(9, 13, 10, 0.20) 100%);
+  }
+  .cover__content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 15mm 16mm 13mm;
+  }
+  .cover__top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8mm;
+  }
+  .cover__mark {
+    display: inline-grid;
+    width: 11mm;
+    height: 11mm;
+    place-items: center;
+    border: 0.3mm solid rgba(243, 241, 233, 0.45);
+    border-radius: 50%;
+    color: var(--gold-soft);
+    font-family: var(--serif);
+    font-size: 10pt;
+  }
+  .cover__topline {
+    font-family: var(--mono);
+    font-size: 6.6pt;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(243, 241, 233, 0.62);
+    text-align: right;
+  }
+  .cover__main {
+    max-width: 122mm;
+    margin-top: 31mm;
+  }
+  .cover__kicker {
+    margin-bottom: 7mm;
+    font-family: var(--mono);
+    font-size: 6.8pt;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+  }
+  .cover h1 {
+    font-family: var(--serif);
+    font-size: 53pt;
+    font-weight: 500;
+    line-height: 0.94;
+    letter-spacing: -0.055em;
+  }
+  .cover h1 em {
+    font-style: italic;
+    color: #d9c58f;
+  }
+  .cover__rule {
+    width: 30mm;
+    height: 0.5mm;
+    margin: 9mm 0 6mm;
+    background: var(--gold);
+  }
+  .cover__role {
+    max-width: 90mm;
+    font-size: 11.2pt;
+    line-height: 1.45;
+    color: #e8e4d8;
+  }
+  .cover__summary {
+    max-width: 94mm;
+    margin-top: 4mm;
+    font-size: 8.6pt;
+    line-height: 1.62;
+    color: rgba(243, 241, 233, 0.70);
+  }
+  .cover__bottom {
+    margin-top: auto;
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: 10mm;
+    padding-top: 6mm;
+    border-top: 0.3mm solid rgba(243, 241, 233, 0.22);
+  }
+  .cover__index {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6mm;
+  }
+  .cover__index h3 {
+    margin-bottom: 2mm;
+    font-family: var(--mono);
+    font-size: 5.9pt;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+  }
+  .cover__index p {
+    margin-bottom: 1.4mm;
+    font-size: 7.2pt;
+    line-height: 1.42;
+    color: rgba(243, 241, 233, 0.76);
+  }
+  .cover__contact {
+    align-self: end;
+    font-family: var(--mono);
+    font-size: 6.4pt;
+    line-height: 1.9;
+    color: rgba(243, 241, 233, 0.72);
+    text-align: right;
+  }
+  .cover__contact b {
+    color: #f3f1e9;
+    font-weight: 500;
+  }
+
+  /* Profile */
+  .profile-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+    gap: 12mm;
+    margin-top: 9mm;
+    padding-bottom: 8mm;
+    border-bottom: 0.3mm solid var(--line);
+  }
+  .profile-hero h2 { max-width: 100mm; }
+  .profile-hero h2 span { color: var(--green); font-style: italic; }
+  .profile-hero .lede { margin-top: 5mm; }
+  .profile-hero__side {
+    padding-top: 1mm;
+    text-align: right;
+  }
+  .profile-hero__side .big {
+    font-family: var(--serif);
+    font-size: 33pt;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    color: var(--green);
+  }
+  .profile-hero__side p {
+    margin-top: 2mm;
+    font-family: var(--mono);
+    font-size: 6.2pt;
+    line-height: 1.7;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .profile-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+    gap: 12mm;
+    padding-top: 7mm;
+  }
+  .profile-section { margin-bottom: 6mm; }
+  .profile-section h3 {
+    margin: 1.6mm 0 2.2mm;
+    font-family: var(--serif);
+    font-size: 13.5pt;
+    line-height: 1.15;
+  }
+  .profile-facts {
+    display: grid;
+    gap: 1.3mm;
+    margin-top: 3mm;
+  }
+  .profile-facts div {
+    display: flex;
+    justify-content: space-between;
+    gap: 4mm;
+    padding-bottom: 1.1mm;
+    border-bottom: 0.2mm dashed var(--line);
+    font-size: 7.8pt;
+    line-height: 1.4;
+  }
+  .profile-facts span { color: var(--muted); }
+  .profile-facts b { font-weight: 600; text-align: right; }
+
+  .glance {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2mm;
+  }
+  .glance div {
+    padding: 2.6mm 3mm;
+    border: 0.25mm solid var(--line);
+    border-radius: 2.4mm;
+    background: rgba(255, 255, 255, 0.26);
+  }
+  .glance b {
+    display: block;
+    font-family: var(--serif);
+    font-size: 16pt;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--green);
+  }
+  .glance span {
+    display: block;
+    margin-top: 1mm;
+    font-family: var(--mono);
+    font-size: 5.7pt;
+    line-height: 1.35;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .toolkit { margin-top: 4mm; }
+  .toolkit__group {
+    padding: 2.2mm 0;
+    border-top: 0.2mm solid var(--line-soft);
+  }
+  .toolkit__group:first-child { border-top: 0; }
+  .toolkit__group b {
+    display: block;
+    margin-bottom: 1.2mm;
+    font-family: var(--mono);
+    font-size: 5.8pt;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 1.1mm; }
+  .chips span {
+    padding: 0.65mm 1.9mm;
+    border: 0.25mm solid var(--line);
+    border-radius: 99px;
+    font-family: var(--mono);
+    font-size: 6.2pt;
+    line-height: 1.35;
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+
+  .index-strip {
+    margin-top: 6mm;
+    padding-top: 5mm;
+    border-top: 0.3mm solid var(--line);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7mm;
+  }
+  .index-strip h3 {
+    margin-bottom: 2.4mm;
+    font-family: var(--mono);
+    font-size: 5.9pt;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--green);
+  }
+  .index-strip p {
+    margin-bottom: 1.5mm;
+    font-size: 7.3pt;
+    line-height: 1.45;
+    color: var(--ink-soft);
+  }
+  .index-strip p b {
+    display: inline-block;
+    width: 5mm;
+    font-family: var(--mono);
+    font-size: 6pt;
+    font-weight: 500;
+    color: var(--gold);
+  }
+
+  /* Section pages */
+  .section-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: 10mm;
+    align-items: end;
+    margin: 7mm 0 6mm;
+  }
+  .section-intro h2 { max-width: 116mm; }
+  .section-intro .lede { max-width: 70mm; }
+
+  .flow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1mm;
+    margin: 0 0 5mm;
+    padding: 2.6mm 3mm;
+    border: 0.25mm solid var(--line);
+    border-radius: 2.4mm;
+    background: rgba(255, 255, 255, 0.24);
+  }
+  .flow span {
+    font-family: var(--mono);
+    font-size: 5.7pt;
+    line-height: 1.35;
+    color: var(--ink-soft);
+  }
+  .flow i {
+    font-style: normal;
+    font-family: var(--mono);
+    font-size: 5.6pt;
+    color: var(--muted);
+  }
+  .flow b {
+    padding: 0.5mm 1.4mm;
+    border-radius: 99px;
+    background: var(--paper-2);
+    font-family: var(--mono);
+    font-size: 5.5pt;
+    font-weight: 500;
+    color: var(--ink-soft);
+  }
+
+  .project {
+    display: grid;
+    grid-template-columns: 43mm minmax(0, 1fr);
+    gap: 7mm;
+    padding: 5.2mm 0;
+    border-top: 0.3mm solid var(--line);
+    page-break-inside: avoid;
+  }
+  .project--first { border-top: 0; padding-top: 1mm; }
+  .project__rail h3 {
+    margin: 1.5mm 0 2.6mm;
+    font-family: var(--serif);
+    font-size: 15.5pt;
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+  }
+  .project__rail .scope {
+    font-size: 7.3pt;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+  .project__link {
+    display: inline-block;
+    margin-top: 2.6mm;
+    font-family: var(--mono);
+    font-size: 5.9pt;
+    line-height: 1.5;
+    color: var(--green);
+    overflow-wrap: anywhere;
+  }
+  .project__link--private { color: var(--muted); }
+  .project__body p {
+    margin-bottom: 2mm;
+    font-size: 8.2pt;
+    line-height: 1.58;
+    color: var(--ink-soft);
+  }
+  .project__body ul {
+    margin: 0 0 2.6mm;
+    padding-left: 4mm;
+  }
+  .project__body li {
+    margin-bottom: 1.25mm;
+    font-size: 7.9pt;
+    line-height: 1.48;
+    color: var(--ink-soft);
+  }
+  .project__body li::marker { color: var(--gold); }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.8mm;
+    margin: 2.4mm 0 2.6mm;
+  }
+  .stats div {
+    padding: 2.2mm 2.4mm;
+    border: 0.25mm solid var(--line);
+    border-radius: 2mm;
+    background: rgba(255, 255, 255, 0.24);
+  }
+  .stats b {
+    display: block;
+    font-family: var(--serif);
+    font-size: 13.5pt;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .stats span {
+    display: block;
+    margin-top: 0.8mm;
+    font-family: var(--mono);
+    font-size: 5.3pt;
+    line-height: 1.3;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .note {
+    margin-top: 4mm;
+    padding: 2.6mm 3mm;
+    border-left: 0.9mm solid var(--gold);
+    background: rgba(227, 207, 155, 0.18);
+    font-size: 7.2pt;
+    line-height: 1.55;
+    color: #5b543f;
+  }
+  .note strong { color: var(--ink); }
+
+  .minor-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4mm;
+    margin-top: 5mm;
+  }
+  .minor-card {
+    display: flex;
+    flex-direction: column;
+    padding: 4mm;
+    border: 0.25mm solid var(--line);
+    border-radius: 2.6mm;
+    background: rgba(255, 255, 255, 0.24);
+    page-break-inside: avoid;
+  }
+  .minor-card .num {
+    font-family: var(--mono);
+    font-size: 6pt;
+    letter-spacing: 0.08em;
+    color: var(--gold);
+  }
+  .minor-card h3 {
+    margin: 1.2mm 0 2mm;
+    font-family: var(--serif);
+    font-size: 12.4pt;
+    line-height: 1.1;
+  }
+  .minor-card p {
+    margin-bottom: 2mm;
+    font-size: 7.2pt;
+    line-height: 1.48;
+    color: var(--ink-soft);
+  }
+  .minor-card ul {
+    margin: 0 0 2.5mm;
+    padding-left: 3.5mm;
+  }
+  .minor-card li {
+    margin-bottom: 1mm;
+    font-size: 6.9pt;
+    line-height: 1.42;
+    color: var(--ink-soft);
+  }
+  .minor-card li::marker { color: var(--gold); }
+  .minor-card .chips { margin-top: auto; }
+  .minor-card .chips span { font-size: 5.5pt; padding: 0.45mm 1.4mm; }
+  .minor-card .project__link { margin-top: 2mm; font-size: 5.4pt; }
+
+  .closing {
+    margin-top: 8mm;
+    padding: 6mm 7mm;
+    border: 0.3mm solid rgba(95, 125, 104, 0.36);
+    border-radius: 3mm;
+    background: linear-gradient(135deg, rgba(199, 215, 203, 0.52), rgba(199, 215, 203, 0.12));
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: 10mm;
+    align-items: end;
+  }
+  .closing h2 { max-width: 100mm; font-size: 22pt; }
+  .closing p {
+    max-width: 76mm;
+    margin-top: 3mm;
+    font-size: 8.3pt;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+  .closing__contact {
+    font-family: var(--mono);
+    font-size: 6.5pt;
+    line-height: 1.95;
+    text-align: right;
+    color: var(--ink-soft);
+  }
+  .closing__contact b { color: var(--ink); font-weight: 600; }
+
+  .end-mark {
+    margin-top: 7mm;
+    display: flex;
+    align-items: center;
+    gap: 4mm;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 5.9pt;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .end-mark::before, .end-mark::after {
+    content: '';
+    height: 0.2mm;
+    flex: 1;
+    background: var(--line);
+  }
+</style>
+</head>
+<body>
+
+<!-- 01 COVER -->
+<section class="page cover">
+  <img class="cover__image" src="../../public/portfolio/lane_mapping.jpg" alt="Calibrated six-lane overlay on a night-time highway camera frame">
+  <div class="cover__shade"></div>
+  <div class="cover__content">
+    <div class="cover__top">
+      <span class="cover__mark">A</span>
+      <div class="cover__topline">Selected project portfolio<br>2026 · Sleman, DIY</div>
+    </div>
+
+    <div class="cover__main">
+      <div class="cover__kicker">Data engineering · Backend · Computer vision</div>
+      <h1>Ahmad Maulana<br><em>Ibrahim</em></h1>
+      <div class="cover__rule"></div>
+      <p class="cover__role">Information Engineering undergraduate<br>Data engineering and backend systems</p>
+      <p class="cover__summary">I build data pipelines, backend services, and computer-vision systems with clear contracts, testable boundaries, and honest scope.</p>
+    </div>
+
+    <div class="cover__bottom">
+      <div class="cover__index">
+        <div>
+          <h3>Primary · 04</h3>
+          <p>Highway Lane Occupancy &amp; Hogging Detection</p>
+          <p>Highway Lane Analytics — Data Pipeline &amp; Dashboard</p>
+          <p>NYC Mobility Lakehouse</p>
+          <p>NusaCommerce Data Platform</p>
+        </div>
+        <div>
+          <h3>Secondary · 02</h3>
+          <p>Photobooth — Local-First Kiosk Prototype</p>
+          <p>Rekberin — Transaction and Payment Contributions</p>
+        </div>
+        <div>
+          <h3>Minor · 03</h3>
+          <p>Thrift Store / WantToSell</p>
+          <p>River Water-Level Modeling</p>
+          <p>OpenGL Porsche 911 Prototype</p>
+        </div>
+      </div>
+      <div class="cover__contact">
+        <b>ahmadmaulanaibrahim@mail.ugm.ac.id</b><br>
+        +62 895 4189 38225<br>
+        github.com/ibrahim119920<br>
+        linkedin.com/in/hmdibrahim
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 PROFILE -->
+<section class="page">
+  <div class="pad">
+    <header class="page-head">
+      <div class="page-head__name">Ahmad Maulana Ibrahim</div>
+      <div class="page-head__right">Profile / 01<br>Selected Project Portfolio</div>
+    </header>
+
+    <div class="profile-hero">
+      <div>
+        <div class="kicker kicker--green">Profile</div>
+        <h2 style="margin-top:4mm">Data systems,<br><span>built with care.</span></h2>
+        <p class="lede">Information Engineering undergraduate at Universitas Gadjah Mada. My main focus is data pipelines and backend systems; machine learning and cloud architecture are supporting areas in project work.</p>
+      </div>
+      <div class="profile-hero__side">
+        <div class="big">3.41</div>
+        <p>GPA · scale not stated<br>2024 — expected 2028</p>
+      </div>
+    </div>
+
+    <div class="profile-grid">
+      <div>
+        <section class="profile-section">
+          <div class="kicker">What I work on</div>
+          <h3>Pipelines, contracts, and systems that can be checked.</h3>
+          <div class="body-copy">
+            <p>My project work sits where data engineering meets backend software: ingestion and incremental loads, medallion models, event contracts, transactional APIs, data-quality checks, and automated tests.</p>
+            <p>I prefer explicit boundaries over hidden coupling. The highway case study, for example, separates a vision pipeline that only emits events from a data platform that owns Kafka, storage, and the dashboard. That makes both halves testable in isolation.</p>
+          </div>
+        </section>
+
+        <section class="profile-section">
+          <div class="kicker">Education</div>
+          <div class="profile-facts">
+            <div><span>University</span><b>Universitas Gadjah Mada</b></div>
+            <div><span>Program</span><b>Bachelor of Engineering, Information Engineering</b></div>
+            <div><span>Study period</span><b>2024 — expected 2028</b></div>
+            <div><span>Location</span><b>Sleman, DIY</b></div>
+          </div>
+        </section>
+
+        <section class="profile-section">
+          <div class="kicker">Organizational experience</div>
+          <div class="profile-facts">
+            <div><span>Find IT! UGM · Oct 2024 — May 2025</span><b>Staff, Event Division</b></div>
+            <div><span>Enforian UGM · Sep — Dec 2024</span><b>Staff, Logistics &amp; Catering</b></div>
+          </div>
+        </section>
+      </div>
+
+      <aside>
+        <div class="kicker">At a glance</div>
+        <div class="glance" style="margin-top:2.6mm">
+          <div><b>09</b><span>selected projects</span></div>
+          <div><b>04</b><span>primary projects</span></div>
+          <div><b>30M+</b><span>trips processed</span></div>
+          <div><b>109</b><span>automated tests</span></div>
+        </div>
+
+        <div class="toolkit">
+          <div class="toolkit__group">
+            <b>Data engineering</b>
+            <div class="chips">
+              <span>Python</span><span>SQL</span><span>PySpark</span><span>Pandas</span><span>PyArrow</span><span>Parquet</span><span>Kafka</span><span>DuckDB</span><span>Delta Lake</span><span>Databricks</span>
+            </div>
+          </div>
+          <div class="toolkit__group">
+            <b>Backend &amp; databases</b>
+            <div class="chips">
+              <span>FastAPI</span><span>Next.js</span><span>Express</span><span>PostgreSQL</span><span>SQLite</span><span>MongoDB</span><span>SQLAlchemy</span><span>Prisma</span>
+            </div>
+          </div>
+          <div class="toolkit__group">
+            <b>Vision &amp; ML</b>
+            <div class="chips">
+              <span>YOLO11n</span><span>ByteTrack</span><span>OpenCV</span><span>scikit-learn</span><span>CatBoost</span><span>XGBoost</span><span>PyTorch</span>
+            </div>
+          </div>
+          <div class="toolkit__group">
+            <b>Infrastructure &amp; testing</b>
+            <div class="chips">
+              <span>Docker Compose</span><span>GitHub Actions</span><span>pytest</span><span>Newman</span><span>Streamlit</span><span>Plotly</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="index-strip">
+      <div>
+        <h3>Primary</h3>
+        <p><b>01</b>Highway Lane Occupancy &amp; Hogging Detection</p>
+        <p><b>02</b>Highway Lane Analytics — Data Pipeline &amp; Dashboard</p>
+        <p><b>03</b>NYC Mobility Lakehouse</p>
+        <p><b>04</b>NusaCommerce Data Platform</p>
+      </div>
+      <div>
+        <h3>Secondary</h3>
+        <p><b>01</b>Photobooth — Local-First Kiosk Prototype</p>
+        <p><b>02</b>Rekberin — Transaction and Payment Contributions</p>
+      </div>
+      <div>
+        <h3>Minor &amp; coursework</h3>
+        <p><b>01</b>Thrift Store / WantToSell — Backend and Testing</p>
+        <p><b>02</b>River Water-Level Modeling — TMA Experiment Family</p>
+        <p><b>03</b>OpenGL Porsche 911 Prototype</p>
+      </div>
+    </div>
+  </div>
+  <footer class="page-foot"><span>Ahmad Maulana Ibrahim · Selected Project Portfolio</span><span>02 / 06</span></footer>
+</section>
+
+<!-- 03 PRIMARY 01–02 -->
+<section class="page">
+  <div class="pad">
+    <header class="page-head">
+      <div class="page-head__name">Ahmad Maulana Ibrahim</div>
+      <div class="page-head__right">Primary projects / 01–02<br>Computer vision · Streaming data</div>
+    </header>
+
+    <div class="section-intro">
+      <div>
+        <div class="kicker kicker--gold">Primary projects / 01–02</div>
+        <h2 style="margin-top:3.5mm">One event contract,<br><em>two systems.</em></h2>
+      </div>
+      <p class="lede">A vision pipeline turns highway CCTV into typed lane events. A Kafka and DuckDB platform moves those events from webhook to dashboard.</p>
+    </div>
+
+    <div class="flow">
+      <span>CCTV</span><i>→</i><b>YOLO11n + ByteTrack</b><i>→</i><b>lane mapper</b><i>→</i><b>events.jsonl</b><i>→</i><b>webhook</b><i>→</i><b>FastAPI</b><i>→</i><b>Kafka</b><i>→</i><b>DuckDB / Parquet</b><i>→</i><b>Streamlit</b>
+    </div>
+
+    <article class="project project--first">
+      <div class="project__rail">
+        <div class="kicker kicker--gold">01 · Computer vision</div>
+        <h3>Highway Lane Occupancy &amp; Hogging Detection</h3>
+        <p class="scope">Single-camera prototype · prerecorded video · CPU-first · six calibrated lanes</p>
+        <a class="project__link" href="https://github.com/ibrahim119920/highway-lane-analytics">github.com/ibrahim119920/highway-lane-analytics</a>
+      </div>
+      <div class="project__body">
+        <p>Maps highway CCTV vehicles to six normalized lane polygons with YOLO11n and ByteTrack, then emits typed lane events and rule-based lane-hogging indications with snapshot and eight-second clip evidence.</p>
+        <ul>
+          <li>Normalized polygons keep one calibration profile valid across resolutions; lane 3 carries the overtaking role in both directions.</li>
+          <li>Adaptive anchor moves from box centre to the outer bottom corner for wide near-field vehicles; hysteresis prevents boundary flicker from creating false lane changes.</li>
+          <li>Rules are configuration: heavy vehicles in an overtaking lane and prolonged car dwell produce severity-tagged events, not legal determinations.</li>
+        </ul>
+        <div class="stats">
+          <div><b>158</b><span>vehicles tracked</span></div>
+          <div><b>111</b><span>events · 5 min clip</span></div>
+          <div><b>8.65</b><span>fps on CPU</span></div>
+          <div><b>109</b><span>automated tests</span></div>
+        </div>
+        <div class="chips">
+          <span>Python</span><span>YOLO11n</span><span>ByteTrack</span><span>OpenCV</span><span>pytest</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="project">
+      <div class="project__rail">
+        <div class="kicker kicker--gold">02 · Streaming data</div>
+        <h3>Highway Lane Analytics — Data Pipeline &amp; Dashboard</h3>
+        <p class="scope">FastAPI receiver · Kafka · DuckDB / Parquet medallion · Streamlit · local prototype</p>
+        <span class="project__link project__link--private">highway-lane-analytics-data-pipeline · private repository</span>
+      </div>
+      <div class="project__body">
+        <p>A replay-fed data platform that receives the vision project's event batches, validates and de-duplicates them, publishes to Kafka, and builds bronze, silver, and gold layers for a four-page Streamlit dashboard.</p>
+        <ul>
+          <li>FastAPI receiver with bearer-token auth, batch limits, deterministic event keys, and de-duplication before publishing.</li>
+          <li>Three Kafka topics keyed by camera_id; consumer quarantines invalid records and commits offsets only after a successful write.</li>
+          <li>Silver facts for runs, events, tracks, and lane stints; gold aggregates lane usage, class mix, hogging, transitions, and run quality. Replay is idempotent.</li>
+        </ul>
+        <div class="stats">
+          <div><b>111</b><span>events ingested</span></div>
+          <div><b>158</b><span>tracks upserted</span></div>
+          <div><b>0</b><span>quarantine</span></div>
+          <div><b>4</b><span>dashboard pages</span></div>
+        </div>
+        <div class="chips">
+          <span>FastAPI</span><span>Kafka</span><span>DuckDB</span><span>Parquet</span><span>Streamlit</span><span>pytest</span>
+        </div>
+      </div>
+    </article>
+
+    <div class="note"><strong>Scope note.</strong> Prototype on one camera profile and two short clips. Replay is not live inference; lane hogging is a rule-based indication, not a violation; vehicle counts are a lower bound because track IDs can switch after occlusion.</div>
+  </div>
+  <footer class="page-foot"><span>Ahmad Maulana Ibrahim · Selected Project Portfolio</span><span>03 / 06</span></footer>
+</section>
+
+<!-- 04 PRIMARY 03–04 -->
+<section class="page">
+  <div class="pad">
+    <header class="page-head">
+      <div class="page-head__name">Ahmad Maulana Ibrahim</div>
+      <div class="page-head__right">Primary projects / 03–04<br>Batch · Lakehouse · Data platform</div>
+    </header>
+
+    <div class="section-intro">
+      <div>
+        <div class="kicker kicker--gold">Primary projects / 03–04</div>
+        <h2 style="margin-top:3.5mm">Batch pipelines with<br><em>provable behavior.</em></h2>
+      </div>
+      <p class="lede">Two data-engineering builds focused on idempotency, explicit data contracts, reconciliation, and reproducible local runs.</p>
+    </div>
+
+    <article class="project project--first">
+      <div class="project__rail">
+        <div class="kicker kicker--gold">03 · Lakehouse</div>
+        <h3>NYC Mobility Lakehouse</h3>
+        <p class="scope">Databricks Free Edition · NYC TLC Yellow Taxi · Jan–Sep 2024 · Bronze–Silver–Gold</p>
+        <a class="project__link" href="https://github.com/ibrahim119920/nyc-mobility-lakehouse">github.com/ibrahim119920/nyc-mobility-lakehouse</a>
+      </div>
+      <div class="project__body">
+        <p>An idempotent Bronze → Silver → Gold batch pipeline for 30,020,554 NYC TLC Yellow Taxi trips across nine months, built with PySpark, SQL, and Delta Lake.</p>
+        <ul>
+          <li>One four-task Job with a replaceWhere overwrite per source_month; the March–September backfill reused the same Job rather than a separate notebook.</li>
+          <li>Idempotency is evidenced by Delta version history and identical checksums before and after a rerun.</li>
+          <li>Gold is reconciled against Silver with zero difference, then used for 12 descriptive analysis queries covering monthly, daily, hourly, zone, payment, and duration patterns.</li>
+        </ul>
+        <div class="stats">
+          <div><b>30.0M</b><span>trips processed</span></div>
+          <div><b>9</b><span>months loaded</span></div>
+          <div><b>12</b><span>analysis queries</span></div>
+          <div><b>0</b><span>reconciliation gap</span></div>
+        </div>
+        <div class="chips">
+          <span>Databricks</span><span>PySpark</span><span>SQL</span><span>Delta Lake</span><span>Medallion</span><span>replaceWhere</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="project">
+      <div class="project__rail">
+        <div class="kicker kicker--gold">04 · Data platform</div>
+        <h3>NusaCommerce Data Platform</h3>
+        <p class="scope">Architecture and incremental ingestion · synthetic e-commerce data · local runner</p>
+        <a class="project__link" href="https://github.com/ibrahim119920/nusacommerce-data-platform">github.com/ibrahim119920/nusacommerce-data-platform</a>
+      </div>
+      <div class="project__body">
+        <p>Designed a data platform for NusaCommerce: PostgreSQL read replica and Payment REST API sources, a Bronze → Silver → Gold → marts → dashboard flow, quality contracts, and freshness SLOs.</p>
+        <ul>
+          <li>Incremental batch ingestion with a composite watermark, keyset pagination, safe cutoff, 15-minute lookback, and checkpoints that advance only after a durable commit.</li>
+          <li>Implementation covers per-page staging, atomic finalization, and rerun recovery; the current running path is orders ingestion from a local table with one sequential runner.</li>
+          <li>Quality and freshness are treated as part of the contract, not a post-hoc report.</li>
+        </ul>
+        <div class="stats">
+          <div><b>3</b><span>sources designed</span></div>
+          <div><b>2</b><span>data contracts</span></div>
+          <div><b>15</b><span>min lookback</span></div>
+          <div><b>1</b><span>active runner</span></div>
+        </div>
+        <div class="chips">
+          <span>Python</span><span>PostgreSQL</span><span>SQLAlchemy</span><span>Data architecture</span><span>Data quality</span><span>Docker Compose</span>
+        </div>
+      </div>
+    </article>
+
+    <div class="note"><strong>Scope notes.</strong> NYC covers January–September 2024 only; October–December are not loaded, so no full-year claim is made. NusaCommerce's Payment API path remains an exercise; dbt, Airflow, Kafka, and clickstream are not implemented yet. Analyses are descriptive, not causal.</div>
+  </div>
+  <footer class="page-foot"><span>Ahmad Maulana Ibrahim · Selected Project Portfolio</span><span>04 / 06</span></footer>
+</section>
+
+<!-- 05 SECONDARY 01–02 -->
+<section class="page">
+  <div class="pad">
+    <header class="page-head">
+      <div class="page-head__name">Ahmad Maulana Ibrahim</div>
+      <div class="page-head__right">Secondary projects / 01–02<br>Backend · Local-first operations</div>
+    </header>
+
+    <div class="section-intro">
+      <div>
+        <div class="kicker kicker--green">Secondary projects / 01–02</div>
+        <h2 style="margin-top:3.5mm">Boundaries that make<br><em>operations testable.</em></h2>
+      </div>
+      <p class="lede">One local-first kiosk with a hardware boundary; one team marketplace with transactional payment flows.</p>
+    </div>
+
+    <article class="project project--first">
+      <div class="project__rail">
+        <div class="kicker kicker--green">01 · Local-first prototype</div>
+        <h3>Photobooth — Local-First Kiosk Prototype</h3>
+        <p class="scope">Next.js · SQLite · C++ camera bridge · single device, single active session</p>
+        <span class="project__link project__link--private">Private repository</span>
+      </div>
+      <div class="project__body">
+        <p>A kiosk prototype where Next.js serves the UI and local backend, SQLite and a local folder are the operational source of truth, and a Local Camera Service is the integration boundary to a USB mirrorless camera.</p>
+        <ul>
+          <li>Session state machine with one active session locked in the database, idempotent commands, transactions, audit logs, and local health/backup checks.</li>
+          <li>C++ camera bridge boundary with fake-bridge tests, so the capture flow can be tested without physical hardware.</li>
+          <li>Result media is stored locally before a durable upload queue hands it to cloud storage.</li>
+        </ul>
+        <div class="flow" style="margin:2.4mm 0 2.6mm">
+          <span>Choose package</span><i>→</i><b>QRIS + operator PIN</b><i>→</i><b>camera capture</b><i>→</i><b>local save</b><i>→</i><b>Drive queue</b><i>→</i><b>result QR</b>
+        </div>
+        <div class="stats">
+          <div><b>1</b><span>active session</span></div>
+          <div><b>SQLite</b><span>local source of truth</span></div>
+          <div><b>C++</b><span>camera boundary</span></div>
+          <div><b>Fake</b><span>bridge tests</span></div>
+        </div>
+        <div class="chips">
+          <span>Next.js</span><span>SQLite</span><span>C++ bridge</span><span>Transactions</span><span>Audit logs</span><span>SSE</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="project">
+      <div class="project__rail">
+        <div class="kicker kicker--green">02 · Team backend</div>
+        <h3>Rekberin — Transaction and Payment Contributions</h3>
+        <p class="scope">Public team repository · individual contributions via PRs #28, #38, #44</p>
+        <a class="project__link" href="https://github.com/aufaanggara/rekberin">github.com/aufaanggara/rekberin</a>
+      </div>
+      <div class="project__body">
+        <p>Contributed persisted transaction APIs and payment integration to a game-account marketplace with negotiation, QRIS payment, and a handover flow.</p>
+        <ul>
+          <li>TypeScript, Next.js, Prisma, and PostgreSQL transaction APIs with atomic listing reservations and participant-based access control.</li>
+          <li>Midtrans Core API sandbox integration for QRIS, webhook signature verification, and payment reconciliation.</li>
+          <li>Transaction and payment tests added through merged pull requests #28, #38, and #44.</li>
+        </ul>
+        <div class="flow" style="margin:2.4mm 0 2.6mm">
+          <span>Listing</span><i>→</i><b>offer &amp; chat</b><i>→</i><b>QRIS payment</b><i>→</i><b>webhook</b><i>→</i><b>handover</b><i>→</i><b>payout simulation</b>
+        </div>
+        <div class="stats">
+          <div><b>3</b><span>merged pull requests</span></div>
+          <div><b>QRIS</b><span>Midtrans sandbox</span></div>
+          <div><b>2 h</b><span>buyer confirmation</span></div>
+          <div><b>Atomic</b><span>listing reservation</span></div>
+        </div>
+        <div class="chips">
+          <span>TypeScript</span><span>Next.js</span><span>Prisma</span><span>PostgreSQL</span><span>Midtrans</span><span>REST APIs</span>
+        </div>
+      </div>
+    </article>
+
+    <div class="note"><strong>Scope notes.</strong> Photobooth's physical camera operation was unverified in the document snapshot; testing used a fake bridge. Rekberin's Midtrans integration uses the sandbox; seller payouts and refunds are simulated.</div>
+  </div>
+  <footer class="page-foot"><span>Ahmad Maulana Ibrahim · Selected Project Portfolio</span><span>05 / 06</span></footer>
+</section>
+
+<!-- 06 MINOR + CLOSING -->
+<section class="page">
+  <div class="pad">
+    <header class="page-head">
+      <div class="page-head__name">Ahmad Maulana Ibrahim</div>
+      <div class="page-head__right">Minor projects / 01–03<br>Coursework · Experiments · Graphics</div>
+    </header>
+
+    <div class="section-intro">
+      <div>
+        <div class="kicker">Minor projects &amp; coursework / 01–03</div>
+        <h2 style="margin-top:3.5mm">Smaller builds,<br><em>same engineering habits.</em></h2>
+      </div>
+      <p class="lede">Shorter project work that still shows transactional thinking, experiment discipline, and low-level rendering.</p>
+    </div>
+
+    <div class="minor-grid">
+      <article class="minor-card">
+        <span class="num">01 · Backend &amp; testing</span>
+        <h3>Thrift Store / WantToSell</h3>
+        <p>Express and MongoDB backend for a thrift marketplace with catalog, favorites, orders, reviews, and transactional stock-one reservations.</p>
+        <ul>
+          <li>One item per product reserved transactionally, with order expiry and simulated payment.</li>
+          <li>A recorded ten-request purchase race produced one order and nine conflicts.</li>
+          <li>API and integrity tests with Postman/Newman; the snapshot records one failed assertion.</li>
+        </ul>
+        <div class="chips">
+          <span>JavaScript</span><span>Express</span><span>MongoDB</span><span>Mongoose</span><span>Newman</span>
+        </div>
+        <a class="project__link" href="https://github.com/ibrahim119920/web-thrift-store">github.com/ibrahim119920/web-thrift-store</a>
+      </article>
+
+      <article class="minor-card">
+        <span class="num">02 · ML experiments</span>
+        <h3>River Water-Level Modeling</h3>
+        <p>A TMA forecasting experiment family covering seasonal baselines, residual boosting ensembles, temporal validation, and experiment provenance.</p>
+        <ul>
+          <li>Station-aware and upstream-river features; a supermodel orchestrator selects a model family per station.</li>
+          <li>PyTorch notebooks cover graph/time-series neural model training and inference.</li>
+          <li>30-station registry and seven model families; training used two Kaggle T4 GPUs.</li>
+        </ul>
+        <div class="chips">
+          <span>CatBoost</span><span>XGBoost</span><span>PyTorch</span><span>Pandas</span><span>Time series</span>
+        </div>
+        <a class="project__link" href="https://github.com/ibrahim119920/TMA-CatBoostRegressor">github.com/ibrahim119920/TMA-CatBoostRegressor</a>
+      </article>
+
+      <article class="minor-card">
+        <span class="num">03 · Graphics</span>
+        <h3>OpenGL Porsche 911</h3>
+        <p>A C++/OpenGL rendering prototype for a Porsche 911 model, focused on mesh and shader rendering plus model loading.</p>
+        <ul>
+          <li>Mesh/model rendering pipeline with vertex and fragment shaders.</li>
+          <li>Model loading through Assimp; windowing and input through GLFW.</li>
+          <li>Math and transform work through GLM; GLAD provides the OpenGL function loader.</li>
+        </ul>
+        <div class="chips">
+          <span>C++</span><span>OpenGL</span><span>GLFW</span><span>GLAD</span><span>GLM</span><span>Assimp</span>
+        </div>
+        <span class="project__link project__link--private">Private repository</span>
+      </article>
+    </div>
+
+    <div class="closing">
+      <div>
+        <div class="kicker kicker--green">Let's build reliable systems</div>
+        <h2 style="margin-top:3mm">Clear contracts.<br><em>Honest scope.</em></h2>
+        <p>I am interested in data engineering, backend systems, and applied computer vision. The work above is project-based; where a claim is limited by data, hardware, or environment, the scope note says so.</p>
+        <div class="chips" style="margin-top:3mm">
+          <span>Data pipelines</span><span>Backend APIs</span><span>Computer vision</span><span>Data quality</span>
+        </div>
+      </div>
+      <div class="closing__contact">
+        <b>ahmadmaulanaibrahim@mail.ugm.ac.id</b><br>
+        +62 895 4189 38225<br>
+        github.com/ibrahim119920<br>
+        linkedin.com/in/hmdibrahim<br>
+        Sleman, DIY · Indonesia
+      </div>
+    </div>
+
+    <div class="end-mark">Selected Project Portfolio · 2026</div>
+  </div>
+  <footer class="page-foot"><span>Ahmad Maulana Ibrahim · Selected Project Portfolio</span><span>06 / 06</span></footer>
+</section>
+
+</body>
+</html>
