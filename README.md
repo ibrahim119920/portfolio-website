@@ -17,7 +17,7 @@ Create a production build with `npm run build`, or serve the built files locally
 
 ## Portfolio PDF
 
-A six-page A4 project portfolio is available at `Ahmad-Maulana-Ibrahim-Portfolio.pdf`. Its print source and regeneration instructions are in `docs/portfolio/`.
+A six-page A4 project portfolio is available at `Ahmad-Maulana-Ibrahim-Portfolio.pdf`, with a plain-language version at `Ahmad-Maulana-Ibrahim-Portfolio-v2.pdf`. Print source and regeneration instructions are in `docs/portfolio/`.
 
 ## Routes
 
