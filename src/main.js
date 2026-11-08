@@ -2969,34 +2969,34 @@ const highwayData = {
     pagesCaption: { id: 'Empat halaman dashboard.', en: 'Four dashboard pages.' },
     pagesHead: [{ id: 'Halaman', en: 'Page' }, { id: 'Pertanyaan yang dijawab', en: 'What it answers' }],
     pagesRows: [
-      [{ id: 'Overview', en: 'Overview' }, { id: 'Berapa kendaraan, lane change, dan indikasi hogging? Bagaimana trennya?', en: 'How many vehicles, lane changes, and hogging indications? How do they trend?' }],
-      [{ id: 'Lane analysis', en: 'Lane analysis' }, { id: 'Lajur mana yang membawa kendaraan apa, dan di mana dwell time paling tinggi?', en: 'Which lanes carry which vehicles, and where is dwell time highest?' }],
-      [{ id: 'Hogging explorer', en: 'Hogging explorer' }, { id: 'Event mana yang ditandai, berdasarkan aturan dan severity, dengan baris yang dapat diunduh?', en: 'Which events were flagged, by rule and severity, with downloadable rows?' }],
-      [{ id: 'Run & data quality', en: 'Run & data quality' }, { id: 'Run mana yang menghasilkan data ini, dan apakah data lengkap serta bebas duplikat?', en: 'Which run produced this data, and is it complete and duplicate-free?' }],
+      [{ id: 'Overview', en: 'Overview' }, { id: 'Berapa kendaraan, lane change, dan sinyal hogging? Seberapa segar datanya?', en: 'How many vehicles, lane changes, and hogging signals? How fresh is the data?' }],
+      [{ id: 'Lane usage', en: 'Lane usage' }, { id: 'Lajur mana yang membawa kendaraan apa, dan di mana kendaraan paling lama berada?', en: 'Which lanes carry which vehicles, and where do vehicles stay longest?' }],
+      [{ id: 'Hogging signals', en: 'Hogging signals' }, { id: 'Event mana yang cocok dengan aturan, menurut level dan rule, dengan baris yang dapat diunduh?', en: 'Which events matched a rule, by level and rule, with downloadable rows?' }],
+      [{ id: 'Data quality', en: 'Data quality' }, { id: 'Run mana yang menghasilkan data ini, dan apakah data lengkap serta bebas duplikat?', en: 'Which run produced this data, and is it complete and free of duplicates?' }],
     ],
     overviewCaption: {
-      id: 'Overview: enam KPI, stack event per menit, lane share, dan tren hogging harian.',
-      en: 'Overview: six KPIs, an event-per-minute stack, lane share, and the daily hogging trend.',
+      id: 'Overview: masthead, ringkasan kendaraan, dan catatan cara membaca angka.',
+      en: 'Overview: masthead, vehicle summary, and a note on how to read the numbers.',
     },
     overviewAlt: {
-      id: 'Dashboard analitik gelap dengan enam kartu metrik dan tiga grafik yang menunjukkan event lalu lintas per menit dan per lajur.',
-      en: 'Dark analytics dashboard with six metric cards and three charts showing traffic events by minute and by lane.',
+      id: 'Dashboard terang dengan masthead jalan tol, lima kartu ringkasan kendaraan, dan catatan definisi metrik.',
+      en: 'Light dashboard with a highway masthead, five vehicle summary cards, and a note explaining the metrics.',
     },
     hoggingCaption: {
-      id: 'Hogging explorer yang difilter ke event mobil severity medium di lajur pendahulu.',
-      en: 'Hogging explorer filtered to medium-severity car events in the overtaking lane.',
+      id: 'Hogging signals: event log dengan level, rule, dan waktu di lajur, plus breakdown severity dan rule.',
+      en: 'Hogging signals: event log with level, rule, and time in lane, plus severity and rule breakdowns.',
     },
     hoggingAlt: {
-      id: 'Tabel dashboard event hogging dengan severity, aturan, lajur, kelas, dan tombol unduh.',
-      en: 'Dashboard table of hogging events with severity, rule, lane, class, and a download button.',
+      id: 'Halaman hogging signals dengan kartu ringkasan, tabel event, dan meter severity serta rule.',
+      en: 'Hogging signals page with summary cards, an event table, and severity and rule meters.',
     },
     qualityCaption: {
-      id: 'Tampilan run dan kualitas data: run registry, pemeriksaan duplikat, rentang timestamp, dan jumlah karantina.',
-      en: 'Run and data-quality view: run registry, duplicate checks, timestamp range, and quarantine counts.',
+      id: 'Run history, pemeriksaan integritas, dan tabel kualitas per run.',
+      en: 'Run history, integrity checks, and the quality-by-run table.',
     },
     qualityAlt: {
-      id: 'Tabel dashboard berisi daftar run dengan pemeriksaan kualitas dan indikator lulus.',
-      en: 'Dashboard table listing runs with quality checks and pass indicators.',
+      id: 'Halaman data quality dengan tabel run, empat pemeriksaan integritas, dan tabel kualitas per run.',
+      en: 'Data quality page with a run table, four integrity checks, and a quality-by-run table.',
     },
     screenshotLabel: { id: 'Screenshot menyusul', en: 'Screenshot pending' },
   },
@@ -3285,7 +3285,7 @@ function renderHighwayPage() {
         ${hwSection('hw-anchor', data.anchor.label, data.anchor.heading, `${hwCopy(data.anchor.paragraphs)}${hwAnchorDiagram()}<blockquote class="hw-quote">${hwRich(data.anchor.quote)}</blockquote>`)}
         ${hwSection('hw-events', data.events.label, data.events.heading, `<div class="hw-copy"><p>${hwRich(data.events.intro)}</p></div>${hwTable(data.events.eventCaption, data.events.eventHead, data.events.eventRows)}${hwTable(data.events.ruleCaption, data.events.ruleHead, data.events.ruleRows)}<div class="hw-copy"><p>${hwRich(data.events.outro)}</p></div><p class="hw-note">${icon('info')}<span>${hwRich({ id: 'Semua indikasi hogging tetap merupakan kecocokan aturan, bukan pelanggaran.', en: 'Every hogging indication remains a rule match, not a violation.' })}</span></p>`)}
         ${hwSection('hw-evidence', data.evidence.label, data.evidence.heading, `${hwCopy(data.evidence.paragraphs)}${hwFigure('/portfolio/evidence_hogging.jpg', data.evidence.imageAlt, data.evidence.imageCaption, '4 / 3')}${hwVideo(data.evidence.videoCaption, data.evidence.videoAlt, data.evidence.videoLabel)}`)}
-        ${hwSection('hw-platform', data.platform.label, data.platform.heading, `${hwCopy(data.platform.paragraphs)}${hwTable(data.platform.pagesCaption, data.platform.pagesHead, data.platform.pagesRows)}<div class="hw-media-grid">${hwFigure('', data.platform.overviewAlt, data.platform.overviewCaption, '16 / 10', data.platform.screenshotLabel)}${hwFigure('', data.platform.hoggingAlt, data.platform.hoggingCaption, '16 / 10', data.platform.screenshotLabel)}${hwFigure('', data.platform.qualityAlt, data.platform.qualityCaption, '16 / 10', data.platform.screenshotLabel)}</div>`)}
+        ${hwSection('hw-platform', data.platform.label, data.platform.heading, `${hwCopy(data.platform.paragraphs)}${hwTable(data.platform.pagesCaption, data.platform.pagesHead, data.platform.pagesRows)}<div class="hw-media-grid">${hwFigure('/portfolio/dashboard-overview.jpg', data.platform.overviewAlt, data.platform.overviewCaption, '16 / 10')}${hwFigure('/portfolio/dashboard-hogging.jpg', data.platform.hoggingAlt, data.platform.hoggingCaption, '16 / 10')}${hwFigure('/portfolio/dashboard-quality.jpg', data.platform.qualityAlt, data.platform.qualityCaption, '16 / 10')}</div>`)}
         ${hwSection('hw-results', data.results.label, data.results.heading, `${hwCopy(data.results.paragraphs)}${hwTable(data.results.caption, data.results.head, data.results.rows)}<div class="hw-callout hw-callout--muted">${icon('info')}<p>${hwRich(data.results.caveat)}</p></div>${hwFigure('/portfolio/annotated_frame.jpg', data.results.frameAlt, data.results.frameCaption, '4 / 3')}${hwVideo(data.results.videoCaption, data.results.videoAlt, data.results.videoLabel)}`)}
         ${hwSection('hw-decisions', data.decisions.label, data.decisions.heading, `${hwTable(data.decisions.caption, data.decisions.head, data.decisions.rows)}<div class="hw-copy"><p>${hwRich(data.decisions.outro)}</p></div>`)}
         ${hwSection('hw-limitations', data.limitations.label, data.limitations.heading, `${hwCopy(data.limitations.paragraphs)}<ul class="hw-chips">${data.limitations.nextSteps.map((item) => `<li>${hwLabel(item)}</li>`).join('')}</ul>`)}
