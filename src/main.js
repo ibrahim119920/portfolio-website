@@ -517,13 +517,13 @@ const courses = [
 ];
 
 const skillGroups = [
-  { icon: 'code-2', title: { id: 'Pemrograman', en: 'Programming' }, skills: ['Python', 'SQL', 'JavaScript', 'TypeScript', 'Dart', 'C++', 'HTML/CSS'] },
-  { icon: 'database', title: { id: 'Data engineering', en: 'Data engineering' }, skills: ['Pandas', 'NumPy', 'PyArrow', 'Parquet', 'dbt', 'Airflow', 'Kafka', 'PySpark (local)', 'GeoPandas', 'Jupyter'] },
-  { icon: 'server', title: { id: 'Database', en: 'Databases' }, skills: ['PostgreSQL', 'SQLite', 'MongoDB', 'SQLAlchemy', 'Psycopg', 'Alembic', 'Prisma', 'Mongoose', 'better-sqlite3', 'Supabase'] },
-  { icon: 'blocks', title: { id: 'Backend, web, dan mobile', en: 'Backend, web, and mobile' }, skills: ['Node.js', 'Express', 'FastAPI', 'Next.js', 'React', 'REST APIs', 'JSON Schema', 'Zod', 'JWT', 'bcrypt', 'Argon2', 'Flutter', 'Riverpod', 'GoRouter', 'Midtrans Core API (sandbox)'] },
-  { icon: 'chart-no-axes-combined', title: { id: 'Machine learning', en: 'Machine learning' }, skills: ['scikit-learn', 'CatBoost', 'XGBoost', 'PyTorch', 'Feature engineering', 'Temporal validation', 'Regression ensembles', 'Graph/time-series modeling'] },
-  { icon: 'workflow', title: { id: 'Infrastruktur dan testing', en: 'Infrastructure and testing' }, skills: ['Docker/Compose', 'Git/GitHub', 'GitHub Actions', 'SSH workflows', 'Prometheus', 'pytest', 'Vitest', 'Node.js test runner', 'Postman/Newman', 'Unit/integration/contract tests', 'Widget/golden tests', 'Data-quality tests'] },
-  { icon: 'panel-top', title: { id: 'Visualisasi dan grafis', en: 'Visualization and graphics' }, skills: ['Matplotlib', 'Seaborn', 'Plotly', 'Streamlit', 'Sharp', 'OpenGL', 'GLFW', 'GLAD', 'GLM', 'Assimp', 'Canon EDSDK bridge development'] },
+  { icon: 'code-2', title: { id: 'Pemrograman', en: 'Programming' }, skills: ['Python', 'SQL', 'JavaScript', 'TypeScript', 'Dart', 'C++'] },
+  { icon: 'database', title: { id: 'Data engineering', en: 'Data engineering' }, skills: ['Pandas', 'NumPy', 'PyArrow', 'Parquet', 'Kafka', 'PySpark (local)', 'GeoPandas'] },
+  { icon: 'server', title: { id: 'Database', en: 'Databases' }, skills: ['PostgreSQL', 'SQLite', 'MongoDB', 'SQLAlchemy', 'Prisma', 'Supabase'] },
+  { icon: 'blocks', title: { id: 'Backend, web, dan mobile', en: 'Backend, web, and mobile' }, skills: ['Node.js', 'Express', 'FastAPI', 'Next.js', 'React', 'REST APIs', 'JWT', 'Argon2', 'Flutter', 'Midtrans Core API (sandbox)'] },
+  { icon: 'chart-no-axes-combined', title: { id: 'Machine learning', en: 'Machine learning' }, skills: ['scikit-learn', 'CatBoost', 'XGBoost', 'PyTorch', 'Feature engineering', 'Temporal validation', 'Regression ensembles'] },
+  { icon: 'workflow', title: { id: 'Infrastruktur dan testing', en: 'Infrastructure and testing' }, skills: ['Docker/Compose', 'Git/GitHub', 'GitHub Actions', 'pytest', 'Postman/Newman', 'Unit/integration/contract tests', 'Data-quality tests'] },
+  { icon: 'panel-top', title: { id: 'Visualisasi dan grafis', en: 'Visualization and graphics' }, skills: ['Matplotlib', 'Seaborn', 'Plotly', 'Streamlit', 'OpenGL'] },
 ];
 
 const engineeringConcepts = [
