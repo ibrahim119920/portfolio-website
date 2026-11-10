@@ -236,15 +236,15 @@
         <p>This project receives the event files, checks them, removes duplicates, and stores them in layers so they can be used for analysis. A dashboard then shows lane usage, vehicle types, hogging signals, and data quality.</p>
         <ul>
           <li>A secure receiving service accepts events in batches and rejects bad records instead of stopping the whole process.</li>
-          <li>The same data can be sent again without double-counting. In testing, 111 events and 158 vehicle tracks were processed with no rejected records.</li>
+          <li>The same data can be sent again without double-counting. In a 10-window replay session, 650 events, 603 vehicle counts, 270 lane entries, 23 lane changes, and 87 hogging signals were processed with no rejected records; all 13 data checks passed.</li>
           <li>The dashboard has four pages: overview, lane usage, hogging signals, and data quality.</li>
           <li>The dashboard finds each event's clip and thumbnail in Nextcloud. A small server-side proxy plays the video.</li>
         </ul>
         <div class="stats">
-          <div><b>111</b><span>events received</span></div>
-          <div><b>158</b><span>vehicle tracks</span></div>
-          <div><b>0</b><span>records rejected</span></div>
-          <div><b>4</b><span>dashboard pages</span></div>
+          <div><b>650</b><span>events received</span></div>
+          <div><b>603</b><span>vehicles seen</span></div>
+          <div><b>87</b><span>hogging signals</span></div>
+          <div><b>13 / 13</b><span>data checks passed</span></div>
         </div>
         <div class="chips">
           <span>FastAPI</span><span>Kafka</span><span>DuckDB</span><span>Parquet</span><span>Streamlit</span><span>pytest</span>

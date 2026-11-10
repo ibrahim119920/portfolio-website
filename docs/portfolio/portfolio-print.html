@@ -898,12 +898,13 @@
           <li>Three Kafka topics keyed by camera_id; consumer quarantines invalid records and commits offsets only after a successful write.</li>
           <li>Silver facts for runs, events, tracks, and lane stints; gold aggregates lane usage, class mix, hogging, transitions, and run quality. Replay is idempotent.</li>
           <li>Clips and thumbnails live in Nextcloud; the dashboard maps event metadata to those files and streams them inline through a server-side proxy, keeping credentials off the client.</li>
+          <li>Replay session live_20261110_214853 completed 10 of 10 windows with 650 events, 270 lane entries, 23 lane changes, and 87 hogging indications across 603 vehicle counts; 13/13 checks passed with 0 quarantined rows.</li>
         </ul>
         <div class="stats">
-          <div><b>111</b><span>events ingested</span></div>
-          <div><b>158</b><span>tracks upserted</span></div>
-          <div><b>0</b><span>quarantine</span></div>
-          <div><b>4</b><span>dashboard pages</span></div>
+          <div><b>650</b><span>events ingested</span></div>
+          <div><b>603</b><span>vehicles seen</span></div>
+          <div><b>87</b><span>hogging signals</span></div>
+          <div><b>13 / 13</b><span>checks passed</span></div>
         </div>
         <div class="chips">
           <span>FastAPI</span><span>Kafka</span><span>DuckDB</span><span>Parquet</span><span>Streamlit</span><span>pytest</span>

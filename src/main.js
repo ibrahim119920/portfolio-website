@@ -133,7 +133,7 @@ const projectSections = [
         detailApp: 'lakehouse',
       },
       {
-        title: 'Highway Lane Occupancy & Hogging Detection — Tuned with Manual Ground Truth',
+        title: 'Highway Lane Occupancy & Hogging Detection',
         icon: 'scan-line',
         accent: 'green',
         order: 1,
@@ -438,8 +438,8 @@ const projectPlainCopy = {
   },
   highwaypipeline: {
     scope: { id: 'Platform data · FastAPI, Kafka, DuckDB, Streamlit · prototipe lokal', en: 'Data platform · FastAPI, Kafka, DuckDB, Streamlit · local prototype' },
-    summary: { id: 'Platform data yang mengubah event kamera menjadi dashboard penggunaan lajur, sinyal hogging, dan kualitas data.', en: 'A data platform that turns camera events into a dashboard for lane usage, hogging signals, and data quality.' },
-    description: { id: 'Platform ini menerima event dari pipeline kamera, memeriksa dan menghapus duplikat, lalu menyimpannya dalam lapisan yang rapi untuk dashboard. Klip dan thumbnail berada di Nextcloud; dashboard memutarnya lewat proxy di server.', en: 'This platform receives events from the camera pipeline, checks and de-duplicates them, and stores them in clear layers for the dashboard. Clips and thumbnails live in Nextcloud; the dashboard plays them through a server-side proxy.' },
+    summary: { id: 'Platform data yang mengubah event kamera menjadi dashboard penggunaan lajur, sinyal hogging, dan kualitas data. Pada satu sesi uji, 650 event dan 603 kendaraan terlihat, dengan 87 sinyal hogging dan 13 dari 13 pemeriksaan kualitas lolos.', en: 'A data platform that turns camera events into a dashboard for lane usage, hogging signals, and data quality. In one test session it recorded 650 events and 603 vehicles seen, with 87 hogging signals and 13 of 13 quality checks passing.' },
+    description: { id: 'Platform ini menerima event dari pipeline kamera, memeriksa dan menghapus duplikat, lalu menyimpannya dalam lapisan yang rapi untuk dashboard. Pada sesi uji live_20261110_214853, 10 dari 10 jendela selesai dengan 650 event, 603 kendaraan terlihat, 270 kendaraan masuk lajur, 23 perubahan lajur, dan 87 sinyal hogging; 13 dari 13 pemeriksaan kualitas lolos dan 0 baris ditolak. Klip dan thumbnail berada di Nextcloud; dashboard memutarnya lewat proxy di server.', en: 'This platform receives events from the camera pipeline, checks and de-duplicates them, and stores them in clear layers for the dashboard. In test session live_20261110_214853, 10 of 10 windows completed with 650 events, 603 vehicles seen, 270 lane entries, 23 lane changes, and 87 hogging signals; all 13 quality checks passed and 0 rows were rejected. Clips and thumbnails live in Nextcloud; the dashboard plays them through a server-side proxy.' },
     caveat: { id: 'Prototipe lokal yang dijalankan lewat replay, bukan kamera langsung. Repositori platform bersifat privat; dashboard dan bukti klip ditampilkan di studi kasus ini.', en: 'Local prototype driven by replay, not a live camera. The platform repository is private; the dashboard and evidence clips are shown in this case study.' },
   },
   rekberin: {
