@@ -1,5 +1,19 @@
+import { inject, pageview } from '@vercel/analytics';
 import { createIcons, icons } from 'lucide';
 import './styles.css';
+
+const analyticsEnabled = import.meta.env.PROD;
+if (analyticsEnabled) inject({ mode: 'production', disableAutoTrack: true });
+let lastTrackedPath = null;
+
+function trackPageview(appId) {
+  if (!analyticsEnabled) return;
+  const path = pathForApp(appId);
+  if (path === lastTrackedPath) return;
+  lastTrackedPath = path;
+  const route = path.startsWith('/projects/') ? '/projects/:project' : path;
+  pageview({ route, path });
+}
 
 // Candidate facts are mapped from the current resume and general CV. Project
 // descriptions retain the scope and caveats recorded in the 3 October 2026 audit.
@@ -67,12 +81,13 @@ const projectSections = [
   {
     id: 'data',
     icon: 'database',
-    title: { id: 'Data engineering', en: 'Data engineering' },
+    title: { id: 'Proyek utama', en: 'Main projects' },
     projects: [
       {
         title: 'NusaCommerce Data Platform',
         icon: 'database',
         accent: 'gold',
+        order: 4,
         scope: { id: 'Arsitektur data platform · data e-commerce sintetis · ingestion incremental lokal', en: 'Data platform architecture · synthetic e-commerce data · local incremental ingestion' },
         description: {
           id: 'Merancang arsitektur data platform NusaCommerce: sumber PostgreSQL read replica dan Payment REST API (clickstream/Kafka sebagai target), alur Bronze → Silver → Gold → mart → dashboard dengan kontrak kualitas dan SLO freshness. Ingestion awal memakai incremental batch dengan composite watermark, keyset pagination, safe cutoff, lookback 15 menit, dan checkpoint yang hanya maju setelah commit durabel; implementasinya mencakup staging per page, finalisasi atomik, dan recovery rerun.',
@@ -98,6 +113,7 @@ const projectSections = [
         title: 'NYC Mobility Lakehouse',
         icon: 'car-taxi-front',
         accent: 'gold',
+        order: 3,
         scope: { id: 'Databricks Free Edition · dataset NYC TLC Yellow Taxi Jan–Sep 2024 (9 bulan) · Bronze, Silver, dan Gold terbukti', en: 'Databricks Free Edition · NYC TLC Yellow Taxi dataset, Jan–Sep 2024 (9 months) · Bronze, Silver, and Gold proven' },
         description: {
           id: 'Pipeline batch idempoten Bronze → Silver → Gold di Databricks Free Edition untuk NYC TLC Yellow Taxi Januari–September 2024 (9 bulan, 30.020.554 perjalanan) dengan PySpark, SQL, dan Delta Lake. Satu Job empat task dengan replaceWhere per source_month; idempotensi dibuktikan checksum dan riwayat Delta, Gold direkonsiliasi ke Silver (selisih 0), lalu dipakai untuk 12 query analisis deskriptif.',
@@ -117,48 +133,50 @@ const projectSections = [
         detailApp: 'lakehouse',
       },
       {
-        title: 'Chicago Traffic Crash Preprocessing',
-        icon: 'map-pin',
-        accent: 'blue',
-        scope: { id: 'Chicago Data Portal 2018–2025 · 3 tabel · 877.921 kecelakaan dipertahankan', en: 'Chicago Data Portal 2018–2025 · 3 tables · 877,921 crashes preserved' },
-        description: {
-          id: 'Membersihkan dan mengintegrasikan tiga tabel Chicago Data Portal (Crashes, Vehicles, People) 2018–2025 dengan Pandas, PyArrow/Parquet, GeoPandas, dan indeks SQLite sementara. Grain sumber dipertahankan; atribut dengan missing >30% dikeluarkan, ringkasan anak diagregasi sebelum join, dan 871.586 kecelakaan dipetakan ke 77 community area. Tabel analisis direduksi dari 67 menjadi 15 atribut (52 dihapus, 77,6%).',
-          en: 'Cleaned and integrated three Chicago Data Portal tables (Crashes, Vehicles, People) for 2018–2025 with Pandas, PyArrow/Parquet, GeoPandas, and a temporary SQLite index. Source grain is preserved; attributes with >30% missing are dropped, child summaries are aggregated before joining, and 871,586 crashes are mapped to 77 community areas. The analysis table is reduced from 67 to 15 attributes (52 removed, 77.6%).',
-        },
-        summary: {
-          id: 'Pembersihan dan integrasi 3 tabel Chicago crash 2018–2025; 877.921 kecelakaan dipertahankan dan dipetakan ke 77 community area.',
-          en: 'Cleaning and integration of three Chicago crash tables for 2018–2025; 877,921 crashes preserved and mapped to 77 community areas.',
-        },
-        caveat: {
-          id: 'Angka berasal dari salinan lokal; 6.335 kecelakaan belum terpetakan, 5.909 lokasi dan 891 total cedera masih tidak diketahui. Koordinat geocoder adalah estimasi alamat, dan jumlah kecelakaan bukan risiko per perjalanan karena data paparan tidak tersedia.',
-          en: 'Figures come from a local copy; 6,335 crashes remain unmapped, and 5,909 locations and 891 injury totals remain unknown. Geocoder coordinates are address estimates, and crash counts are not per-trip risk because exposure data is unavailable.',
-        },
-        tags: ['Python', 'Pandas', 'PyArrow', 'Parquet', 'SQLite', 'GeoPandas', 'Jupyter'],
-        links: [{ label: 'GitHub repository', href: 'https://github.com/ibrahim119920/traffic-crash-preprocessing', visibility: 'public' }],
-        terms: 'traffic crash accidents geospatial preprocessing data cleaning Chicago',
-        detailApp: 'chicago',
-      },
-      {
-        title: 'Highway Lane Occupancy & Hogging Detection',
+        title: 'Highway Lane Occupancy & Hogging Detection — Tuned with Manual Ground Truth',
         icon: 'scan-line',
         accent: 'green',
-        scope: { id: 'Sistem dua proyek · computer vision + data platform · prototipe kamera tunggal · video prerekam', en: 'Two-project system · computer vision + data platform · single-camera prototype · prerecorded video' },
+        order: 1,
+        scope: { id: 'Pipeline computer vision · prototipe kamera tunggal · video prerekam · ground truth 56 kendaraan', en: 'Computer-vision pipeline · single-camera prototype · prerecorded video · 56-vehicle ground truth' },
         description: {
-          id: 'Pipeline computer vision memetakan kendaraan dari CCTV jalan tol ke enam lajur terkalibrasi, melacaknya dengan YOLO11n dan ByteTrack, lalu menghasilkan event lajur bertipe serta indikasi lane hogging berbasis aturan dengan bukti snapshot dan klip delapan detik. Platform FastAPI, Kafka, DuckDB, dan Streamlit mengonsumsi event melalui webhook replay dan membangun tabel bronze, silver, dan gold untuk dashboard. Pada klip malam lima menit, sistem melacak 158 kendaraan dan menghasilkan 111 event pada 8,65 fps di CPU.',
-          en: 'A computer-vision pipeline maps highway CCTV vehicles to six calibrated lanes, tracks them with YOLO11n and ByteTrack, and emits typed lane events plus rule-based hogging indications with snapshot and eight-second clip evidence. A FastAPI, Kafka, DuckDB, and Streamlit platform consumes those events through a replay webhook and builds bronze, silver, and gold tables for the dashboard. On a five-minute night clip, it tracked 158 vehicles and produced 111 events at 8.65 fps on CPU.',
+          id: 'Pipeline computer vision memetakan kendaraan CCTV jalan tol ke enam lajur terkalibrasi, melacaknya dengan YOLO11n dan ByteTrack, lalu menghasilkan event lajur bertipe serta indikasi lane hogging berbasis aturan. Aturan dirombak memakai 56 kendaraan berlabel manual: lajur 2 dan 3 diawasi, kendaraan yang mendahului dikecualikan, dan lajur ditentukan lewat voting bbox. F1 naik dari 0,54 ke 0,93, false positive turun 9 ke 5, dan hogger yang lolos turun 24 ke 1. Klip bukti delapan detik dan thumbnail dipublikasikan dari unit komputasi Kaggle ke Nextcloud; event hanya menyimpan path file.',
+          en: 'A computer-vision pipeline maps highway CCTV vehicles to six calibrated lanes, tracks them with YOLO11n and ByteTrack, and emits typed lane events plus rule-based hogging indications. The rules were rebuilt against 56 manually labelled vehicles: lanes 2 and 3 are monitored, legitimate overtaking is exempted, and lane membership is voted across the bounding box. F1 rose from 0.54 to 0.93, false positives fell from 9 to 5, and missed hoggers fell from 24 to 1. Eight-second evidence clips and thumbnails are published from the Kaggle computation unit to Nextcloud; the event record only stores the file path.',
         },
         summary: {
-          id: 'Pipeline computer vision untuk CCTV jalan tol: enam lajur terkalibrasi, adaptive anchor, dan indikasi hogging berbasis aturan, plus platform data Kafka, DuckDB, dan Streamlit.',
-          en: 'Computer-vision pipeline for highway CCTV: six calibrated lanes, an adaptive anchor, and rule-based hogging indications, plus a Kafka, DuckDB, and Streamlit data platform.',
+          id: 'Pipeline computer vision untuk CCTV jalan tol: enam lajur terkalibrasi, voting bbox, pemeriksaan kendaraan yang mendahului, dan aturan hogging yang di-tuning dengan 56 kendaraan berlabel.',
+          en: 'Computer-vision pipeline for highway CCTV: six calibrated lanes, bbox voting, overtake-aware exemption, and hogging rules tuned on 56 labelled vehicles.',
         },
         caveat: {
-          id: 'Prototipe pada satu profil kamera dan dua klip pendek. Hogging adalah indikasi berbasis aturan, bukan penentuan hukum; replay bukan inferensi langsung; jumlah kendaraan adalah batas bawah karena track ID dapat berganti setelah oklusi. Belum ada studi akurasi berlabel.',
-          en: 'Prototype on one camera profile and two short clips. Hogging is a rule-based indication, not a legal determination; replay is not live inference; vehicle counts are a lower bound because track IDs can switch after occlusion. No labelled accuracy study was run.',
+          id: 'Prototipe pada satu profil kamera dan klip pendek. Hogging adalah indikasi berbasis aturan, bukan penentuan hukum; replay bukan inferensi langsung. Evaluasi memakai 56 kendaraan yang direview manual dari satu klip 10 menit, dengan akurasi kelas 85,7%; label bersifat level kendaraan, bukan bounding box, dan hasilnya tidak digeneralisasi ke seluruh lalu lintas.',
+          en: 'Prototype on one camera profile and short clips. Hogging is a rule-based indication, not a legal determination; replay is not live inference. Evaluation uses 56 manually reviewed vehicles from one 10-minute clip, with 85.7% class accuracy; labels are vehicle-level, not bounding boxes, and the results are not generalized to all traffic.',
         },
-        tags: ['Python', 'YOLO11n', 'ByteTrack', 'OpenCV', 'FastAPI', 'Kafka', 'DuckDB', 'Streamlit', 'pytest'],
+        tags: ['Python', 'YOLO11n', 'ByteTrack', 'OpenCV', 'Ground Truth', 'Precision / Recall', 'Nextcloud', 'pytest'],
         links: [{ label: 'Vision pipeline repository', href: 'https://github.com/ibrahim119920/highway-lane-analytics', visibility: 'public' }],
-        terms: 'highway lane occupancy detection vehicle tracking YOLO ByteTrack lane hogging Kafka DuckDB Streamlit computer vision CCTV adaptive anchor polygonal lanes event contract',
+        terms: 'highway lane occupancy detection vehicle tracking YOLO ByteTrack lane hogging ground truth tuning precision recall F1 computer vision CCTV bbox vote Kaggle Nextcloud evidence clips',
         detailApp: 'highway',
+      },
+      {
+        title: 'Highway Lane Analytics — Data Pipeline & Dashboard',
+        icon: 'workflow',
+        accent: 'blue',
+        order: 2,
+        scope: { id: 'FastAPI receiver · Kafka · DuckDB / Parquet medallion · Streamlit · prototipe lokal', en: 'FastAPI receiver · Kafka · DuckDB / Parquet medallion · Streamlit · local prototype' },
+        description: {
+          id: 'Platform data yang menerima batch event dari pipeline vision, memvalidasi dan menghapus duplikat, memublikasikan ke Kafka, lalu membangun lapisan bronze, silver, dan gold untuk dashboard Streamlit empat halaman. Pada sesi replay live_20261110_214853, platform menerima 650 event, mencatat 603 kendaraan terlihat, 270 lane entry, 23 lane change, dan 87 indikasi hogging; 13 dari 13 pemeriksaan kualitas lolos dengan 0 baris karantina. Klip dan thumbnail disimpan di Nextcloud; dashboard memetakan metadata event ke file tersebut dan memutarnya lewat proxy server-side.',
+          en: 'A data platform that receives event batches from the vision pipeline, validates and de-duplicates them, publishes to Kafka, and builds bronze, silver, and gold layers for a four-page Streamlit dashboard. In replay session live_20261110_214853 it ingested 650 events, counted 603 vehicles seen, 270 lane entries, 23 lane changes, and 87 hogging indications; 13 of 13 data checks passed with 0 quarantined rows. Clips and thumbnails live in Nextcloud; the dashboard maps event metadata to those files and streams them through a server-side proxy.',
+        },
+        summary: {
+          id: 'Platform data FastAPI, Kafka, DuckDB, dan Streamlit yang mengubah event vision menjadi dashboard penggunaan lajur, sinyal hogging, dan kualitas data.',
+          en: 'FastAPI, Kafka, DuckDB, and Streamlit platform that turns vision events into a dashboard for lane usage, hogging signals, and data quality.',
+        },
+        caveat: {
+          id: 'Prototipe lokal yang dijalankan lewat replay, bukan ingestion kamera langsung. Repositori platform bersifat privat; dashboard dan bukti klip ditampilkan di halaman portofolio ini.',
+          en: 'Local prototype driven by replay, not live camera ingestion. The platform repository is private; the dashboard and evidence clips are shown in this portfolio case study.',
+        },
+        tags: ['FastAPI', 'Kafka', 'DuckDB', 'Parquet', 'Streamlit', 'Nextcloud', 'pytest'],
+        links: [],
+        terms: 'highway data pipeline dashboard FastAPI Kafka DuckDB Parquet medallion Streamlit Nextcloud evidence clips dashboard',
+        detailApp: 'highwaypipeline',
       },
     ],
   },
@@ -332,6 +350,28 @@ const projectSections = [
     title: { id: 'Proyek kecil dan tugas kuliah', en: 'Minor projects and coursework' },
     projects: [
       {
+        title: 'Chicago Traffic Crash Preprocessing',
+        icon: 'map-pin',
+        accent: 'blue',
+        scope: { id: 'Chicago Data Portal 2018–2025 · 3 tabel · 877.921 kecelakaan dipertahankan', en: 'Chicago Data Portal 2018–2025 · 3 tables · 877,921 crashes preserved' },
+        description: {
+          id: 'Membersihkan dan mengintegrasikan tiga tabel Chicago Data Portal (Crashes, Vehicles, People) 2018–2025 dengan Pandas, PyArrow/Parquet, GeoPandas, dan indeks SQLite sementara. Grain sumber dipertahankan; atribut dengan missing >30% dikeluarkan, ringkasan anak diagregasi sebelum join, dan 871.586 kecelakaan dipetakan ke 77 community area. Tabel analisis direduksi dari 67 menjadi 15 atribut (52 dihapus, 77,6%).',
+          en: 'Cleaned and integrated three Chicago Data Portal tables (Crashes, Vehicles, People) for 2018–2025 with Pandas, PyArrow/Parquet, GeoPandas, and a temporary SQLite index. Source grain is preserved; attributes with >30% missing are dropped, child summaries are aggregated before joining, and 871,586 crashes are mapped to 77 community areas. The analysis table is reduced from 67 to 15 attributes (52 removed, 77.6%).',
+        },
+        summary: {
+          id: 'Pembersihan dan integrasi 3 tabel Chicago crash 2018–2025; 877.921 kecelakaan dipertahankan dan dipetakan ke 77 community area.',
+          en: 'Cleaning and integration of three Chicago crash tables for 2018–2025; 877,921 crashes preserved and mapped to 77 community areas.',
+        },
+        caveat: {
+          id: 'Angka berasal dari salinan lokal; 6.335 kecelakaan belum terpetakan, 5.909 lokasi dan 891 total cedera masih tidak diketahui. Koordinat geocoder adalah estimasi alamat, dan jumlah kecelakaan bukan risiko per perjalanan karena data paparan tidak tersedia.',
+          en: 'Figures come from a local copy; 6,335 crashes remain unmapped, and 5,909 locations and 891 injury totals remain unknown. Geocoder coordinates are address estimates, and crash counts are not per-trip risk because exposure data is unavailable.',
+        },
+        tags: ['Python', 'Pandas', 'PyArrow', 'Parquet', 'SQLite', 'GeoPandas', 'Jupyter'],
+        links: [{ label: 'GitHub repository', href: 'https://github.com/ibrahim119920/traffic-crash-preprocessing', visibility: 'public' }],
+        terms: 'traffic crash accidents geospatial preprocessing data cleaning Chicago',
+        detailApp: 'chicago',
+      },
+      {
         title: 'C++ Car Rental Application',
         icon: 'car-front',
         accent: 'blue',
@@ -370,6 +410,102 @@ const projectSections = [
     ],
   },
 ];
+
+const projectPlainCopy = {
+  nusacommerce: {
+    scope: { id: 'Rencana memindahkan data toko online ke laporan dan dashboard', en: 'A plan for moving online-store data into reports and dashboards' },
+    summary: { id: 'Rancangan data platform yang memuat order dengan aman dan berakhir di laporan serta dashboard.', en: 'A data platform design that loads orders safely and ends in reports and dashboards.' },
+    description: { id: 'Proyek ini merancang alur data toko online: data order bergerak dari database melalui lapisan yang jelas menuju laporan. Jalur pertama memuat order baru dalam halaman kecil dan mengingat posisi terakhir, sehingga proses yang gagal bisa diulang dengan aman.', en: 'This project designs how online-store order data moves from its database through clear layers into reports. The first working path loads new orders in small pages and remembers where it stopped, so a failed load can be retried safely.' },
+    caveat: { id: 'Rancangan mencakup tiga sumber, tetapi yang berjalan baru jalur order. Data pembayaran, clickstream, dan beberapa alat pendukung masih berupa rencana.', en: 'The design covers three sources, but only the order path is running. Payment data, clickstream, and several supporting tools are still design targets.' },
+  },
+  lakehouse: {
+    scope: { id: 'Sembilan bulan data taksi New York · sekitar 30 juta perjalanan', en: 'Nine months of New York City taxi trips · about 30 million records' },
+    summary: { id: 'Pipeline batch yang mengubah sembilan bulan data taksi NYC menjadi tabel ringkasan yang bersih.', en: 'A batch pipeline that turns nine months of NYC taxi data into clean summary tables.' },
+    description: { id: 'Proyek ini memproses sembilan bulan perjalanan taksi New York City — lebih dari 30 juta perjalanan — dan mengubahnya menjadi tabel ringkasan untuk analisis. Job bulanan yang sama bisa dijalankan ulang tanpa menambah data ganda.', en: 'This project processes nine months of New York City taxi trips — more than 30 million records — and turns them into clean summary tables for analysis. The same monthly job can run again without adding duplicate data.' },
+    caveat: { id: 'Hasilnya mencakup Januari–September 2024 saja, bukan setahun penuh. Analisisnya deskriptif, bukan kausal.', en: 'The result covers January–September 2024 only, not a full year. The analysis is descriptive, not causal.' },
+  },
+  chicago: {
+    scope: { id: 'Data kecelakaan Chicago 2018–2025 · tiga tabel · 877.921 kecelakaan dipertahankan', en: 'Chicago crash data 2018–2025 · three tables · 877,921 crashes kept' },
+    summary: { id: 'Membersihkan dan menggabungkan tiga tabel kecelakaan Chicago, lalu memetakan lokasinya ke community area.', en: 'Cleaning and joining three Chicago crash tables, then mapping crashes to community areas.' },
+    description: { id: 'Proyek ini membersihkan dan menggabungkan tiga tabel kecelakaan Chicago agar bisa dianalisis bersama. Sebanyak 877.921 kecelakaan dipertahankan, sebagian besar dipetakan ke community area, dan tabel analisis dipangkas ke kolom yang penting.', en: 'This project cleans and joins three Chicago crash tables so they can be analysed together. It keeps 877,921 crashes, maps most of them to community areas, and trims the analysis table to the columns that matter.' },
+    caveat: { id: 'Sebagian kecelakaan belum bisa dipetakan dan sebagian total cedera belum diketahui. Jumlah kecelakaan bukan ukuran risiko per perjalanan karena data paparan tidak tersedia.', en: 'Some crashes could not be mapped, and some injury totals are unknown. Crash counts are not the same as risk per trip because exposure data is missing.' },
+  },
+  highway: {
+    scope: { id: 'Pipeline kamera · satu kamera · video prerekam · 56 kendaraan diperiksa manual', en: 'Camera pipeline · one camera · prerecorded video · 56 vehicles checked by hand' },
+    summary: { id: 'Pipeline kamera yang mencatat penggunaan lajur dan lane hogging, dengan aturan yang diuji pada 56 kendaraan yang diperiksa manual.', en: 'A camera pipeline that records lane use and lane hogging, with rules checked against 56 vehicles reviewed by hand.' },
+    description: { id: 'Proyek ini mengamati video jalan tol dan mencatat perilaku tiap kendaraan. Aturan lane hogging dirombak setelah 56 kendaraan diperiksa manual, menaikkan F1 aturan dari 0,54 ke 0,93. Klip bukti delapan detik dan thumbnail dikirim dari Kaggle ke Nextcloud; catatan event hanya menyimpan path file.', en: 'This project watches recorded highway video and records what each vehicle does. The lane-hogging rules were rebuilt after 56 vehicles were reviewed by hand, lifting rule F1 from 0.54 to 0.93. Eight-second evidence clips and thumbnails are sent from Kaggle to Nextcloud; the event record only stores the file path.' },
+    caveat: { id: 'Ini prototipe pada satu kamera. Sinyal hogging adalah kecocokan aturan, bukan pelanggaran hukum. Hasil akurasi berlaku untuk 56 kendaraan dari satu klip, bukan seluruh lalu lintas.', en: 'This is a prototype on one camera. A hogging signal is a rule match, not a legal violation. The accuracy result applies to 56 reviewed vehicles from one clip, not all traffic.' },
+  },
+  highwaypipeline: {
+    scope: { id: 'Platform data · FastAPI, Kafka, DuckDB, Streamlit · prototipe lokal', en: 'Data platform · FastAPI, Kafka, DuckDB, Streamlit · local prototype' },
+    summary: { id: 'Platform data yang mengubah event kamera menjadi dashboard penggunaan lajur, sinyal hogging, dan kualitas data.', en: 'A data platform that turns camera events into a dashboard for lane usage, hogging signals, and data quality.' },
+    description: { id: 'Platform ini menerima event dari pipeline kamera, memeriksa dan menghapus duplikat, lalu menyimpannya dalam lapisan yang rapi untuk dashboard. Klip dan thumbnail berada di Nextcloud; dashboard memutarnya lewat proxy di server.', en: 'This platform receives events from the camera pipeline, checks and de-duplicates them, and stores them in clear layers for the dashboard. Clips and thumbnails live in Nextcloud; the dashboard plays them through a server-side proxy.' },
+    caveat: { id: 'Prototipe lokal yang dijalankan lewat replay, bukan kamera langsung. Repositori platform bersifat privat; dashboard dan bukti klip ditampilkan di studi kasus ini.', en: 'Local prototype driven by replay, not a live camera. The platform repository is private; the dashboard and evidence clips are shown in this case study.' },
+  },
+  rekberin: {
+    scope: { id: 'Proyek tim publik · kontribusi saya di PR #28, #38, #44', en: 'Public team project · my work landed in PRs #28, #38, #44' },
+    summary: { id: 'API transaksi dan pembayaran untuk layanan escrow, termasuk pembayaran QRIS sandbox.', en: 'Transaction and payment APIs for an escrow service, including QRIS sandbox payments.' },
+    description: { id: 'Saya mengerjakan API transaksi yang menahan dan melepas pembayaran dengan aman, plus pembayaran QRIS sandbox dan pemeriksaan webhook. Pekerjaan ini digabungkan melalui pull request.', en: 'I worked on the transaction APIs that hold and release payments safely, plus sandbox QRIS payments and webhook checks. The work was merged through pull requests.' },
+    caveat: { id: 'Pembayaran memakai akun sandbox. Payout seller dan refund masih disimulasikan.', en: 'Payments use a sandbox account. Seller payouts and refunds are simulated.' },
+  },
+  lelaku: {
+    scope: { id: 'Proyek tim publik · integrasi feature branch · deployment Azure belum terverifikasi', en: 'Public team project · feature-branch integration · Azure deployment not verified' },
+    summary: { id: 'Login, profil, dan sesi untuk aplikasi travel, dibangun dengan FastAPI dan PostgreSQL.', en: 'Login, profile, and session handling for a travel app, built with FastAPI and PostgreSQL.' },
+    description: { id: 'Saya membangun API login, profil, dan sesi lalu menyambungkannya ke frontend. Password di-hash, sesi bisa dicabut, dan email harus unik.', en: 'I built login, profile, and session APIs and connected them to the frontend. Passwords are hashed, sessions can be revoked, and email addresses are unique.' },
+    caveat: { id: 'Deployment Azure sudah disiapkan tetapi belum diverifikasi.', en: 'The Azure deployment was prepared but not verified.' },
+  },
+  wanttosell: {
+    scope: { id: 'Proyek tim publik · backend dan testing', en: 'Public team project · backend and testing' },
+    summary: { id: 'Backend toko thrift online dengan katalog, order, dan reservasi stok yang aman.', en: 'An online thrift store backend with catalog, orders, and safe stock reservations.' },
+    description: { id: 'Saya mengerjakan backend Express dan MongoDB: login, pencarian produk, favorit, order, ulasan, dan reservasi stok. Uji race dengan sepuluh permintaan menghasilkan satu order dan sembilan konflik.', en: 'I worked on the Express and MongoDB backend: login, product search, favorites, orders, reviews, and stock reservations. A ten-request race test produced one order and nine conflicts.' },
+    caveat: { id: 'Pembayaran masih simulasi, dan satu assertion API masih gagal.', en: 'Payments are simulated, and one API assertion still fails.' },
+  },
+  photobooth: {
+    scope: { id: 'Proyek privat · operasi kamera fisik belum terverifikasi', en: 'Private project · physical camera operation not verified' },
+    summary: { id: 'Aplikasi photo booth local-first dengan sesi, audit log, dan jembatan kamera.', en: 'A local-first photo booth app with sessions, audit logs, and a camera bridge.' },
+    description: { id: 'Saya membangun alur sesi dan penyimpanan lokal untuk photo booth, plus jembatan C++ kecil ke kamera. Setiap tindakan dicatat untuk audit.', en: 'I built the session flow and local storage for a photo booth, plus a small C++ bridge to the camera. The app records each action for auditing.' },
+    caveat: { id: 'Kamera fisik belum diuji; pengujian memakai kamera simulasi.', en: 'The physical camera was not tested; tests used a simulated camera.' },
+  },
+  moneytracker: {
+    scope: { id: 'Proyek kolaboratif publik · UI, navigasi, dan proyeksi', en: 'Public collaborative project · UI, navigation, and projections' },
+    summary: { id: 'Aplikasi keuangan Flutter dengan tab dashboard dan proyeksi transaksi mendatang.', en: 'A Flutter personal-finance app with dashboard tabs and future transaction projections.' },
+    description: { id: 'Saya mengerjakan tab dashboard, navigasi bulan, dan proyeksi transaksi mendatang, dengan tes agar perhitungannya tetap stabil.', en: 'I worked on dashboard tabs, month navigation, and a projection of upcoming transactions, with tests to keep the calculations stable.' },
+    caveat: null,
+  },
+  riverlevel: {
+    scope: { id: 'Empat repositori publik · satu keluarga eksperimen', en: 'Four public repositories · an experiment family' },
+    summary: { id: 'Rangkaian eksperimen untuk memprediksi ketinggian air sungai.', en: 'A family of experiments for forecasting river water levels.' },
+    description: { id: 'Saya membandingkan baseline musiman sederhana dengan model boosting dan model neural, memakai validasi berbasis waktu dan fitur stasiun.', en: 'I compared simple seasonal baselines with boosting and neural models, using time-aware validation and station features.' },
+    caveat: null,
+  },
+  abm: {
+    scope: { id: 'Proyek tim publik · kontribusi vision, UI, dan heatmap', en: 'Public team project · vision, UI, and heatmap contributions' },
+    summary: { id: 'Simulasi yang menunjukkan pergerakan orang dan area paparan.', en: 'A simulation that shows how people move and where they are exposed.' },
+    description: { id: 'Saya mengerjakan vision berbasis obstacle, pembaruan UI simulasi, dan heatmap yang menunjukkan paparan.', en: 'I worked on obstacle-aware vision, simulation UI updates, and heatmaps that show exposure.' },
+    caveat: null,
+  },
+  'C++ Car Rental Application': {
+    scope: { id: 'Proyek publik · aplikasi konsol OOP', en: 'Public project · OOP console app' },
+    summary: { id: 'Aplikasi penyewaan mobil konsol dengan C++ berorientasi objek.', en: 'A console car-rental app built with object-oriented C++.' },
+    description: { id: 'Saya mengerjakan alur penyewaan dan penyimpanan data ke file teks.', en: 'I worked on rental workflows and saving data to text files.' },
+    caveat: null,
+  },
+  'OpenGL Porsche 911 Prototype': {
+    scope: { id: 'Proyek privat · model dan rendering grafis', en: 'Private project · graphics model and rendering' },
+    summary: { id: 'Prototipe rendering Porsche 911 dengan mesh, shader, dan model loading.', en: 'A Porsche 911 rendering prototype with meshes, shaders, and model loading.' },
+    description: { id: 'Saya membangun model loading, rendering mesh, dan shader untuk scene Porsche 911 3D.', en: 'I built model loading, mesh rendering, and shaders for a 3D Porsche 911 scene.' },
+    caveat: null,
+  },
+};
+
+function projectField(project, field) {
+  if (state.copyMode === 'plain') {
+    const key = project.detailApp ?? project.title;
+    const plain = projectPlainCopy[key];
+    if (plain && plain[field] != null) return plain[field];
+  }
+  return project[field];
+}
 
 const courses = [
   { title: 'Intermediate SQL', href: 'https://www.datacamp.com/statement-of-accomplishment/course/765f550ec280d12939854913201b66fbf0bb41cc?raw=1', terms: 'SQL querying joins' },
@@ -428,8 +564,17 @@ const appMeta = {
     label: { id: 'Highway Lane Occupancy', en: 'Highway Lane Occupancy' },
     icon: 'scan-line',
     description: {
-      id: 'Pipeline computer vision yang memetakan kendaraan CCTV jalan tol ke enam lajur terkalibrasi dan menghasilkan event lane hogging berbasis aturan, plus platform data Kafka, DuckDB, dan Streamlit.',
-      en: 'A computer vision pipeline that maps highway CCTV vehicles to six calibrated lanes and emits rule-based lane-hogging events, plus a Kafka, DuckDB, and Streamlit data platform.',
+      id: 'Pipeline computer vision yang memetakan kendaraan CCTV jalan tol ke enam lajur terkalibrasi dan menghasilkan event lane hogging berbasis aturan, dengan aturan yang di-tuning memakai 56 kendaraan berlabel manual.',
+      en: 'A computer vision pipeline that maps highway CCTV vehicles to six calibrated lanes and emits rule-based lane-hogging events, with rules tuned on 56 manually labelled vehicles.',
+    },
+  },
+  highwaypipeline: {
+    title: { id: 'Detail proyek — Highway Lane Analytics: Data Pipeline & Dashboard', en: 'Project detail — Highway Lane Analytics: Data Pipeline & Dashboard' },
+    label: { id: 'Highway Data Pipeline', en: 'Highway Data Pipeline' },
+    icon: 'workflow',
+    description: {
+      id: 'Platform data FastAPI, Kafka, DuckDB, dan Streamlit yang menerima event vision, membangun lapisan medallion, dan menampilkan penggunaan lajur, sinyal hogging, serta kualitas data.',
+      en: 'A FastAPI, Kafka, DuckDB, and Streamlit data platform that receives vision events, builds a medallion model, and shows lane usage, hogging signals, and data quality.',
     },
   },
   rekberin: { title: { id: 'Detail proyek — Rekberin', en: 'Project detail — Rekberin' }, label: { id: 'Rekberin', en: 'Rekberin' }, icon: 'shield-check' },
@@ -454,6 +599,7 @@ const appRoutes = {
   nusacommerce: '/projects/nusacommerce-data-platform',
   chicago: '/projects/chicago-traffic-crash',
   highway: '/projects/highway-lane-occupancy',
+  highwaypipeline: '/projects/highway-lane-analytics-data-pipeline',
   rekberin: '/projects/rekberin',
   lelaku: '/projects/lelaku',
   wanttosell: '/projects/wanttosell',
@@ -526,6 +672,7 @@ const translations = {
     menuHome: 'Beranda', menuWork: 'Karya', menuView: 'Tampilan', menuHelp: 'Bantuan',
     projects: 'Proyek', skills: 'Keahlian', learning: 'Pembelajaran', notes: 'Pembelajaran', home: 'Beranda', about: 'Profil', contact: 'Kontak',
     openSearch: 'Buka pencarian', showHelp: 'Tampilkan bantuan', switchLanguage: 'EN', switchLanguageAria: 'Beralih ke bahasa Inggris',
+    copyModeLabel: 'Gaya bahasa proyek', copyModeTechnical: 'Teknis', copyModePlain: 'Bahasa awam', technicalDetails: 'Detail teknis',
     switchToDark: 'Beralih ke mode gelap', switchToLight: 'Beralih ke mode terang', toastDark: 'Mode gelap aktif', toastLight: 'Mode terang aktif',
     maximize: 'Maksimalkan jendela', closeWindow: 'Tutup jendela', minimize: 'Minimalkan jendela', toggleMaximize: 'Ubah ukuran jendela',
     workMenu: 'Buka menu karya', viewMenu: 'Buka menu tampilan', helpMenu: 'Buka menu bantuan',
@@ -550,7 +697,7 @@ const translations = {
     aboutEyebrow: 'PROFIL / 001', aboutTitle: 'Tentang Ahmad', aboutDescription: 'Mahasiswa Information Engineering dengan pengalaman dari proyek individu dan kolaboratif.',
     positioningLead: 'Membangun sistem data dan software backend.',
     projectWorkSummary: 'Dalam proyek, saya mengerjakan ingestion, kualitas data, konsistensi database, pengujian otomatis, dan layanan berbasis container.',
-    education: 'Pendidikan', university: 'Universitas', program: 'Program', graduation: 'Masa studi', gpa: 'GPA', gpaScale: 'skala tidak dicantumkan', location: 'Lokasi',
+    education: 'Pendidikan', university: 'Universitas', program: 'Program', graduation: 'Masa studi', gpa: 'GPA', location: 'Lokasi',
     organizationalExperience: 'Pengalaman organisasi', seasonal: 'Kepanitiaan',
     projectsEyebrow: 'KARYA / 003', projectsTitle: 'Proyek terpilih',
     projectsDescription: 'Kontribusi, teknologi, dan cakupan implementasi pada proyek data, software, serta desain arsitektur.',
@@ -590,6 +737,7 @@ const translations = {
     menuHome: 'Home', menuWork: 'Work', menuView: 'View', menuHelp: 'Help',
     projects: 'Projects', skills: 'Skills', learning: 'Learning', notes: 'Learning', home: 'Home', about: 'About', contact: 'Contact',
     openSearch: 'Open search', showHelp: 'Show help', switchLanguage: 'ID', switchLanguageAria: 'Switch to Indonesian',
+    copyModeLabel: 'Project writing style', copyModeTechnical: 'Technical', copyModePlain: 'Plain language', technicalDetails: 'Technical details',
     switchToDark: 'Switch to dark mode', switchToLight: 'Switch to light mode', toastDark: 'Dark mode active', toastLight: 'Light mode active',
     maximize: 'Maximize window', closeWindow: 'Close window', minimize: 'Minimize window', toggleMaximize: 'Toggle window size',
     workMenu: 'Open work menu', viewMenu: 'Open view menu', helpMenu: 'Open help menu',
@@ -614,7 +762,7 @@ const translations = {
     aboutEyebrow: 'PROFILE / 001', aboutTitle: 'About Ahmad', aboutDescription: 'Information Engineering undergraduate with individual and collaborative project experience.',
     positioningLead: 'Building data systems and backend software.',
     projectWorkSummary: 'Project work includes ingestion, data quality, database consistency, automated testing, and containerized services.',
-    education: 'Education', university: 'University', program: 'Program', graduation: 'Study period', gpa: 'GPA', gpaScale: 'scale not stated', location: 'Location',
+    education: 'Education', university: 'University', program: 'Program', graduation: 'Study period', gpa: 'GPA', location: 'Location',
     organizationalExperience: 'Organizational experience', seasonal: 'Seasonal',
     projectsEyebrow: 'WORK / 003', projectsTitle: 'Selected projects',
     projectsDescription: 'Contributions, technologies, and implementation scope across data, software, and architecture projects.',
@@ -652,6 +800,7 @@ const state = {
   activeApp: 'home',
   language: 'en',
   darkMode: false,
+  copyMode: 'technical',
   minimized: false,
   maximized: false,
   searchReturnFocus: null,
@@ -1370,6 +1519,26 @@ function replaceLakehouseSection(selector, html, focusSelector) {
   if (focusSelector) $(focusSelector)?.focus();
 }
 
+function copyModeToggle() {
+  const options = [
+    ['technical', t('copyModeTechnical')],
+    ['plain', t('copyModePlain')],
+  ];
+  return `<div class="copy-mode" role="group" aria-label="${escapeHtml(t('copyModeLabel'))}">
+    ${options.map(([value, label]) => `
+      <button type="button" data-copy-mode="${value}" class="${state.copyMode === value ? 'is-active' : ''}" aria-pressed="${state.copyMode === value}">${escapeHtml(label)}</button>
+    `).join('')}
+  </div>`;
+}
+
+function technicalBlock(content) {
+  if (state.copyMode !== 'plain') return content;
+  return `<details class="technical-details">
+    <summary>${escapeHtml(t('technicalDetails'))}</summary>
+    <div class="technical-details__body">${content}</div>
+  </details>`;
+}
+
 function renderProject(project, index) {
   const detailOpen = project.detailApp
     ? ` data-open-app="${escapeHtml(project.detailApp)}" role="link" tabindex="0" aria-label="${escapeHtml(`${t('openProjectDetail')}: ${project.title}`)}"`
@@ -1379,9 +1548,9 @@ function renderProject(project, index) {
       <div class="project-card__index">${String(index + 1).padStart(2, '0')}</div>
       <div class="project-card__icon">${icon(project.icon)}</div>
       <div class="project-card__body">
-        <div class="project-card__meta"><span>${escapeHtml(localized(project.scope))}</span></div>
+        <div class="project-card__meta"><span>${escapeHtml(localized(projectField(project, 'scope')))}</span></div>
         <h4>${escapeHtml(project.title)}</h4>
-        <p>${escapeHtml(localized(project.summary ?? project.description))}</p>
+        <p>${escapeHtml(localized(projectField(project, 'summary') ?? projectField(project, 'description')))}</p>
         <div class="tag-list">${project.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join('')}</div>
         ${project.detailApp ? `<a class="inline-link project-card__open" href="${escapeHtml(pathForApp(project.detailApp))}" data-open-app="${escapeHtml(project.detailApp)}">${t('openProjectDetail')} ${icon('arrow-up-right')}</a>` : ''}
       </div>
@@ -1399,7 +1568,8 @@ function renderProject(project, index) {
 function renderProjects() {
   let globalIndex = 0;
   const sectionsHtml = projectSections.map((section) => {
-    const projectsHtml = section.projects.map((project) => renderProject(project, globalIndex++)).join('');
+    const ordered = [...section.projects].sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
+    const projectsHtml = ordered.map((project) => renderProject(project, globalIndex++)).join('');
     return `
       <section class="project-section" aria-labelledby="projectSection-${escapeHtml(section.id)}">
         <div class="section-heading section-heading--with-icon"><span class="section-heading__icon">${icon(section.icon)}</span><h3 id="projectSection-${escapeHtml(section.id)}">${escapeHtml(localized(section.title))}</h3></div>
@@ -1420,6 +1590,7 @@ function renderProjects() {
         <div><div class="eyebrow">${t('projectsEyebrow')}</div><h2 id="projectsTitle">${t('projectsTitle')}</h2></div>
         <p class="content-header__description">${t('projectsDescription')}</p>
       </div>
+      <div class="copy-mode-row">${copyModeToggle()}</div>
       ${sectionsHtml}
       <p class="project-evidence-note">${icon('info')}<span>${t('projectEvidenceNote')}</span></p>
     </section>
@@ -1435,12 +1606,13 @@ function renderLakehousePage() {
     <section class="content-app lakehouse-app" aria-labelledby="lakehouseTitle">
       <a class="inline-link lakehouse-back" href="/projects" data-open-app="projects">${icon('arrow-left')} <span>${localized({ id: 'Kembali ke proyek', en: 'Back to projects' })}</span></a>
       <div class="content-header content-header--split">
-        <div><div class="eyebrow">${localized({ id: 'DETAIL PROYEK', en: 'PROJECT DETAIL' })}</div><h2 id="lakehouseTitle">${escapeHtml(project.title)}</h2></div>        <p class="content-header__description">${escapeHtml(localized(project.scope))}</p>
+        <div><div class="eyebrow">${localized({ id: 'DETAIL PROYEK', en: 'PROJECT DETAIL' })}</div><h2 id="lakehouseTitle">${escapeHtml(project.title)}</h2></div>        <p class="content-header__description">${escapeHtml(localized(projectField(project, 'scope')))}</p>
       </div>
-      <p class="lakehouse-lead">${escapeHtml(localized(project.description))}</p>
-      <p class="lakehouse-caveat"><strong>${localized({ id: 'Cakupan:', en: 'Scope note:' })}</strong> ${escapeHtml(localized(project.caveat))}</p>
+      <div class="copy-mode-row">${copyModeToggle()}</div>
+      <p class="lakehouse-lead">${escapeHtml(localized(projectField(project, 'description')))}</p>
+      <p class="lakehouse-caveat"><strong>${localized({ id: 'Cakupan:', en: 'Scope note:' })}</strong> ${escapeHtml(localized(projectField(project, 'caveat')))}</p>
       <div class="tag-list">${project.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join('')}</div>
-      ${renderLakehouseViz()}
+      ${technicalBlock(renderLakehouseViz())}
     </section>
   `;
 }
@@ -1923,12 +2095,13 @@ function renderNusacommercePage() {
       <a class="inline-link lakehouse-back" href="/projects" data-open-app="projects">${icon('arrow-left')} <span>${localized({ id: 'Kembali ke proyek', en: 'Back to projects' })}</span></a>
       <div class="content-header content-header--split">
         <div><div class="eyebrow">${localized({ id: 'DETAIL PROYEK', en: 'PROJECT DETAIL' })}</div><h2 id="nusacommerceTitle">${escapeHtml(project.title)}</h2></div>
-        <p class="content-header__description">${escapeHtml(localized(project.scope))}</p>
+        <p class="content-header__description">${escapeHtml(localized(projectField(project, 'scope')))}</p>
       </div>
-      <p class="lakehouse-lead">${escapeHtml(localized(project.description))}</p>
-      <p class="lakehouse-caveat"><strong>${localized({ id: 'Cakupan:', en: 'Scope note:' })}</strong> ${escapeHtml(localized(project.caveat))}</p>
+      <div class="copy-mode-row">${copyModeToggle()}</div>
+      <p class="lakehouse-lead">${escapeHtml(localized(projectField(project, 'description')))}</p>
+      <p class="lakehouse-caveat"><strong>${localized({ id: 'Cakupan:', en: 'Scope note:' })}</strong> ${escapeHtml(localized(projectField(project, 'caveat')))}</p>
       <div class="tag-list">${project.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join('')}</div>
-      ${renderNusacommerceViz()}
+      ${technicalBlock(renderNusacommerceViz())}
     </section>`;
 }
 
@@ -2385,12 +2558,13 @@ function renderChicagoPage() {
       <a class="inline-link lakehouse-back" href="/projects" data-open-app="projects">${icon('arrow-left')} <span>${localized({ id: 'Kembali ke proyek', en: 'Back to projects' })}</span></a>
       <div class="content-header content-header--split">
         <div><div class="eyebrow">${localized({ id: 'DETAIL PROYEK', en: 'PROJECT DETAIL' })}</div><h2 id="chicagoTitle">${escapeHtml(project.title)}</h2></div>
-        <p class="content-header__description">${escapeHtml(localized(project.scope))}</p>
+        <p class="content-header__description">${escapeHtml(localized(projectField(project, 'scope')))}</p>
       </div>
-      <p class="lakehouse-lead">${escapeHtml(localized(project.description))}</p>
-      <p class="lakehouse-caveat"><strong>${localized({ id: 'Cakupan:', en: 'Scope note:' })}</strong> ${escapeHtml(localized(project.caveat))}</p>
+      <div class="copy-mode-row">${copyModeToggle()}</div>
+      <p class="lakehouse-lead">${escapeHtml(localized(projectField(project, 'description')))}</p>
+      <p class="lakehouse-caveat"><strong>${localized({ id: 'Cakupan:', en: 'Scope note:' })}</strong> ${escapeHtml(localized(projectField(project, 'caveat')))}</p>
       <div class="tag-list">${project.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join('')}</div>
-      ${renderChicagoViz()}
+      ${technicalBlock(renderChicagoViz())}
     </section>`;
 }
 
@@ -2732,57 +2906,35 @@ function renderDetailPage(appId) {
       <a class="inline-link lakehouse-back" href="/projects" data-open-app="projects">${icon('arrow-left')} <span>${localized({ id: 'Kembali ke proyek', en: 'Back to projects' })}</span></a>
       <div class="content-header content-header--split">
         <div><div class="eyebrow">${localized({ id: 'DETAIL PROYEK', en: 'PROJECT DETAIL' })}</div><h2 id="${escapeHtml(appId)}Title">${escapeHtml(project.title)}</h2></div>
-        <p class="content-header__description">${escapeHtml(localized(project.scope))}</p>
+        <p class="content-header__description">${escapeHtml(localized(projectField(project, 'scope')))}</p>
       </div>
-      <p class="lakehouse-lead">${escapeHtml(localized(project.description))}</p>
-      ${project.caveat ? `<p class="lakehouse-caveat"><strong>${localized({ id: 'Cakupan:', en: 'Scope note:' })}</strong> ${escapeHtml(localized(project.caveat))}</p>` : ''}
+      <div class="copy-mode-row">${copyModeToggle()}</div>
+      <p class="lakehouse-lead">${escapeHtml(localized(projectField(project, 'description')))}</p>
+      ${projectField(project, 'caveat') ? `<p class="lakehouse-caveat"><strong>${localized({ id: 'Cakupan:', en: 'Scope note:' })}</strong> ${escapeHtml(localized(projectField(project, 'caveat')))}</p>` : ''}
       <div class="tag-list">${project.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join('')}</div>
       ${linksHtml}
-      ${renderDetailViz(detail)}
+      ${technicalBlock(renderDetailViz(detail))}
     </section>`;
 }
 
 
 const highwayData = {
-  environment: 'Python 3.10+ · Ultralytics YOLO11n · ByteTrack · OpenCV · FastAPI · Kafka · DuckDB · Streamlit',
+  environment: 'Python 3.10+ · Ultralytics YOLO11n · ByteTrack · OpenCV · Pandas · FastAPI · Kafka · DuckDB · Streamlit',
   hero: {
     eyebrow: { id: 'STUDI KASUS · COMPUTER VISION / DATA ENGINEERING', en: 'CASE STUDY · COMPUTER VISION / DATA ENGINEERING' },
-    headline: { id: 'Mengubah CCTV jalan tol menjadi data okupansi lajur', en: 'Turning highway CCTV into lane-occupancy data' },
+    headline: { id: 'Dari aturan tebakan menjadi aturan yang terukur', en: 'From guessed rules to measured rules' },
     subhead: {
-      id: 'Sistem dua bagian: pipeline vision yang mendeteksi dan melacak kendaraan di enam lajur terkalibrasi serta menandai lane hogging berbasis aturan, dan platform data streaming yang memindahkan event tersebut melalui Kafka ke dashboard DuckDB dan Streamlit.',
-      en: 'A two-part system: a vision pipeline that detects and tracks vehicles across six calibrated lanes and flags rule-based lane hogging, and a streaming data platform that moves those events through Kafka into a DuckDB and Streamlit dashboard.',
+      id: 'Pipeline vision ini memetakan kendaraan CCTV jalan tol ke enam lajur terkalibrasi dan mengirim event ke platform data Kafka, DuckDB, dan Streamlit. Yang berubah: 56 kendaraan dari klip 10 menit dilabeli manual, lalu aturan hogging dirombak — lajur 2 dan 3 diawasi, kendaraan yang mendahului dikecualikan, dan lajur ditentukan lewat voting bbox. F1 aturan naik dari 0,54 ke 0,93.',
+      en: 'This vision pipeline maps highway CCTV vehicles to six calibrated lanes and feeds typed events into a Kafka, DuckDB, and Streamlit data platform. The change: 56 vehicles from a 10-minute clip were manually labelled, then the hogging rules were rebuilt — lanes 2 and 3 are monitored, legitimate overtaking is exempted, and lane membership is voted across the bounding box. Rule F1 rose from 0.54 to 0.93.',
     },
-    primary: { id: 'Baca studi kasus', en: 'Read the case study' },
     secondary: { id: 'Repositori pipeline vision', en: 'Vision pipeline repository' },
   },
   stats: [
-    { value: '158', label: { id: 'kendaraan dilacak', en: 'vehicles tracked' } },
-    { value: '111', label: { id: 'event dari klip 5 menit', en: 'events from a 5-minute clip' } },
-    { value: '8.65 fps', label: { id: 'di CPU', en: 'on CPU' } },
-    { value: '109', label: { id: 'tes otomatis', en: 'automated tests' } },
+    { value: '56', label: { id: 'kendaraan berlabel manual', en: 'manually labelled vehicles' } },
+    { value: '0.93', label: { id: 'F1 aturan setelah tuning', en: 'rule F1 after tuning' } },
+    { value: '9 → 5', label: { id: 'false positive', en: 'false positives' } },
+    { value: '137', label: { id: 'tes otomatis', en: 'automated tests' } },
   ],
-  overview: {
-    label: { id: 'Masalah', en: 'The problem' },
-    heading: { id: 'Okupansi lajur adalah masalah geometri sebelum menjadi masalah machine learning', en: 'Lane occupancy is a geometry problem before it is a machine-learning problem' },
-    paragraphs: [
-      {
-        id: 'Kamera jalan tol sudah merekam semuanya. Bagian sulitnya adalah mengubah piksel menjadi sesuatu yang dapat di-query tim data: kendaraan ada di lajur mana, berapa lama ia berada di sana, apakah berpindah lajur, dan apakah ia berada di lajur pendahulu lebih lama daripada batas aturan?',
-        en: 'Highway cameras already record everything. The hard part is turning pixels into something a data team can query: which lane is each vehicle in, how long did it stay, did it change lanes, and did it sit in the overtaking lane longer than the rules allow?',
-      },
-      {
-        id: 'Proyek ini menjawab pertanyaan tersebut untuk kamera jalan tol malam nyata di Tj. Priok KM 58+400, Jakarta. Kamera berada di median, sehingga kedua arah terlihat: tiga lajur northbound dan tiga lajur southbound, dengan lajur sisi median berperan sebagai lajur pendahulu pada masing-masing arah.',
-        en: 'This project answers those questions for a real night-time toll-road camera at Tj. Priok KM 58+400 in Jakarta. The camera sits on the median, so both carriageways are visible: three northbound lanes and three southbound lanes, with the median-side lane acting as the overtaking lane in each direction.',
-      },
-      {
-        id: 'Output-nya bukan skor black-box. Output-nya adalah aliran event bertipe — lane enter, lane exit, lane change, hogging indication — dengan timestamp, track ID, nama lajur, dan bukti video singkat.',
-        en: 'The output is not a black-box score. It is a stream of typed events — lane enter, lane exit, lane change, hogging indication — with timestamps, track IDs, lane names, and short video evidence.',
-      },
-    ],
-    callout: {
-      id: 'Lane hogging di sini adalah **indikasi berbasis aturan**, bukan penentuan hukum. Sistem melaporkan bahwa kendaraan cocok dengan aturan yang dikonfigurasi; sistem tidak menerbitkan pelanggaran.',
-      en: 'Lane hogging here is a **rule-based indication**, not a legal determination. The system reports that a vehicle matched a configured rule; it does not issue violations.',
-    },
-  },
   architecture: {
     label: { id: 'Arsitektur', en: 'Architecture' },
     heading: { id: 'Dua proyek, satu kontrak event', en: 'Two projects, one event contract' },
@@ -2817,6 +2969,8 @@ const highwayData = {
       { id: 'MP4 beranotasi', en: 'Annotated MP4' },
       { id: 'Evidence cutter · snapshot + klip 8 dtk', en: 'Evidence cutter · snapshot + 8 s clip' },
       { id: 'Laporan JSON · CSV · MD', en: 'Reports JSON · CSV · MD' },
+      { id: 'Tuning report · proxy + replay', en: 'Tuning report · proxy + replay' },
+      { id: 'Label manual · 56 kendaraan', en: 'Manual labels · 56 vehicles' },
     ],
   },
   lane: {
@@ -2828,8 +2982,8 @@ const highwayData = {
         en: 'Lane assignment uses normalized polygons, so the same profile works at any resolution. Each of the six lanes is a polygon drawn once against a 1434×1076 reference frame and divided by that frame\'s width and height.',
       },
       {
-        id: 'Tepi atas peta lajur berada di `y = 400` piksel referensi, tempat marka lajur bertemu. Batas northbound berakhir di x = 621, 647, 671, dan 697; batas southbound berakhir di x = 803, 774, 743, dan 715. Lajur 3 adalah lajur sisi median pada kedua arah dan membawa peran `overtaking` yang dipakai aturan hogging.',
-        en: 'The top edge of the lane map sits at `y = 400` in reference pixels, where the painted lane markings converge. Northbound boundaries end at x = 621, 647, 671, and 697; southbound boundaries end at x = 803, 774, 743, and 715. Lane 3 is the median-side lane in both directions and carries the `overtaking` role that the hogging rules use.',
+        id: 'Tepi atas peta lajur berada di `y = 400` piksel referensi, tempat marka lajur bertemu. Batas northbound berakhir di x = 621, 647, 671, dan 697; batas southbound berakhir di x = 803, 774, 743, dan 715. Lajur 3 adalah lajur sisi median pada kedua arah dan berperan sebagai lajur pendahulu. Aturan hasil tuning mengawasi lajur 2 dan 3, lalu mengecualikan kendaraan yang benar-benar sedang mendahului.',
+        en: 'The top edge of the lane map sits at `y = 400` in reference pixels, where the painted lane markings converge. Northbound boundaries end at x = 621, 647, 671, and 697; southbound boundaries end at x = 803, 774, 743, and 715. Lane 3 is the median-side overtaking lane in both directions. The tuned rules monitor lanes 2 and 3, then exempt vehicles that are genuinely passing.',
       },
       {
         id: 'Kalibrasi adalah skrip, bukan edit manual. Skrip merender gambar overlay, menghasilkan YAML ternormalisasi, dan konfigurasi diuji terhadap output tersebut, sehingga perubahan lajur tidak dapat diam-diam menyimpang dari gambar.',
@@ -2841,11 +2995,11 @@ const highwayData = {
       [{ id: 'Tepi atas peta', en: 'Map top edge' }, 'y = 400 px'],
       [{ id: 'Batas northbound', en: 'Northbound boundaries' }, 'x = 621 · 647 · 671 · 697'],
       [{ id: 'Batas southbound', en: 'Southbound boundaries' }, 'x = 803 · 774 · 743 · 715'],
-      [{ id: 'Lajur pendahulu', en: 'Overtaking lane' }, { id: 'lajur 3 · kedua arah', en: 'lane 3 · both directions' }],
+      [{ id: 'Lajur diawasi', en: 'Monitored lanes' }, { id: 'lajur 2 & 3 · kedua arah', en: 'lanes 2 & 3 · both directions' }],
     ],
     mappingCaption: {
-      id: 'Enam poligon lajur terkalibrasi pada frame referensi 1434×1076. Lajur 3 adalah lajur pendahulu di sisi median pada masing-masing arah.',
-      en: 'The six calibrated lane polygons, drawn on the 1434×1076 reference frame. Lane 3 is the median-side overtaking lane in each direction.',
+      id: 'Enam poligon lajur terkalibrasi pada frame referensi 1434×1076. Lajur 3 adalah lajur pendahulu di sisi median; aturan hasil tuning mengawasi lajur 2 dan 3.',
+      en: 'The six calibrated lane polygons, drawn on the 1434×1076 reference frame. Lane 3 is the median-side overtaking lane; the tuned rules monitor lanes 2 and 3.',
     },
     mappingAlt: {
       id: 'Frame kamera jalan tol dengan enam poligon lajur berwarna, tiga northbound di kiri dan tiga southbound di kanan, bertemu ke arah horizon.',
@@ -2861,39 +3015,35 @@ const highwayData = {
     },
   },
   anchor: {
-    label: { id: 'Masalah anchor', en: 'The anchor problem' },
-    heading: { id: 'Mengapa titik tengah bounding box adalah uji lajur yang salah', en: 'Why a bounding-box centre is the wrong lane test' },
+    label: { id: 'Penentuan lajur', en: 'Lane assignment' },
+    heading: { id: 'Mengapa satu titik adalah uji lajur yang salah', en: 'Why a single point is the wrong lane test' },
     paragraphs: [
       {
-        id: 'Truk yang dekat kamera memiliki box besar. Titik tengah geometrisnya dapat berada di atas garis lajur atau bahkan di lajur berikutnya, sementara rodanya jelas berada di satu lajur. Memakai titik tengah box menghasilkan lajur yang berkedip tepat di area yang paling andal: near field.',
-        en: 'A truck close to the camera has a large box. Its geometric centre can sit over the lane line or even in the next lane, while its wheels are clearly in one lane. Using the box centre produces lane flapping exactly where the scene is most reliable: the near field.',
+        id: 'Truk yang dekat kamera memiliki box besar. Titik tengah bawahnya dapat berada di atas garis lajur atau bahkan di lajur berikutnya, sementara rodanya jelas berada di satu lajur. Memakai satu titik menghasilkan lajur yang berkedip tepat di area yang paling andal: near field.',
+        en: 'A truck close to the camera has a large box. Its bottom-centre point can sit over the lane line or even in the next lane, while its wheels are clearly in one lane. Using a single point produces lane flapping exactly where the scene is most reliable: the near field.',
       },
       {
-        id: 'Perbaikannya adalah anchor adaptif. Box kecil memakai `bottom_center`. Saat lebar box melewati 90 piksel, anchor bergeser ke sudut bawah luar — bottom-left untuk arus northbound, bottom-right untuk southbound — dan mencapai sudut pada 250 piksel. Arahnya tidak di-hard-code per frame: arah dipilih melalui voting pada frame berurutan dengan deadband kecil, sehingga satu deteksi berisik tidak dapat membaliknya.',
-        en: 'The fix is an adaptive anchor. Small boxes use `bottom_center`. As box width grows past 90 pixels, the anchor slides toward the outer bottom corner — bottom-left for northbound traffic, bottom-right for southbound — reaching the corner at 250 pixels. The direction is not hard-coded per frame: it is voted over consecutive frames with a small deadband, so a single noisy detection cannot flip it.',
+        id: 'Perbaikannya adalah `bbox_vote`: lima titik di sepanjang bottom edge bbox (10%–90% lebar) dipetakan ke poligon lajur, lalu lajur dengan suara terbanyak dipakai. Voting dibatasi ke lajur dengan arah perjalanan yang sama. Kalau tidak ada lajur yang mencapai 50% suara, tracker kembali ke titik bottom-centre.',
+        en: 'The fix is `bbox_vote`: five points along the bottom edge of the box (10%–90% of its width) are mapped to lane polygons, and the majority lane wins. Voting is restricted to lanes with the same travel direction. If no lane reaches 50% agreement, the tracker falls back to the bottom-centre point.',
       },
       {
-        id: 'Pengaman kedua adalah hysteresis. Kendaraan harus terlihat di lajur baru selama jumlah frame minimum sebelum lane change dihasilkan, sehingga kedipan batas tidak menciptakan event palsu.',
-        en: 'A second guard is hysteresis. A vehicle must be seen in a new lane for a minimum number of frames before a lane change is emitted, which stops boundary flicker from creating false events.',
+        id: 'Pada replay 49 kendaraan yang berhasil dipetakan, perubahan ini menaikkan kecocokan lajur dari 98,0% menjadi 100% dan memperbaiki kasus truk near-field yang sebelumnya jatuh ke lajur sebelah. Penentuan kelas juga ikut diperbaiki: kelas kendaraan dipilih lewat vote berbobot confidence sepanjang track, bukan frame terakhir.',
+        en: 'On the 49 mapped vehicles in the replay, this raised lane agreement from 98.0% to 100% and fixed the wide near-field truck case that previously landed in the neighbouring lane. Vehicle class evolved too: class is now a confidence-weighted vote over the whole track, not the latest frame.',
       },
     ],
-    quote: {
-      id: 'Near field adalah tempat box paling besar dan uji lajur paling mudah salah.',
-      en: 'The near field is where the boxes are largest and the lane test is easiest to get wrong.',
-    },
-    small: { id: 'Box kecil memakai titik tengah bawah.', en: 'Small box uses the bottom centre.' },
-    wide: { id: 'Box lebar memakai sudut bawah luar.', en: 'Wide box uses the outer bottom corner.' },
+    small: { id: 'Satu titik bisa jatuh di garis lajur.', en: 'A single point can fall on the lane line.' },
+    wide: { id: 'Lima titik di bottom edge, majority vote.', en: 'Five bottom-edge points, majority vote.' },
     note: {
-      id: 'Anchor bergeser antara 90 dan 250 piksel; arah dipilih melalui voting frame dan lane change dijaga oleh hysteresis.',
-      en: 'The anchor slides between 90 and 250 pixels; direction is voted over frames and lane changes are gated by hysteresis.',
+      id: 'Voting dibatasi arah perjalanan; jika tidak ada lajur mencapai 50% suara, tracker kembali ke bottom-centre.',
+      en: 'Voting is restricted to travel direction; if no lane reaches 50% agreement, the tracker falls back to bottom-centre.',
     },
   },
   events: {
     label: { id: 'Event dan aturan', en: 'Events and rules' },
     heading: { id: 'Model event kecil dan bertipe', en: 'A small, typed event model' },
     intro: {
-      id: 'Setiap event membawa `event_id`, `camera_id`, `track_id`, `object_class`, `lane_name`, `timestamp`, `video_time_s`, `frame_index`, `severity`, dan `rule_name` bila relevan. Lane change dihasilkan sebagai triplet berurutan: exit, change, enter, pada frame yang sama. Urutan ini penting di downstream karena memungkinkan pipeline merekonstruksi transisi lajur tanpa menebak.',
-      en: 'Every event carries `event_id`, `camera_id`, `track_id`, `object_class`, `lane_name`, `timestamp`, `video_time_s`, `frame_index`, `severity`, and `rule_name` where relevant. A lane change is emitted as an ordered triplet: exit, change, enter, on the same frame. That ordering matters downstream, because it lets the pipeline reconstruct lane transitions without guessing.',
+      id: 'Setiap event membawa `event_id`, `camera_id`, `track_id`, `object_class`, `lane_name`, `timestamp`, `video_time_s`, `frame_index`, `severity`, dan `rule_name` bila relevan. Lane change dihasilkan sebagai triplet berurutan: exit, change, enter, pada frame yang sama. Indikasi hogging dievaluasi saat lane stint berakhir (`evaluate_at: stint`), sehingga seluruh proses mendahului terlihat sebelum keputusan diambil dan `dwell_seconds` adalah durasi akhir stint.',
+      en: 'Every event carries `event_id`, `camera_id`, `track_id`, `object_class`, `lane_name`, `timestamp`, `video_time_s`, `frame_index`, `severity`, and `rule_name` where relevant. A lane change is emitted as an ordered triplet: exit, change, enter, on the same frame. Hogging is evaluated when the lane stint ends (`evaluate_at: stint`), so the whole pass is visible before a decision and `dwell_seconds` is the final stint dwell.',
     },
     eventCaption: { id: 'Empat tipe event inti.', en: 'Four core event types.' },
     eventHead: [{ id: 'Event', en: 'Event' }, { id: 'Kapan aktif', en: 'When it fires' }, { id: 'Field tambahan', en: 'Extra fields' }],
@@ -2901,18 +3051,61 @@ const highwayData = {
       ['`lane_enter`', { id: 'Track dikonfirmasi berada di dalam lajur', en: 'A track is confirmed inside a lane' }, 'lane, timestamp'],
       ['`lane_exit`', { id: 'Track meninggalkan lajur selama jumlah frame yang disyaratkan', en: 'A track leaves the lane for the required frames' }, 'lane, dwell'],
       ['`lane_change`', { id: 'Exit dan enter mengarah ke lajur berbeda', en: 'Exit and enter resolve to different lanes' }, { id: 'from/to lane', en: 'from/to lane' }],
-      ['`lane_hogging_indication`', { id: 'Track cocok dengan aturan yang dikonfigurasi', en: 'A track matches a configured rule' }, { id: 'severity, rule', en: 'severity, rule' }],
+      ['`lane_hogging_indication`', { id: 'Stint berakhir dan track cocok dengan aturan', en: 'The stint ends and the track matches a rule' }, { id: 'severity, rule, dwell', en: 'severity, rule, dwell' }],
     ],
-    ruleCaption: { id: 'Dua aturan hogging yang dikonfigurasi.', en: 'Two configured hogging rules.' },
+    ruleCaption: { id: 'Dua aturan setelah tuning; lajur 1 tidak pernah ditandai.', en: 'Two rules after tuning; lane 1 is never flagged.' },
     ruleHead: [{ id: 'Aturan', en: 'Rule' }, { id: 'Berlaku untuk', en: 'Applies to' }, { id: 'Kondisi', en: 'Condition' }, { id: 'Severity', en: 'Severity' }],
     ruleRows: [
-      ['`heavy_vehicle_in_overtaking_lane`', { id: 'truck, bus', en: 'truck, bus' }, { id: 'dwell apa pun di lajur pendahulu, guard 0,4 dtk', en: 'any dwell in an overtaking lane, 0.4 s guard' }, 'high'],
-      ['`prolonged_overtaking_lane`', { id: 'car', en: 'car' }, { id: 'minimal 2,0 dtk di lajur pendahulu', en: 'at least 2.0 s in an overtaking lane' }, 'medium'],
+      ['`heavy_cruising_lane_2_3`', { id: 'truck, bus', en: 'truck, bus' }, { id: '≥ 0,4 dtk di lajur 2 atau 3, tanpa sedang mendahului', en: '≥ 0.4 s in lane 2 or 3, not actively overtaking' }, 'high'],
+      ['`car_cruising_lane_3`', { id: 'car', en: 'car' }, { id: '≥ 0,4 dtk di lajur 3, tanpa sedang mendahului', en: '≥ 0.4 s in lane 3, not actively overtaking' }, 'medium'],
     ],
     outro: {
-      id: 'Aturan adalah konfigurasi, bukan kode. Setiap aturan memilih peran lajur, kelas kendaraan, durasi dwell minimum, dan severity. Kendaraan yang tidak cocok dengan aturan tetap dilacak dan dilaporkan sebagai penggunaan yang diizinkan. Ini memisahkan "observed" dan "flagged", perbedaan yang dibutuhkan tim operasi nyata.',
-      en: 'Rules are configuration, not code. Each rule selects lane roles, vehicle classes, a minimum dwell time, and a severity. A vehicle that does not match a rule is still tracked and reported as allowed usage. This keeps "observed" and "flagged" separate, which is the distinction a real operations team would need.',
+      id: 'Aturan adalah konfigurasi, bukan kode. Kendaraan dikecualikan apabila di lajur sebelah dalam ada kendaraan yang lebih lambat di depan dalam jarak 10% tinggi frame (atau baru saja terlewati, sampai 2,5% di belakang). Satu keberhasilan mendahului membebaskan sisa lane stint. Kendaraan yang tidak cocok tetap dilacak dan dilaporkan sebagai penggunaan yang diizinkan — pemisahan antara "observed" dan "flagged".',
+      en: 'Rules are configuration, not code. A vehicle is exempt when a slower vehicle in the adjacent inner lane is ahead within 10% of the frame height (or was just passed, up to 2.5% behind). One confirmed pass exempts the rest of that lane stint. Vehicles that do not match are still tracked and reported as allowed usage — the split between "observed" and "flagged".',
     },
+  },
+  tuning: {
+    label: { id: 'Ground truth', en: 'Ground truth' },
+    heading: { id: '56 kendaraan berlabel, aturan diukur ulang', en: '56 labelled vehicles, rules re-measured' },
+    paragraphs: [
+      {
+        id: 'Aturan lama hanya menandai lajur 3 berdasarkan dwell time. Setelah 56 kendaraan dari klip 10 menit KM 58+400 direview manual — 43 hogger dan 13 bukan — kedua jenis kesalahan terlihat: mobil yang sedang mendahului ikut ditandai, sementara truk dan bus yang cruising di lajur 2 lolos.',
+        en: 'The old rule flagged only lane 3 using dwell time. After 56 vehicles from a 10-minute KM 58+400 clip were manually reviewed — 43 hoggers and 13 non-hoggers — both failure modes were visible: passing cars were flagged, while trucks and buses cruising in lane 2 slipped through.',
+      },
+      {
+        id: 'Aturan dirombak: lajur 2 dan 3 diawasi, kendaraan yang mendahului dikecualikan berdasarkan posisi dan kecepatan relatif, lajur ditentukan lewat voting bbox, dan keputusan diambil saat lane stint berakhir. Tuning memakai CLI dengan dua mode evaluasi — proxy lane-stint pada 56 label dan replay bbox per frame pada 49 kendaraan yang berhasil dipetakan — plus grid search dan laporan Markdown/CSV/JSON.',
+        en: 'The rule set was rebuilt: lanes 2 and 3 are monitored, overtaking is exempted using relative position and speed, lane membership is voted across the bounding box, and the decision is made when the lane stint ends. Tuning uses a CLI with two evaluation modes — a lane-stint proxy over 56 labels and a per-frame bbox replay over 49 mapped vehicles — plus grid search and Markdown/CSV/JSON reports.',
+      },
+    ],
+    proxyCaption: {
+      id: 'Confusion matrix — 56 kendaraan berlabel, evaluasi proxy lane-stint.',
+      en: 'Confusion matrix — 56 labelled vehicles, lane-stint proxy evaluation.',
+    },
+    proxyHead: [{ id: 'Konfigurasi', en: 'Configuration' }, 'TP', 'FP', 'FN', 'TN', { id: 'Precision', en: 'Precision' }, { id: 'Recall', en: 'Recall' }, 'F1'],
+    proxyRows: [
+      [{ id: 'Sebelum · lajur 3, live, tanpa overtake', en: 'Before · lane 3, live, no overtake' }, '19', '9', '24', '4', '0.679', '0.442', '0.535'],
+      [{ id: 'Sesudah · lajur 2+3, overtake exemption, stint', en: 'After · lanes 2+3, overtake exemption, stint' }, '42', '5', '1', '8', '0.894', '0.977', '0.933'],
+    ],
+    replayCaption: {
+      id: 'Replay bbox per frame — 49 dari 56 kendaraan berhasil dipetakan lewat time + lane.',
+      en: 'Per-frame bbox replay — 49 of 56 vehicles were mapped by time + lane.',
+    },
+    replayRows: [
+      [{ id: 'Sebelum · rule lama di-replay', en: 'Before · old rule replayed' }, '17', '9', '19', '4', '0.654', '0.472', '0.548'],
+      [{ id: 'Sesudah · rule tuned di-replay', en: 'After · tuned rule replayed' }, '35', '6', '1', '7', '0.854', '0.972', '0.909'],
+    ],
+    facts: [
+      [{ id: 'Kecocokan lajur', en: 'Lane agreement' }, { id: '98,0% → 100%', en: '98.0% → 100%' }],
+      [{ id: 'Akurasi kelas', en: 'Class accuracy' }, { id: '85,7%', en: '85.7%' }],
+      [{ id: 'Klip evaluasi', en: 'Evaluation clip' }, { id: '10 menit · 10.786 frame', en: '10 minutes · 10,786 frames' }],
+      [{ id: 'Tes otomatis', en: 'Automated tests' }, '137'],
+    ],
+    note: {
+      id: 'F1 ini berlaku pada kendaraan yang direview, bukan seluruh lalu lintas. Kelas kendaraan masih 85,7%; karena lajur 2 hanya menandai truk/bus, satu truk yang terbaca mobil bisa lolos. Label bersifat level kendaraan, bukan bounding box, sehingga tidak dipakai untuk fine-tune YOLO.',
+      en: 'This F1 applies to the reviewed vehicles, not all traffic. Class accuracy is still 85.7%; because lane 2 only flags trucks and buses, a truck read as a car can slip through. Labels are vehicle-level, not bounding boxes, so they are not used to fine-tune YOLO.',
+    },
+    artifact: { id: 'Commit c33c17b · tuning CLI, label, dan laporan', en: 'Commit c33c17b · tuning CLI, labels, and reports' },
+    artifactHref: 'https://github.com/ibrahim119920/highway-lane-analytics/commit/c33c17b',
   },
   evidence: {
     label: { id: 'Bukti per event', en: 'Evidence per event' },
@@ -2932,8 +3125,8 @@ const highwayData = {
       },
     ],
     imageCaption: {
-      id: 'Snapshot hogging dari klip malam: mobil #203 di `nb_lane_3`, ditandai `! HOGGING medium` oleh `prolonged_overtaking_lane`, dengan dwell time dan anchor point terlihat.',
-      en: 'A hogging snapshot from the night clip: car #203 in `nb_lane_3`, flagged `! HOGGING medium` by `prolonged_overtaking_lane`, with its dwell time and anchor point visible.',
+      id: 'Snapshot hogging dari klip malam: mobil di `nb_lane_3`, ditandai `! HOGGING medium`, dengan dwell time dan anchor point terlihat. Snapshot ini berasal dari run sebelum tuning, saat aturan masih berbasis lajur pendahulu saja.',
+      en: 'A hogging snapshot from the night clip: a car in `nb_lane_3`, flagged `! HOGGING medium`, with its dwell time and anchor point visible. This snapshot comes from a pre-tuning run, when the rule still watched only the overtaking lane.',
     },
     imageAlt: {
       id: 'Frame malam beranotasi dengan box merah di sekitar mobil, label lajur nb_lane_3, dan badge peringatan hogging.',
@@ -2965,6 +3158,10 @@ const highwayData = {
         id: 'Dashboard membaca Parquet hasil ekspor melalui koneksi DuckDB in-memory, sehingga tidak pernah bersaing dengan consumer untuk write lock pada database live.',
         en: 'The dashboard reads exported Parquet through an in-memory DuckDB connection, so it never competes with the consumer for the write lock on the live database.',
       },
+      {
+        id: 'Angka pada halaman ini berasal dari satu sesi replay, `live_20261110_214853`: 10 dari 10 jendela selesai, 650 event, 603 kendaraan terlihat, 270 lane entry, 23 lane change, dan 87 indikasi hogging. Dashboard menampilkan data tersebut lewat filter sesi, run, dan rentang tanggal.',
+        en: 'The numbers on this page come from one replay session, `live_20261110_214853`: 10 of 10 windows complete, 650 events, 603 vehicles seen, 270 lane entries, 23 lane changes, and 87 hogging indications. The dashboard exposes that data through session, run, and date-range filters.',
+      },
     ],
     pagesCaption: { id: 'Empat halaman dashboard.', en: 'Four dashboard pages.' },
     pagesHead: [{ id: 'Halaman', en: 'Page' }, { id: 'Pertanyaan yang dijawab', en: 'What it answers' }],
@@ -2974,62 +3171,95 @@ const highwayData = {
       [{ id: 'Hogging signals', en: 'Hogging signals' }, { id: 'Event mana yang cocok dengan aturan, menurut level dan rule, dengan baris yang dapat diunduh?', en: 'Which events matched a rule, by level and rule, with downloadable rows?' }],
       [{ id: 'Data quality', en: 'Data quality' }, { id: 'Run mana yang menghasilkan data ini, dan apakah data lengkap serta bebas duplikat?', en: 'Which run produced this data, and is it complete and free of duplicates?' }],
     ],
+    snapshot: {
+      caption: { id: 'Cuplikan sesi `live_20261110_214853` — 10 dari 10 jendela selesai.', en: 'Session snapshot `live_20261110_214853` — 10 of 10 windows complete.' },
+      head: [{ id: 'Metrik', en: 'Metric' }, { id: 'Nilai', en: 'Value' }],
+      rows: [
+        [{ id: 'Jendela terlihat / diharapkan', en: 'Windows seen / expected' }, '10 / 10'],
+        [{ id: 'Event', en: 'Events' }, '650'],
+        [{ id: 'Kendaraan terlihat', en: 'Vehicles seen' }, '603'],
+        [{ id: 'Lane entry', en: 'Lane entries' }, '270'],
+        [{ id: 'Lane change', en: 'Lane changes' }, '23'],
+        [{ id: 'Indikasi hogging', en: 'Hogging signals' }, { id: '87 · 2 aturan · 4 lajur', en: '87 · 2 rules · 4 lanes' }],
+        [{ id: 'Hogging per 1.000 lane entry', en: 'Hogging per 1,000 lane entries' }, '322.22'],
+        [{ id: 'Rata-rata waktu di lajur pendahulu', en: 'Average passing-lane time' }, '2.02 s'],
+        [{ id: 'Pemeriksaan kualitas', en: 'Data checks' }, { id: '13 / 13 lolos · 0 baris karantina', en: '13 / 13 passed · 0 quarantined rows' }],
+      ],
+      freshness: [
+        [{ id: 'Batch terakhir (WIB)', en: 'Latest batch (WIB)' }, '10 Nov 21:52:55'],
+        [{ id: 'Rata-rata delay data', en: 'Average data delay' }, '6 min'],
+        [{ id: 'Delay terpanjang', en: 'Longest data delay' }, '9 min'],
+        [{ id: 'Usia data saat diambil', en: 'Data age at capture' }, '3 min'],
+      ],
+      note: {
+        id: 'Semua angka berasal dari satu sesi replay, bukan ingestion kamera langsung. Indikasi hogging tetap merupakan kecocokan aturan, bukan penentuan pelanggaran.',
+        en: 'Every figure comes from one replay session, not live camera ingestion. A hogging indication remains a rule match, not a legal determination.',
+      },
+    },
     overviewCaption: {
-      id: 'Overview: masthead, ringkasan kendaraan, dan catatan cara membaca angka.',
-      en: 'Overview: masthead, vehicle summary, and a note on how to read the numbers.',
+      id: 'Overview: filter sesi, masthead jalan tol, delapan kartu ringkasan kendaraan, lane entry, lane change, dan indikasi hogging, plus catatan cara membaca angka.',
+      en: 'Overview: session filters, a highway masthead, eight summary cards for vehicles, lane entries, lane changes, and hogging signals, plus a note on how to read the numbers.',
     },
     overviewAlt: {
-      id: 'Dashboard terang dengan masthead jalan tol, lima kartu ringkasan kendaraan, dan catatan definisi metrik.',
-      en: 'Light dashboard with a highway masthead, five vehicle summary cards, and a note explaining the metrics.',
+      id: 'Dashboard gelap dengan masthead jalan tol dan kartu ringkasan: 603 kendaraan terlihat, 245 kendaraan per jendela, 245 masuk lajur, 23 lane change, 87 sinyal hogging, 355,10 hogging per 1.000 lane entry, dan 2,02 detik rata-rata waktu di lajur pendahulu.',
+      en: 'Dark dashboard with a highway masthead and summary cards: 603 vehicles seen, 245 vehicles per window, 245 entered a lane, 23 lane changes, 87 hogging signals, 355.10 hogging per 1,000 lane entries, and a 2.02 s average passing-lane time.',
+    },
+    laneCaption: {
+      id: 'Lane usage: heatmap kunjungan lajur per jam, box plot waktu di lajur menurut kelas kendaraan, dan matriks lane change dari → ke.',
+      en: 'Lane usage: a lane-visit heatmap by hour, time-in-lane box plots by vehicle class, and a lane-change from → to matrix.',
+    },
+    laneAlt: {
+      id: 'Halaman lane usage dengan heatmap kunjungan lajur per jam, box plot waktu di lajur untuk truk, mobil, dan bus, serta matriks lane change antar lajur.',
+      en: 'Lane usage page with a lane-visit heatmap by hour, time-in-lane box plots for truck, car, and bus, and a lane-change matrix between lanes.',
     },
     hoggingCaption: {
-      id: 'Hogging signals: event log dengan level, rule, dan waktu di lajur, plus breakdown severity dan rule.',
-      en: 'Hogging signals: event log with level, rule, and time in lane, plus severity and rule breakdowns.',
+      id: 'Hogging signals: 87 sinyal pada 4 lajur dan 2 aturan, dengan rata-rata 2,25 detik di lajur. Event log menampilkan track, kelas, lajur, dwell, level, rule, confidence, dan ketersediaan klip.',
+      en: 'Hogging signals: 87 signals across 4 lanes and 2 rules, averaging 2.25 s in lane. The event log shows track, class, lane, dwell, level, rule, confidence, and clip availability.',
     },
     hoggingAlt: {
-      id: 'Halaman hogging signals dengan kartu ringkasan, tabel event, dan meter severity serta rule.',
-      en: 'Hogging signals page with summary cards, an event table, and severity and rule meters.',
+      id: 'Halaman hogging signals dengan kartu 87 total sinyal, 4 lajur terlibat, 2 aturan terpicu, 2,25 detik rata-rata waktu di lajur, dan tabel event log berisi track, kelas kendaraan, lajur, dwell, level, rule, confidence, serta klip.',
+      en: 'Hogging signals page with cards for 87 total signals, 4 lanes involved, 2 rules triggered, and a 2.25 s average time in lane, plus an event log with track, vehicle class, lane, dwell, level, rule, confidence, and clip.',
     },
     qualityCaption: {
-      id: 'Run history, pemeriksaan integritas, dan tabel kualitas per run.',
-      en: 'Run history, integrity checks, and the quality-by-run table.',
+      id: 'Data quality: 13 dari 13 pemeriksaan lolos, 0 baris perlu perhatian, dan 0 baris karantina. Lane entry vs exit cocok (Δ0) di setiap jendela sesi.',
+      en: 'Data quality: 13 of 13 checks passed, 0 rows need attention, and 0 quarantined rows. Lane entries vs exits reconcile (Δ0) in every window of the session.',
     },
     qualityAlt: {
-      id: 'Halaman data quality dengan tabel run, empat pemeriksaan integritas, dan tabel kualitas per run.',
-      en: 'Data quality page with a run table, four integrity checks, and a quality-by-run table.',
+      id: 'Halaman data quality dengan 13/13 pemeriksaan lolos, 0 perlu perhatian, 0 baris karantina, dan daftar pemeriksaan termasuk duplicate event ID, event di luar jendela run, lane entry vs exit per jendela, serta baris karantina.',
+      en: 'Data quality page with 13/13 checks passed, 0 needing attention, 0 quarantined rows, and a check list covering duplicate event IDs, events outside the run window, lane entries vs exits per window, and quarantined rows.',
     },
-    screenshotLabel: { id: 'Screenshot menyusul', en: 'Screenshot pending' },
   },
   results: {
-    label: { id: 'Hasil', en: 'Results' },
-    heading: { id: 'Apa yang dihasilkan pipeline', en: 'What the pipeline produced' },
+    label: { id: 'Hasil operasional', en: 'Operational results' },
+    heading: { id: 'Throughput dan cakupan evaluasi', en: 'Throughput and evaluation coverage' },
     paragraphs: [
       {
-        id: 'Pada klip malam lima menit beresolusi 1024×768, diproses di CPU dengan frame stride 2, pipeline melacak 158 kendaraan dan menghasilkan 111 event pada 8,65 fps. Komposisinya 126 mobil, 29 truk, dan 3 bus. Lima event adalah indikasi hogging severity medium, semuanya di lajur pendahulu northbound, semuanya dari aturan prolonged-dwell yang sama.',
-        en: 'On a five-minute night clip at 1024×768, processed on CPU with frame stride 2, the pipeline tracked 158 vehicles and produced 111 events at 8.65 fps. That is 126 cars, 29 trucks, and 3 buses. Five events were medium-severity hogging indications, all in the northbound overtaking lane, all from the same prolonged-dwell rule.',
+        id: 'Pada klip 10 menit beresolusi 1024×768, replay CPU memproses 10.786 frame dalam 17 menit 44 detik (±10,1 fps) dan menghasilkan 323 track. Sebanyak 56 kendaraan direview manual untuk tuning; 49 di antaranya berhasil dipetakan untuk replay bbox per frame.',
+        en: 'On the 10-minute 1024×768 clip, a CPU replay processed 10,786 frames in 17 minutes 44 seconds (~10.1 fps) and produced 323 tracks. 56 vehicles were manually reviewed for tuning; 49 of them were mapped for per-frame bbox replay.',
       },
       {
-        id: 'Klip siang kedua berdurasi 55 detik menghasilkan 18 kendaraan, 20 event, 1 lane change, dan 1 indikasi hogging.',
-        en: 'A second 55-second daytime clip produced 18 vehicles, 20 events, 1 lane change, and 1 hogging indication.',
+        id: 'Hasil evaluasinya: F1 aturan naik dari 0,535 ke 0,933 pada proxy 56 label dan dari 0,548 ke 0,909 pada replay 49 kendaraan. False positive turun 9 ke 5, hogger yang lolos turun 24 ke 1, dan kecocokan lajur naik dari 98,0% ke 100%.',
+        en: 'The evaluation: rule F1 rose from 0.535 to 0.933 on the 56-label proxy and from 0.548 to 0.909 on the 49-vehicle replay. False positives fell from 9 to 5, missed hoggers fell from 24 to 1, and lane agreement rose from 98.0% to 100%.',
       },
     ],
-    caption: { id: 'Perbandingan dua klip.', en: 'Comparison of the two clips.' },
-    head: [{ id: 'Metrik', en: 'Metric' }, { id: 'Klip malam 5 menit', en: 'Five-minute night clip' }, { id: 'Klip siang 55 detik', en: '55-second day clip' }],
+    caption: { id: 'Cakupan run evaluasi 10 menit.', en: 'Coverage of the 10-minute evaluation run.' },
+    head: [{ id: 'Metrik', en: 'Metric' }, { id: 'Nilai', en: 'Value' }],
     rows: [
-      [{ id: 'Kendaraan', en: 'Vehicles' }, '158', '18'],
-      [{ id: 'Event', en: 'Events' }, '111', '20'],
-      [{ id: 'Perubahan lajur', en: 'Lane changes' }, '2', '1'],
-      [{ id: 'Indikasi hogging', en: 'Hogging indications' }, { id: '5 (medium)', en: '5 (medium)' }, { id: '1 (medium)', en: '1 (medium)' }],
-      [{ id: 'Throughput', en: 'Throughput' }, '8.65 fps', '—'],
-      [{ id: 'Menit puncak', en: 'Peak minute' }, { id: '32 event', en: '32 events' }, '—'],
+      [{ id: 'Frame diproses', en: 'Frames processed' }, '10.786'],
+      [{ id: 'Kendaraan dilacak', en: 'Vehicles tracked' }, '323'],
+      [{ id: 'Kendaraan direview manual', en: 'Vehicles manually reviewed' }, { id: '56 · 43 hogger, 13 bukan', en: '56 · 43 hoggers, 13 non-hoggers' }],
+      [{ id: 'Dipetakan untuk replay', en: 'Mapped for replay' }, '49'],
+      [{ id: 'Waktu proses CPU', en: 'CPU runtime' }, { id: '17 mnt 44 dtk', en: '17 min 44 s' }],
+      [{ id: 'Throughput', en: 'Throughput' }, { id: '±10,1 fps', en: '~10.1 fps' }],
+      [{ id: 'Tes otomatis', en: 'Automated tests' }, '137'],
     ],
     caveat: {
-      id: 'Ini adalah observasi satu kamera dan klip pendek, bukan benchmark. Track ID dapat berganti setelah oklusi, sehingga jumlah kendaraan adalah batas bawah volume lalu lintas. Tidak ada studi akurasi berlabel yang dijalankan.',
-      en: 'These are single-camera, short-clip observations, not a benchmark. Track IDs can switch after occlusion, so vehicle counts are a lower bound on traffic volume. No labelled accuracy study was run.',
+      id: 'Ini evaluasi satu kamera dan satu klip, bukan benchmark populasi. Label bersifat level kendaraan, bukan bounding box; akurasi kelas 85,7%; dan replay bukan inferensi langsung. Angka F1 hanya berlaku pada kendaraan yang direview.',
+      en: 'This is a single-camera, single-clip evaluation, not a population benchmark. Labels are vehicle-level, not bounding boxes; class accuracy is 85.7%; and replay is not live inference. The F1 numbers apply only to the reviewed vehicles.',
     },
     frameCaption: {
-      id: 'Output beranotasi pada klip siang: bus #31 di `sb_lane_2` selama 1,2 dtk, dengan box, track ID, kelas, lajur, dwell time, dan poligon lajur tetap di scene.',
-      en: 'Annotated output on the daytime clip: bus #31 in `sb_lane_2` for 1.2 s, with boxes, track IDs, class, current lane, dwell time, and lane polygons fixed in the scene.',
+      id: 'Output beranotasi dari run awal: bus di `sb_lane_2`, dengan box, track ID, kelas, lajur, dwell time, dan poligon lajur tetap di scene.',
+      en: 'Annotated output from an earlier run: a bus in `sb_lane_2`, with boxes, track IDs, class, current lane, dwell time, and lane polygons fixed in the scene.',
     },
     frameAlt: {
       id: 'Frame siang beranotasi dengan bus di dalam box oranye, label lajur, dan HUD lane occupancy.',
@@ -3051,8 +3281,11 @@ const highwayData = {
     caption: { id: 'Masalah, keputusan, dan hasilnya.', en: 'Problem, decision, and result.' },
     head: [{ id: 'Masalah', en: 'Problem' }, { id: 'Keputusan', en: 'Decision' }, { id: 'Hasil', en: 'Result' }],
     rows: [
-      [{ id: 'Box besar di near field melewati garis lajur', en: 'Large near-field boxes cross lane lines' }, { id: 'Anchor adaptif: titik tengah untuk box kecil, sudut luar untuk box lebar; arah divoting antar frame', en: 'Adaptive anchor: centre for small boxes, outer corner for wide ones, direction voted over frames' }, { id: 'Penetapan lajur stabil di near field', en: 'Stable lane assignment in the near field' }],
-      [{ id: 'Kedipan batas menciptakan lane change palsu', en: 'Boundary flicker creates fake lane changes' }, { id: 'Hysteresis frame sebelum lane change dikonfirmasi', en: 'Frame hysteresis before a lane change is confirmed' }, { id: '2 lane change dari 111 event, keduanya masuk akal', en: '2 lane changes in 111 events, both plausible' }],
+      [{ id: 'Aturan lama hanya melihat lajur 3 dan dwell time', en: 'The old rule watched only lane 3 and dwell time' }, { id: 'Label 56 kendaraan, awasi lajur 2+3, tambahkan overtake exemption', en: 'Label 56 vehicles, monitor lanes 2+3, add overtake exemption' }, { id: 'F1 0,54→0,93; false positive 9→5; hogger lolos 24→1', en: 'F1 0.54→0.93; false positives 9→5; missed hoggers 24→1' }],
+      [{ id: 'Satu titik lajur jatuh di garis pada box near-field lebar', en: 'A single lane point falls on the line for wide near-field boxes' }, { id: '`bbox_vote`: lima titik di bottom edge, majority vote dibatasi arah', en: '`bbox_vote`: five bottom-edge points, direction-restricted majority vote' }, { id: 'Kecocokan lajur 98,0%→100% pada 49 kendaraan', en: 'Lane agreement 98.0%→100% on 49 vehicles' }],
+      [{ id: 'Flag keluar sebelum proses mendahului selesai', en: 'A flag fired before the pass finished' }, { id: 'Evaluasi saat lane stint berakhir (`evaluate_at: stint`)', en: 'Evaluate at lane exit (`evaluate_at: stint`)' }, { id: 'Seluruh manuver terlihat; dwell = durasi akhir stint', en: 'Whole manoeuvre visible; dwell = final stint duration' }],
+      [{ id: 'Tidak ada cara mengukur kualitas aturan secara reproduksibel', en: 'No repeatable way to measure rule quality' }, { id: 'CLI tuning dengan proxy lane-stint, replay per frame, grid search, dan laporan', en: 'Tuning CLI with lane-stint proxy, per-frame replay, grid search, and reports' }, { id: 'Dua confusion matrix; tercakup 137 tes', en: 'Two confusion matrices; covered by 137 tests' }],
+      [{ id: 'Kedipan batas menciptakan lane change palsu', en: 'Boundary flicker creates fake lane changes' }, { id: 'Hysteresis frame sebelum lane change dikonfirmasi', en: 'Frame hysteresis before a lane change is confirmed' }, { id: 'Lane change hanya terbit saat perpindahan stabil', en: 'Lane changes are emitted only when the move is stable' }],
       [{ id: 'Footage malam menghasilkan skor rendah', en: 'Night footage scores low' }, { id: '`conf 0.30`, `imgsz 960`, kelas dibatasi ke car, bus, truck', en: '`conf 0.30`, `imgsz 960`, classes limited to car, bus, truck' }, { id: 'Recall yang dapat dipakai tanpa noise motor', en: 'Usable recall without motorcycles adding noise' }],
       [{ id: 'Demo langsung membutuhkan feed langsung', en: 'A live demo needs a live feed' }, { id: 'Batch dulu, lalu replay melalui kontrak webhook yang sama', en: 'Batch first, then replay through the same webhook contract' }, { id: 'Run end-to-end yang reproducible, tanpa GPU saat demo', en: 'Reproducible end-to-end runs, no GPU at demo time' }],
       [{ id: 'Event dan track datang pada laju berbeda', en: 'Events and tracks arrive at different rates' }, { id: 'Event per jendela waktu, track sekali, run-complete terakhir', en: 'Events per time window, tracks once, run-complete last' }, { id: 'Consumer dapat membangun ulang tabel gold hanya saat run selesai', en: 'Consumer can rebuild gold tables only when a run is complete' }],
@@ -3070,24 +3303,24 @@ const highwayData = {
     heading: { id: 'Apa yang bukan cakupan proyek ini', en: 'What this is not' },
     paragraphs: [
       {
-        id: 'Ini adalah prototipe, bukan deployment. Proyek berjalan pada satu profil kamera dan dua klip pendek. Tidak ada estimasi kecepatan, ANPR, re-identification lintas kamera, atau orkestrasi terjadwal.',
-        en: 'This is a prototype, not a deployment. It runs on one camera profile and two short clips. There is no speed estimation, no ANPR, no cross-camera re-identification, and no scheduled orchestration.',
+        id: 'Ini adalah prototipe, bukan deployment. Proyek berjalan pada satu profil kamera dan beberapa klip pendek. Tidak ada estimasi kecepatan, ANPR, re-identification lintas kamera, atau orkestrasi terjadwal.',
+        en: 'This is a prototype, not a deployment. It runs on one camera profile and a few short clips. There is no speed estimation, no ANPR, no cross-camera re-identification, and no scheduled orchestration.',
       },
       {
-        id: 'Framing yang jujur itu penting: hogging adalah indikasi berbasis aturan, replay bukan inferensi langsung, dan jumlah kendaraan adalah batas bawah karena ID tracker dapat berganti setelah oklusi.',
-        en: 'The honest framing matters: hogging is a rule-based indication, replay is not live inference, and vehicle counts are a lower bound because tracker IDs can switch after occlusion.',
+        id: 'Tuning menyasar layer aturan dan post-processing, bukan bobot YOLO. Label bersifat level kendaraan, bukan bounding box, sehingga tidak dapat dipakai langsung untuk melatih detector. Akurasi kelas 85,7%; karena lajur 2 hanya menandai truk/bus, satu truk yang terbaca mobil bisa lolos.',
+        en: 'Tuning targets the rule and post-processing layer, not the YOLO weights. Labels are vehicle-level, not bounding boxes, so they cannot be used directly to train the detector. Class accuracy is 85.7%; because lane 2 only flags trucks and buses, a truck read as a car can slip through.',
       },
       {
-        id: 'Langkah berikutnya jelas: set validasi berlabel, konfigurasi multi-kamera, consumer dan retensi terjadwal, crop bukti ke box kendaraan agar review lebih cepat, dan dashboard yang dapat di-deploy di belakang autentikasi.',
-        en: 'The next steps are clear: a labelled validation set, multi-camera configuration, scheduled consumers and retention, cropping evidence to the vehicle box for faster review, and a deployable dashboard behind authentication.',
+        id: 'Framing yang jujur tetap penting: hogging adalah indikasi berbasis aturan, bukan penentuan hukum; replay bukan inferensi langsung; dan F1 0,933 berlaku pada 56 kendaraan yang direview dari satu klip, bukan seluruh lalu lintas.',
+        en: 'The honest framing still matters: hogging is a rule-based indication, not a legal determination; replay is not live inference; and the 0.933 F1 applies to 56 reviewed vehicles from one clip, not all traffic.',
       },
     ],
     nextSteps: [
-      { id: 'Set validasi berlabel', en: 'Labelled validation set' },
+      { id: 'Set validasi berlabel yang lebih besar', en: 'Larger labelled validation set' },
       { id: 'Konfigurasi multi-kamera', en: 'Multi-camera configuration' },
       { id: 'Consumer dan retensi terjadwal', en: 'Scheduled consumers and retention' },
       { id: 'Crop bukti ke box kendaraan', en: 'Vehicle-box evidence crops' },
-      { id: 'Dashboard di balik autentikasi', en: 'Authenticated dashboard' },
+      { id: 'Detector yang lebih kuat untuk kelas kendaraan', en: 'Stronger vehicle-class detector' },
     ],
   },
   cta: {
@@ -3113,7 +3346,7 @@ const highwayData = {
     { name: { id: 'Frame sampler', en: 'Frame sampler' }, meta: 'stride N', kind: 'vision' },
     { name: 'YOLO11n', meta: { id: 'detektor kendaraan', en: 'vehicle detector' }, kind: 'vision' },
     { name: 'ByteTrack', meta: { id: 'track ID persisten', en: 'persistent track IDs' }, kind: 'vision' },
-    { name: { id: 'Pemeta lajur', en: 'Six-lane mapper' }, meta: { id: 'poligon + adaptive anchor', en: 'polygon + adaptive anchor' }, kind: 'vision' },
+    { name: { id: 'Pemeta lajur', en: 'Six-lane mapper' }, meta: { id: 'poligon + bbox vote', en: 'polygon + bbox vote' }, kind: 'vision' },
     { name: { id: 'Occupancy tracker', en: 'Occupancy tracker' }, meta: { id: 'enter / exit / change / dwell', en: 'enter / exit / change / dwell' }, kind: 'vision' },
     { name: { id: 'Aturan hogging', en: 'Hogging rules' }, meta: { id: 'berbasis konfigurasi', en: 'config-driven' }, kind: 'event' },
     { name: 'events.jsonl', meta: { id: 'kontrak event bertipe', en: 'typed event contract' }, kind: 'event' },
@@ -3215,15 +3448,15 @@ function hwLaneMap() {
 }
 
 function hwAnchorDiagram() {
-  const aria = hwLabel({ id: 'Perbandingan anchor: box kecil memakai titik tengah bawah, box lebar memakai sudut bawah luar.', en: 'Anchor comparison: a small box uses the bottom centre, a wide box uses the outer bottom corner.' });
+  const aria = hwLabel({ id: 'Perbandingan penentuan lajur: satu titik bawah box versus lima titik di sepanjang bottom edge dengan majority vote.', en: 'Lane assignment comparison: one bottom-centre point versus five points along the bottom edge with a majority vote.' });
   return `<div class="hw-anchor-grid">
     <figure class="hw-anchor">
       <svg class="hw-anchor-svg" viewBox="0 0 240 150" role="img" aria-label="${aria}">
         <rect class="hw-svg-road" x="0" y="0" width="240" height="150" rx="8"></rect>
         <path class="hw-svg-lane" d="M120 20 L30 150 M120 20 L92 150 M120 20 L148 150 M120 20 L210 150"></path>
         <rect class="hw-svg-box" x="99" y="92" width="32" height="28" rx="2"></rect>
-        <circle class="hw-svg-dot" cx="115" cy="106" r="4.5"></circle>
-        <text class="hw-svg-label" x="12" y="18">bottom_center</text>
+        <circle class="hw-svg-dot" cx="115" cy="120" r="4.5"></circle>
+        <text class="hw-svg-label" x="12" y="18">single point</text>
       </svg>
       <figcaption>${hwLabel(highwayData.anchor.small)}</figcaption>
     </figure>
@@ -3232,8 +3465,12 @@ function hwAnchorDiagram() {
         <rect class="hw-svg-road" x="0" y="0" width="240" height="150" rx="8"></rect>
         <path class="hw-svg-lane" d="M120 20 L30 150 M120 20 L92 150 M120 20 L148 150 M120 20 L210 150"></path>
         <rect class="hw-svg-box" x="44" y="74" width="112" height="56" rx="2"></rect>
-        <circle class="hw-svg-dot" cx="44" cy="130" r="4.5"></circle>
-        <text class="hw-svg-label" x="12" y="18">outer bottom corner</text>
+        <circle class="hw-svg-dot" cx="55" cy="130" r="3.5"></circle>
+        <circle class="hw-svg-dot" cx="78" cy="130" r="3.5"></circle>
+        <circle class="hw-svg-dot" cx="100" cy="130" r="3.5"></circle>
+        <circle class="hw-svg-dot" cx="122" cy="130" r="3.5"></circle>
+        <circle class="hw-svg-dot" cx="145" cy="130" r="3.5"></circle>
+        <text class="hw-svg-label" x="12" y="18">bbox_vote · 5 points</text>
       </svg>
       <figcaption>${hwLabel(highwayData.anchor.wide)}</figcaption>
     </figure>
@@ -3249,6 +3486,69 @@ function hwMediaGrid(items) {
   return `<div class="hw-media-grid">${items.map((item) => hwFigure(item.src, item.alt, item.caption)).join('')}</div>`;
 }
 
+function renderHighwayPipelinePage() {
+  const project = findProjectByDetailApp('highwaypipeline');
+  if (!project) return '';
+  const data = highwayData;
+  const plain = state.copyMode === 'plain';
+  const caveat = `<p class="lakehouse-caveat"><strong>${localized({ id: 'Cakupan:', en: 'Scope note:' })}</strong> ${escapeHtml(localized(projectField(project, 'caveat')))}</p>`;
+
+  const dashboard = `
+    ${hwTable(data.platform.pagesCaption, data.platform.pagesHead, data.platform.pagesRows)}
+    ${hwTable(data.platform.snapshot.caption, data.platform.snapshot.head, data.platform.snapshot.rows)}
+    ${hwFacts(data.platform.snapshot.freshness)}
+    <div class="hw-media-grid">
+      ${hwFigure('/portfolio/dashboard-overview.jpg', data.platform.overviewAlt, data.platform.overviewCaption, '16 / 9')}
+      ${hwFigure('/portfolio/dashboard-lane-usage.jpg', data.platform.laneAlt, data.platform.laneCaption, '16 / 9')}
+      ${hwFigure('/portfolio/dashboard-hogging.jpg', data.platform.hoggingAlt, data.platform.hoggingCaption, '16 / 9')}
+      ${hwFigure('/portfolio/dashboard-quality.jpg', data.platform.qualityAlt, data.platform.qualityCaption, '16 / 9')}
+    </div>
+    <p class="hw-note">${icon('info')}<span>${hwRich(data.platform.snapshot.note)}</span></p>`;
+
+  const technicalSections = `
+    ${hwSection('hw-pipeline-flow', { id: 'Alur platform', en: 'Platform flow' }, { id: 'Receiver, queue, dan penyimpanan', en: 'Receiver, queue, and storage' }, `${hwCopy(data.platform.paragraphs)}${hwArchitecture()}`)}
+    ${hwSection('hw-pipeline-dashboard', data.platform.label, { id: 'Empat halaman untuk membaca data', en: 'Four pages for reading the data' }, dashboard)}
+    ${hwSection('hw-pipeline-evidence', { id: 'Bukti klip', en: 'Evidence clips' }, { id: 'Dari Kaggle ke Nextcloud lalu ke dashboard', en: 'From Kaggle to Nextcloud to the dashboard' }, `<div class="hw-copy"><p>${hwRich({ id: 'Klip bukti delapan detik dan thumbnail dihasilkan di Kaggle, lalu diunggah ke Nextcloud. Metadata event hanya menyimpan path relatif, bukan file video.', en: 'Eight-second evidence clips and thumbnails are produced on Kaggle and uploaded to Nextcloud. Event metadata stores only the relative path, not the video file.' })}</p><p>${hwRich({ id: 'Dashboard mengambil klip dan thumbnail melalui proxy server-side. Dengan begitu, kredensial Nextcloud tetap di server dan pemutar video bisa memakai range request tanpa membebani browser dengan file penuh.', en: 'The dashboard fetches clips and thumbnails through a server-side proxy. Nextcloud credentials stay on the server, and the video player can use range requests without loading the whole file in the browser.' })}</p></div>`) }
+  `;
+
+  return `
+    <section class="content-app lakehouse-app hw-app" aria-labelledby="highwayPipelineTitle">
+      <a class="inline-link lakehouse-back" href="/projects" data-open-app="projects">${icon('arrow-left')} <span>${localized({ id: 'Kembali ke proyek', en: 'Back to projects' })}</span></a>
+      <div class="content-header content-header--split">
+        <div><div class="eyebrow">${localized({ id: 'DETAIL PROYEK', en: 'PROJECT DETAIL' })}</div><h2 id="highwayPipelineTitle">${escapeHtml(project.title)}</h2></div>
+        <p class="content-header__description">${escapeHtml(localized(projectField(project, 'scope')))}</p>
+      </div>
+      <div class="copy-mode-row">${copyModeToggle()}</div>
+      <section class="hw-cta" aria-labelledby="hwVisionFirstTitle">
+        <div><span class="hw-kicker">${hwLabel({ id: 'Mulai dari sini · 01', en: 'Start here · 01' })}</span><h3 id="hwVisionFirstTitle">${hwLabel({ id: 'Baca pipeline vision dulu', en: 'Read the vision pipeline first' })}</h3><p>${hwLabel({ id: 'Platform ini mengolah event dari pipeline kamera. Lihat bagaimana kendaraan dilacak, lajur ditentukan, dan klip bukti dibuat.', en: 'This platform processes events from the camera pipeline. See how vehicles are tracked, lanes are assigned, and evidence clips are produced.' })}</p></div>
+        <div class="hw-actions"><a class="inline-link" href="/projects/highway-lane-occupancy" data-open-app="highway">${hwLabel({ id: 'Buka Highway vision', en: 'Open Highway vision' })} ${icon('arrow-up-right')}</a></div>
+      </section>
+      <div class="hw">
+        <header class="hw-hero">
+          <span class="hw-kicker">${hwLabel({ id: 'PLATFORM DATA · KAFKA · DUCKDB · STREAMLIT', en: 'DATA PLATFORM · KAFKA · DUCKDB · STREAMLIT' })}</span>
+          <h3 class="hw-hero__headline">${hwLabel({ id: 'Dari webhook ke dashboard', en: 'From webhook to dashboard' })}</h3>
+          <p class="hw-hero__subhead">${hwLabel(projectField(project, 'description'))}</p>
+        </header>
+        <div class="hw-stats">
+          <div class="hw-stat"><b>650</b><span>${localized({ id: 'event masuk', en: 'events ingested' })}</span></div>
+          <div class="hw-stat"><b>603</b><span>${localized({ id: 'kendaraan terlihat', en: 'vehicles seen' })}</span></div>
+          <div class="hw-stat"><b>270</b><span>${localized({ id: 'lane entry', en: 'lane entries' })}</span></div>
+          <div class="hw-stat"><b>87</b><span>${localized({ id: 'sinyal hogging', en: 'hogging signals' })}</span></div>
+        </div>
+        ${plain ? caveat : ''}
+        ${technicalBlock(technicalSections)}
+        <section class="hw-cta" aria-labelledby="hwPipelineCtaTitle">
+          <div><span class="hw-kicker">${hwLabel({ id: 'Kembali ke awal', en: 'Back to the start' })}</span><h3 id="hwPipelineCtaTitle">${hwLabel({ id: 'Lihat cara event dibuat', en: 'See how the events are made' })}</h3><p>${hwLabel({ id: 'Pipeline vision menangani deteksi kendaraan, penentuan lajur, aturan hogging, dan pembuatan klip bukti.', en: 'The vision pipeline handles vehicle detection, lane assignment, hogging rules, and evidence clip generation.' })}</p></div>
+          <div class="hw-actions">
+            <a class="inline-link" href="/projects/highway-lane-occupancy" data-open-app="highway">${hwLabel({ id: 'Highway vision', en: 'Highway vision' })} ${icon('arrow-up-right')}</a>
+            <a class="inline-link" href="/projects" data-open-app="projects">${hwLabel({ id: 'Semua proyek', en: 'All projects' })} ${icon('arrow-up-right')}</a>
+          </div>
+        </section>
+        ${plain ? '' : caveat}
+      </div>
+    </section>`;
+}
+
 function renderHighwayPage() {
   const project = findProjectByDetailApp('highway');
   if (!project) return '';
@@ -3259,41 +3559,49 @@ function renderHighwayPage() {
     `<a class="inline-link" href="/projects" data-open-app="projects">${hwLabel(data.cta.projects)} ${icon('arrow-up-right')}</a>`,
     `<a class="inline-link" href="/contact" data-open-app="contact">${hwLabel(data.cta.contact)} ${icon('arrow-up-right')}</a>`,
   ].join('');
+  const plain = state.copyMode === 'plain';
+  const caveat = `<p class="lakehouse-caveat"><strong>${localized({ id: 'Cakupan:', en: 'Scope note:' })}</strong> ${escapeHtml(localized(projectField(project, 'caveat')))}</p>`;
 
   return `
     <section class="content-app lakehouse-app hw-app" aria-labelledby="highwayTitle">
       <a class="inline-link lakehouse-back" href="/projects" data-open-app="projects">${icon('arrow-left')} <span>${localized({ id: 'Kembali ke proyek', en: 'Back to projects' })}</span></a>
       <div class="content-header content-header--split">
         <div><div class="eyebrow">${localized({ id: 'DETAIL PROYEK', en: 'PROJECT DETAIL' })}</div><h2 id="highwayTitle">${escapeHtml(project.title)}</h2></div>
-        <p class="content-header__description">${escapeHtml(localized(project.scope))}</p>
+        <p class="content-header__description">${escapeHtml(localized(projectField(project, 'scope')))}</p>
       </div>
+      <div class="copy-mode-row">${copyModeToggle()}</div>
       <div class="hw">
         <header class="hw-hero">
           <span class="hw-kicker">${hwLabel(data.hero.eyebrow)}</span>
           <h3 class="hw-hero__headline">${hwLabel(data.hero.headline)}</h3>
-          <p class="hw-hero__subhead">${hwLabel(data.hero.subhead)}</p>
+          <p class="hw-hero__subhead">${hwLabel(plain ? projectField(project, 'description') : data.hero.subhead)}</p>
           <div class="hw-actions">
-            <a class="button button--dark" href="#hw-overview">${hwLabel(data.hero.primary)} <span aria-hidden="true">→</span></a>
             ${repo ? `<a class="button button--light" href="${escapeHtml(repo.href)}" target="_blank" rel="noopener noreferrer">${hwLabel(data.hero.secondary)} ${icon('arrow-up-right')}</a>` : ''}
           </div>
         </header>
         ${hwFigure('/portfolio/lane_mapping.jpg', data.lane.mappingAlt, data.lane.mappingCaption, '4 / 3')}
         ${hwStats()}
-        ${hwSection('hw-overview', data.overview.label, data.overview.heading, `${hwCopy(data.overview.paragraphs)}<div class="hw-callout">${icon('info')}<p>${hwRich(data.overview.callout)}</p></div>`)}
+        ${plain ? caveat : ''}
+        ${plain ? `<details class="technical-details"><summary>${escapeHtml(t('technicalDetails'))}</summary><div class="technical-details__body">` : ''}
         ${hwSection('hw-architecture', data.architecture.label, data.architecture.heading, `${hwCopy(data.architecture.paragraphs)}${hwArchitecture()}<p class="hw-note">${icon('info')}<span>${hwRich(data.architecture.note)}</span></p>`)}
         ${hwSection('hw-geometry', data.lane.label, data.lane.heading, `${hwCopy(data.lane.paragraphs)}${hwLaneMap()}${hwFacts(data.lane.facts)}${hwFigure('/portfolio/lane_preview.jpg', data.lane.previewAlt, data.lane.previewCaption, '4 / 3')}`)}
-        ${hwSection('hw-anchor', data.anchor.label, data.anchor.heading, `${hwCopy(data.anchor.paragraphs)}${hwAnchorDiagram()}<blockquote class="hw-quote">${hwRich(data.anchor.quote)}</blockquote>`)}
+        ${hwSection('hw-anchor', data.anchor.label, data.anchor.heading, `${hwCopy(data.anchor.paragraphs)}${hwAnchorDiagram()}`)}
         ${hwSection('hw-events', data.events.label, data.events.heading, `<div class="hw-copy"><p>${hwRich(data.events.intro)}</p></div>${hwTable(data.events.eventCaption, data.events.eventHead, data.events.eventRows)}${hwTable(data.events.ruleCaption, data.events.ruleHead, data.events.ruleRows)}<div class="hw-copy"><p>${hwRich(data.events.outro)}</p></div><p class="hw-note">${icon('info')}<span>${hwRich({ id: 'Semua indikasi hogging tetap merupakan kecocokan aturan, bukan pelanggaran.', en: 'Every hogging indication remains a rule match, not a violation.' })}</span></p>`)}
+        ${hwSection('hw-tuning', data.tuning.label, data.tuning.heading, `${hwCopy(data.tuning.paragraphs)}${hwTable(data.tuning.proxyCaption, data.tuning.proxyHead, data.tuning.proxyRows)}${hwTable(data.tuning.replayCaption, data.tuning.proxyHead, data.tuning.replayRows)}${hwFacts(data.tuning.facts)}<div class="hw-callout hw-callout--muted">${icon('info')}<p>${hwRich(data.tuning.note)}</p></div><p class="hw-note">${icon('info')}<span><a class="inline-link" href="${escapeHtml(data.tuning.artifactHref)}" target="_blank" rel="noopener noreferrer">${hwLabel(data.tuning.artifact)} ${icon('arrow-up-right')}</a></span></p>`)}
         ${hwSection('hw-evidence', data.evidence.label, data.evidence.heading, `${hwCopy(data.evidence.paragraphs)}${hwFigure('/portfolio/evidence_hogging.jpg', data.evidence.imageAlt, data.evidence.imageCaption, '4 / 3')}${hwVideo(data.evidence.videoCaption, data.evidence.videoAlt, data.evidence.videoLabel)}`)}
-        ${hwSection('hw-platform', data.platform.label, data.platform.heading, `${hwCopy(data.platform.paragraphs)}${hwTable(data.platform.pagesCaption, data.platform.pagesHead, data.platform.pagesRows)}<div class="hw-media-grid">${hwFigure('/portfolio/dashboard-overview.jpg', data.platform.overviewAlt, data.platform.overviewCaption, '16 / 10')}${hwFigure('/portfolio/dashboard-hogging.jpg', data.platform.hoggingAlt, data.platform.hoggingCaption, '16 / 10')}${hwFigure('/portfolio/dashboard-quality.jpg', data.platform.qualityAlt, data.platform.qualityCaption, '16 / 10')}</div>`)}
-        ${hwSection('hw-results', data.results.label, data.results.heading, `${hwCopy(data.results.paragraphs)}${hwTable(data.results.caption, data.results.head, data.results.rows)}<div class="hw-callout hw-callout--muted">${icon('info')}<p>${hwRich(data.results.caveat)}</p></div>${hwFigure('/portfolio/annotated_frame.jpg', data.results.frameAlt, data.results.frameCaption, '4 / 3')}${hwVideo(data.results.videoCaption, data.results.videoAlt, data.results.videoLabel)}`)}
+        ${hwSection('hw-results', data.results.label, data.results.heading, `${hwCopy(data.results.paragraphs)}${hwTable(data.results.caption, data.results.head, data.results.rows)}<div class="hw-callout hw-callout--muted">${icon('info')}<p>${hwRich(data.results.caveat)}</p></div>${hwVideo(data.results.videoCaption, data.results.videoAlt, data.results.videoLabel)}`)}
         ${hwSection('hw-decisions', data.decisions.label, data.decisions.heading, `${hwTable(data.decisions.caption, data.decisions.head, data.decisions.rows)}<div class="hw-copy"><p>${hwRich(data.decisions.outro)}</p></div>`)}
         ${hwSection('hw-limitations', data.limitations.label, data.limitations.heading, `${hwCopy(data.limitations.paragraphs)}<ul class="hw-chips">${data.limitations.nextSteps.map((item) => `<li>${hwLabel(item)}</li>`).join('')}</ul>`)}
+        ${plain ? '</div></details>' : ''}
+        <section class="hw-cta" id="hw-platform" aria-labelledby="hwNextTitle">
+          <div><span class="hw-kicker">${hwLabel({ id: 'Berikutnya · 02', en: 'Next · 02' })}</span><h3 id="hwNextTitle">${hwLabel({ id: 'Dari event ke dashboard', en: 'From events to a dashboard' })}</h3><p>${hwLabel({ id: 'Lanjut ke Highway Lane Analytics — Data Pipeline & Dashboard: receiver FastAPI, topik Kafka, lapisan DuckDB, dashboard Streamlit, dan bukti klip.', en: 'Continue to Highway Lane Analytics — Data Pipeline & Dashboard: the FastAPI receiver, Kafka topics, DuckDB medallion, Streamlit dashboard, and evidence clips.' })}</p></div>
+          <div class="hw-actions"><a class="inline-link" href="/projects/highway-lane-analytics-data-pipeline" data-open-app="highwaypipeline">${hwLabel({ id: 'Buka data platform', en: 'Open the data platform' })} ${icon('arrow-up-right')}</a></div>
+        </section>
         <section class="hw-cta" aria-labelledby="hwCtaTitle">
           <div><span class="hw-kicker">${hwLabel({ id: 'Selanjutnya', en: 'Next' })}</span><h3 id="hwCtaTitle">${hwLabel(data.cta.title)}</h3><p>${hwLabel(data.cta.body)}</p></div>
           <div class="hw-actions">${ctaLinks}</div>
         </section>
-        <p class="lakehouse-caveat"><strong>${localized({ id: 'Cakupan:', en: 'Scope note:' })}</strong> ${escapeHtml(localized(project.caveat))}</p>
+        ${plain ? '' : caveat}
       </div>
     </section>`;
 }
@@ -3387,6 +3695,7 @@ function renderApp(appId) {
     nusacommerce: renderNusacommercePage,
     chicago: renderChicagoPage,
     highway: renderHighwayPage,
+    highwaypipeline: renderHighwayPipelinePage,
     rekberin: () => renderDetailPage('rekberin'),
     lelaku: () => renderDetailPage('lelaku'),
     wanttosell: () => renderDetailPage('wanttosell'),
@@ -3404,6 +3713,14 @@ function updateDock() {
   });
 }
 
+function revealHashTarget() {
+  const id = decodeURIComponent(window.location.hash.slice(1));
+  if (!id) return;
+  const target = document.getElementById(id);
+  const details = target?.closest('details.technical-details');
+  if (details) details.open = true;
+}
+
 function openApp(appId, options = {}) {
   if (!appMeta[appId]) return;
   const historyMode = options.history ?? 'push';
@@ -3411,6 +3728,7 @@ function openApp(appId, options = {}) {
   state.activeApp = appId;
   state.minimized = false;
   if (historyMode !== 'none') syncRoute(appId, historyMode);
+  trackPageview(appId);
   updateDocumentTitle(appId);
   $('#windowEmpty').hidden = true;
   $('#windowFrame').hidden = false;
@@ -3418,6 +3736,7 @@ function openApp(appId, options = {}) {
   $('#windowFrame').classList.remove('is-minimized');
   $('#windowTitle').textContent = localized(appMeta[appId].title);
   $('#windowContent').innerHTML = renderApp(appId);
+  window.requestAnimationFrame(revealHashTarget);
   if (previousApp !== appId) $('#windowContent').scrollTop = 0;
   closeFloatingMenus();
   updateDock();
@@ -3705,6 +4024,13 @@ document.addEventListener('click', (event) => {
   if (event.target.closest('[data-open-search]')) { openSearch(); return; }
   if (event.target.closest('[data-show-help]')) { openHelp(); return; }
   if (event.target.closest('[data-close-help]')) { closeHelp(); return; }
+  const copyButton = event.target.closest('[data-copy-mode]');
+  if (copyButton) {
+    state.copyMode = copyButton.dataset.copyMode === 'plain' ? 'plain' : 'technical';
+    try { localStorage.setItem('portfolio-copy-mode', state.copyMode); } catch { }
+    openApp(state.activeApp, { history: 'none' });
+    return;
+  }
   if (event.target.closest('#languageButton')) { toggleLanguage(); return; }
   if (event.target.closest('#themeButton')) { toggleDarkMode(); return; }
   if (event.target.id === 'overlay') { closeSearch(); return; }
@@ -3736,10 +4062,14 @@ document.addEventListener('keydown', (event) => {
 window.addEventListener('popstate', () => {
   openApp(routeFromLocation(), { history: 'none' });
 });
+window.addEventListener('hashchange', revealHashTarget);
 
 let storedTheme = null;
 try { storedTheme = localStorage.getItem('portfolio-theme'); } catch { }
 state.darkMode = storedTheme ? storedTheme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+let storedCopyMode = null;
+try { storedCopyMode = localStorage.getItem('portfolio-copy-mode'); } catch { }
+if (storedCopyMode === 'plain' || storedCopyMode === 'technical') state.copyMode = storedCopyMode;
 applyTranslations();
 openApp(routeFromLocation(), { history: 'none' });
 updateDock();

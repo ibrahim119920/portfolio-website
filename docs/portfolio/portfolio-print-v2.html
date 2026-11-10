@@ -74,7 +74,7 @@
       </div>
       <div class="profile-hero__side">
         <div class="big">3.41</div>
-        <p>GPA · scale not stated<br>2024 — expected 2028</p>
+        <p>GPA<br>2024 — expected 2028</p>
       </div>
     </div>
 
@@ -114,32 +114,38 @@
           <div><b>09</b><span>selected projects</span></div>
           <div><b>04</b><span>main projects</span></div>
           <div><b>30M+</b><span>trips analysed</span></div>
-          <div><b>109</b><span>automated checks</span></div>
+          <div><b>137</b><span>automated checks</span></div>
         </div>
 
         <div class="toolkit">
           <div class="toolkit__group">
-            <b>Data tools</b>
+            <b>Programming</b>
             <div class="chips">
-              <span>Python</span><span>SQL</span><span>PySpark</span><span>Pandas</span><span>Parquet</span><span>Kafka</span><span>DuckDB</span><span>Delta Lake</span><span>Databricks</span>
+              <span>Python</span><span>SQL</span><span>C++</span>
+            </div>
+          </div>
+          <div class="toolkit__group">
+            <b>Data</b>
+            <div class="chips">
+              <span>Databricks</span><span>Kafka</span><span>PySpark</span>
             </div>
           </div>
           <div class="toolkit__group">
             <b>Software &amp; databases</b>
             <div class="chips">
-              <span>FastAPI</span><span>Next.js</span><span>Express</span><span>PostgreSQL</span><span>SQLite</span><span>MongoDB</span><span>SQLAlchemy</span><span>Prisma</span>
+              <span>PostgreSQL</span><span>SQLite</span><span>MongoDB</span>
             </div>
           </div>
           <div class="toolkit__group">
             <b>Vision &amp; machine learning</b>
             <div class="chips">
-              <span>YOLO11n</span><span>ByteTrack</span><span>OpenCV</span><span>scikit-learn</span><span>CatBoost</span><span>XGBoost</span><span>PyTorch</span>
+              <span>YOLO11n</span><span>ByteTrack</span><span>scikit-learn</span>
             </div>
           </div>
           <div class="toolkit__group">
             <b>Infrastructure &amp; testing</b>
             <div class="chips">
-              <span>Docker Compose</span><span>GitHub Actions</span><span>pytest</span><span>Newman</span><span>Streamlit</span><span>Plotly</span>
+              <span>Docker / Compose</span><span>Git / GitHub</span><span>Streamlit</span>
             </div>
           </div>
         </div>
@@ -183,7 +189,7 @@
         <div class="kicker kicker--gold">Main projects / 01–02</div>
         <h2 style="margin-top:3.5mm">From camera footage<br><em>to a dashboard.</em></h2>
       </div>
-      <p class="lede">One project watches highway cameras and records what each vehicle does. The other collects those records and turns them into clear reports and charts.</p>
+      <p class="lede">One project watches highway cameras and records what each vehicle does, with rules checked against vehicles reviewed by hand. The other collects those records and turns them into clear reports and charts.</p>
     </div>
 
     <div class="flow">
@@ -194,25 +200,26 @@
       <div class="project__rail">
         <div class="kicker kicker--gold">01 · Camera &amp; lanes</div>
         <h3>Highway Lane Occupancy &amp; Hogging Detection</h3>
-        <p class="scope">A prototype that reads recorded highway video · one camera · six lanes</p>
+        <p class="scope">A prototype that reads recorded highway video · one camera · rules checked on 56 vehicles</p>
         <a class="project__link" href="https://github.com/ibrahim119920/highway-lane-analytics">github.com/ibrahim119920/highway-lane-analytics</a><br>
         <a class="project__link project__link--portfolio" href="https://michiportfolio.vercel.app/projects/highway-lane-occupancy">Portfolio page · michiportfolio.vercel.app</a>
       </div>
       <div class="project__body">
-        <p>This project watches recorded highway video and works out which lane each vehicle is in, how long it stays there, and whether it stays in the passing lane longer than the rules allow. Each finding comes with a snapshot and a short video clip.</p>
+        <p>This project watches recorded highway video and works out which lane each vehicle is in, how long it stays there, and whether it stays in a passing lane longer than the rules allow. The rules were rebuilt after 56 vehicles were reviewed by hand. Each finding still comes with a snapshot and a short video clip.</p>
         <ul>
-          <li>The road is divided into six lanes on screen, so one setup can work with different camera resolutions.</li>
-          <li>For large vehicles close to the camera, the system uses the bottom corner of the vehicle instead of the middle, so it does not jump between lanes.</li>
-          <li>A lane change is only recorded after it is seen for several frames. A hogging signal is a rule match, not a legal violation.</li>
+          <li>The road is divided into six lane areas. For each vehicle, the system checks five points along the bottom edge of its box and picks the lane chosen by most points.</li>
+          <li>Passing is not treated as hogging: if a vehicle is moving past a slower vehicle in the next lane, it is left alone. The decision is made after the vehicle leaves the lane.</li>
+          <li>56 vehicles were checked by hand. The rule's F1 rose from 0.54 to 0.93, wrong flags fell from 9 to 5, and missed hoggers fell from 24 to 1.</li>
+          <li>When the Kaggle job finds a lane-hogging or lane-change event, it saves an 8-second clip and a thumbnail to Nextcloud. The event record keeps the file path, so the video does not have to travel through the data pipeline.</li>
         </ul>
         <div class="stats">
-          <div><b>158</b><span>vehicles followed</span></div>
-          <div><b>111</b><span>events · 5-min video</span></div>
-          <div><b>8.65</b><span>frames per second</span></div>
-          <div><b>109</b><span>automated checks</span></div>
+          <div><b>56</b><span>vehicles reviewed by hand</span></div>
+          <div><b>0.93</b><span>rule F1</span></div>
+          <div><b>9 → 5</b><span>wrong flags</span></div>
+          <div><b>137</b><span>automated checks</span></div>
         </div>
         <div class="chips">
-          <span>Python</span><span>YOLO11n</span><span>ByteTrack</span><span>OpenCV</span><span>pytest</span>
+          <span>Python</span><span>YOLO11n</span><span>ByteTrack</span><span>OpenCV</span><span>Manual review</span><span>pytest</span>
         </div>
       </div>
     </article>
@@ -223,14 +230,15 @@
         <h3>Highway Lane Analytics — Data Pipeline &amp; Dashboard</h3>
         <p class="scope">A service that receives the events, checks them, stores them in layers, and shows the results</p>
         <span class="project__link project__link--private">highway-lane-analytics-data-pipeline · private repository</span><br>
-        <a class="project__link project__link--portfolio" href="https://michiportfolio.vercel.app/projects/highway-lane-occupancy#hw-platform">Portfolio page · dashboard section</a>
+        <a class="project__link project__link--portfolio" href="https://michiportfolio.vercel.app/projects/highway-lane-analytics-data-pipeline">Portfolio page · data pipeline &amp; dashboard</a>
       </div>
       <div class="project__body">
         <p>This project receives the event files, checks them, removes duplicates, and stores them in layers so they can be used for analysis. A dashboard then shows lane usage, vehicle types, hogging signals, and data quality.</p>
         <ul>
           <li>A secure receiving service accepts events in batches and rejects bad records instead of stopping the whole process.</li>
           <li>The same data can be sent again without double-counting. In testing, 111 events and 158 vehicle tracks were processed with no rejected records.</li>
-          <li>The dashboard has four pages: overview, lane analysis, hogging explorer, and run quality.</li>
+          <li>The dashboard has four pages: overview, lane usage, hogging signals, and data quality.</li>
+          <li>The dashboard finds each event's clip and thumbnail in Nextcloud. A small server-side proxy plays the video.</li>
         </ul>
         <div class="stats">
           <div><b>111</b><span>events received</span></div>
@@ -243,8 +251,6 @@
         </div>
       </div>
     </article>
-
-    <div class="note"><strong>What to keep in mind.</strong> This is a prototype using one camera and two short videos. Replaying old data is not live detection. A hogging signal is a rule match, not a violation. Vehicle counts are a lower bound because the tracker can lose an ID after a vehicle is blocked from view.</div>
   </div>
   <footer class="page-foot"><span>Ahmad Maulana Ibrahim · Selected Project Portfolio</span><span>03 / 06</span></footer>
 </section>
@@ -319,7 +325,11 @@
       </div>
     </article>
 
-    <div class="note"><strong>What was not built yet.</strong> NYC covers January–September 2024 only, so it is not a full-year result. NusaCommerce currently runs the order-loading path only; the payment connection and other data sources are design targets. The analysis is descriptive, not causal.</div>
+    <div class="portfolio-cta">
+      <div class="kicker kicker--gold">Full portfolio</div>
+      <p>See more project detail, live dashboards, and evidence clips at <a href="https://michiportfolio.vercel.app">michiportfolio.vercel.app</a>.</p>
+    </div>
+
   </div>
   <footer class="page-foot"><span>Ahmad Maulana Ibrahim · Selected Project Portfolio</span><span>04 / 06</span></footer>
 </section>

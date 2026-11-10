@@ -1056,3 +1056,20 @@ kbd { display: inline-flex; align-items: center; justify-content: center; min-wi
 @media (max-width: 430px) {
   .hw-stats { grid-template-columns: 1fr; }
 }
+
+/* ---------------------------------------------------- project copy style */
+.copy-mode-row { display: flex; justify-content: flex-end; margin: -8px 0 22px; }
+.copy-mode { display: inline-flex; gap: 2px; padding: 3px; border: 1px solid var(--line-dark); border-radius: 999px; background: rgba(28, 33, 28, 0.04); }
+.copy-mode button { appearance: none; border: 0; padding: 6px 12px; border-radius: 999px; background: transparent; color: #6f786f; font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: color 160ms ease, background 160ms ease; }
+.copy-mode button:hover { color: #1f261f; }
+.copy-mode button.is-active { background: #1f261f; color: #f3f1e9; }
+.technical-details { margin-top: 28px; border-top: 1px solid var(--line-dark); }
+.technical-details summary { padding: 15px 0; color: #6f786f; font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; }
+.technical-details summary::marker { color: var(--gold); }
+.technical-details__body { padding-top: 6px; }
+.theme-dark .copy-mode { border-color: var(--line); background: rgba(255, 255, 255, 0.04); }
+.theme-dark .copy-mode button { color: #98a295; }
+.theme-dark .copy-mode button:hover { color: #f1f3ea; }
+.theme-dark .copy-mode button.is-active { background: #e3cf9b; color: #171a17; }
+.theme-dark .technical-details { border-top-color: var(--line); }
+.theme-dark .technical-details summary { color: #98a295; }

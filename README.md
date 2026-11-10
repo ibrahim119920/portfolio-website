@@ -15,6 +15,10 @@ npm run dev
 
 Create a production build with `npm run build`, or serve the built files locally with `npm run preview`.
 
+## Analytics
+
+Vercel Web Analytics is wired through `@vercel/analytics`. `src/main.js` injects the tracking script in production and sends a page view on each client-side route change, with project detail routes grouped under `/projects/:project`. Enable Web Analytics in the Vercel project settings before the first production deployment.
+
 ## Portfolio PDF
 
 A six-page A4 project portfolio is available at `Ahmad-Maulana-Ibrahim-Portfolio.pdf`, with a plain-language version at `Ahmad-Maulana-Ibrahim-Portfolio-v2.pdf`. Print source and regeneration instructions are in `docs/portfolio/`.
@@ -59,7 +63,7 @@ Portfolio data and bilingual presentation live in `src/main.js`:
 
 The shell and responsive layout are in `index.html` and `src/styles.css`. `docs/AI_CONTEXT.md` records source mapping and evidence rules for future updates.
 
-The highway case study currently uses `lane_mapping.jpg`, `lane_preview.jpg`, `evidence_hogging.jpg`, and `annotated_frame.jpg` from `public/portfolio/`. Video and dashboard slots are rendered as pending placeholders with their captions and alt text; drop the final files into `public/portfolio/` and update the corresponding paths in `src/main.js` when they are available.
+The highway case study uses `lane_mapping.jpg`, `lane_preview.jpg`, `evidence_hogging.jpg`, and `annotated_frame.jpg` from `public/portfolio/`, plus four dashboard captures from replay session `live_20261110_214853`: `dashboard-overview.jpg`, `dashboard-lane-usage.jpg`, `dashboard-hogging.jpg`, and `dashboard-quality.jpg`. Video slots remain pending placeholders with their captions and alt text; drop the final files into `public/portfolio/` and update the corresponding paths in `src/main.js` when they are available.
 
 ## Content sources and evidence
 

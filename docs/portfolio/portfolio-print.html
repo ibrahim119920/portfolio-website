@@ -552,6 +552,25 @@
   }
   .note strong { color: var(--ink); }
 
+  .portfolio-cta {
+    margin-top: 9mm;
+    padding-top: 4.5mm;
+    border-top: 0.35pt solid var(--line);
+  }
+  .portfolio-cta p {
+    margin: 2.4mm 0 0;
+    max-width: 150mm;
+    font-family: var(--serif);
+    font-size: 18pt;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .portfolio-cta a {
+    color: var(--gold);
+    border-bottom: 0.55pt solid var(--gold);
+  }
+
   .minor-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -714,7 +733,7 @@
       </div>
       <div class="profile-hero__side">
         <div class="big">3.41</div>
-        <p>GPA · scale not stated<br>2024 — expected 2028</p>
+        <p>GPA<br>2024 — expected 2028</p>
       </div>
     </div>
 
@@ -754,32 +773,38 @@
           <div><b>09</b><span>selected projects</span></div>
           <div><b>04</b><span>primary projects</span></div>
           <div><b>30M+</b><span>trips processed</span></div>
-          <div><b>109</b><span>automated tests</span></div>
+          <div><b>137</b><span>automated tests</span></div>
         </div>
 
         <div class="toolkit">
           <div class="toolkit__group">
-            <b>Data engineering</b>
+            <b>Programming</b>
             <div class="chips">
-              <span>Python</span><span>SQL</span><span>PySpark</span><span>Pandas</span><span>PyArrow</span><span>Parquet</span><span>Kafka</span><span>DuckDB</span><span>Delta Lake</span><span>Databricks</span>
+              <span>Python</span><span>SQL</span><span>C++</span>
             </div>
           </div>
           <div class="toolkit__group">
-            <b>Backend &amp; databases</b>
+            <b>Data</b>
             <div class="chips">
-              <span>FastAPI</span><span>Next.js</span><span>Express</span><span>PostgreSQL</span><span>SQLite</span><span>MongoDB</span><span>SQLAlchemy</span><span>Prisma</span>
+              <span>Databricks</span><span>Kafka</span><span>PySpark</span>
+            </div>
+          </div>
+          <div class="toolkit__group">
+            <b>Software &amp; databases</b>
+            <div class="chips">
+              <span>PostgreSQL</span><span>SQLite</span><span>MongoDB</span>
             </div>
           </div>
           <div class="toolkit__group">
             <b>Vision &amp; ML</b>
             <div class="chips">
-              <span>YOLO11n</span><span>ByteTrack</span><span>OpenCV</span><span>scikit-learn</span><span>CatBoost</span><span>XGBoost</span><span>PyTorch</span>
+              <span>YOLO11n</span><span>ByteTrack</span><span>scikit-learn</span>
             </div>
           </div>
           <div class="toolkit__group">
             <b>Infrastructure &amp; testing</b>
             <div class="chips">
-              <span>Docker Compose</span><span>GitHub Actions</span><span>pytest</span><span>Newman</span><span>Streamlit</span><span>Plotly</span>
+              <span>Docker / Compose</span><span>Git / GitHub</span><span>Streamlit</span>
             </div>
           </div>
         </div>
@@ -823,7 +848,7 @@
         <div class="kicker kicker--gold">Primary projects / 01–02</div>
         <h2 style="margin-top:3.5mm">One event contract,<br><em>two systems.</em></h2>
       </div>
-      <p class="lede">A vision pipeline turns highway CCTV into typed lane events. A Kafka and DuckDB platform moves those events from webhook to dashboard.</p>
+      <p class="lede">A vision pipeline turns highway CCTV into typed lane events and was tuned against 56 manually labelled vehicles. A Kafka and DuckDB platform moves those events from webhook to dashboard.</p>
     </div>
 
     <div class="flow">
@@ -834,25 +859,26 @@
       <div class="project__rail">
         <div class="kicker kicker--gold">01 · Computer vision</div>
         <h3>Highway Lane Occupancy &amp; Hogging Detection</h3>
-        <p class="scope">Single-camera prototype · prerecorded video · CPU-first · six calibrated lanes</p>
+        <p class="scope">Single-camera prototype · prerecorded video · CPU-first · 56-vehicle ground truth</p>
         <a class="project__link" href="https://github.com/ibrahim119920/highway-lane-analytics">github.com/ibrahim119920/highway-lane-analytics</a><br>
         <a class="project__link project__link--portfolio" href="https://michiportfolio.vercel.app/projects/highway-lane-occupancy">Portfolio page · michiportfolio.vercel.app</a>
       </div>
       <div class="project__body">
-        <p>Maps highway CCTV vehicles to six normalized lane polygons with YOLO11n and ByteTrack, then emits typed lane events and rule-based lane-hogging indications with snapshot and eight-second clip evidence.</p>
+        <p>Maps highway CCTV vehicles to six normalized lane polygons with YOLO11n and ByteTrack, then emits typed lane events and rule-based lane-hogging indications. The rule set was rebuilt against 56 manually labelled vehicles, lifting F1 from 0.54 to 0.93.</p>
         <ul>
-          <li>Normalized polygons keep one calibration profile valid across resolutions; lane 3 carries the overtaking role in both directions.</li>
-          <li>Adaptive anchor moves from box centre to the outer bottom corner for wide near-field vehicles; hysteresis prevents boundary flicker from creating false lane changes.</li>
-          <li>Rules are configuration: heavy vehicles in an overtaking lane and prolonged car dwell produce severity-tagged events, not legal determinations.</li>
+          <li>Lane membership is voted across five points on the bottom edge of each box, restricted to the travel direction, fixing wide near-field truck misassignment.</li>
+          <li>Legitimate overtaking is exempted using relative position and speed; the decision is made when the lane stint ends, so the whole pass is visible.</li>
+          <li>Rules monitor lanes 2 and 3. On 56 reviewed vehicles, false positives fell 9 to 5 and missed hoggers 24 to 1; per-frame replay reached 0.909 F1.</li>
+          <li>Eight-second evidence clips and thumbnails are rendered on the Kaggle computation unit and published to Nextcloud; the event record keeps the clip path, not the video itself.</li>
         </ul>
         <div class="stats">
-          <div><b>158</b><span>vehicles tracked</span></div>
-          <div><b>111</b><span>events · 5 min clip</span></div>
-          <div><b>8.65</b><span>fps on CPU</span></div>
-          <div><b>109</b><span>automated tests</span></div>
+          <div><b>56</b><span>labelled vehicles</span></div>
+          <div><b>0.93</b><span>rule F1</span></div>
+          <div><b>9 → 5</b><span>false positives</span></div>
+          <div><b>137</b><span>automated tests</span></div>
         </div>
         <div class="chips">
-          <span>Python</span><span>YOLO11n</span><span>ByteTrack</span><span>OpenCV</span><span>pytest</span>
+          <span>Python</span><span>YOLO11n</span><span>ByteTrack</span><span>OpenCV</span><span>Ground truth</span><span>pytest</span>
         </div>
       </div>
     </article>
@@ -863,7 +889,7 @@
         <h3>Highway Lane Analytics — Data Pipeline &amp; Dashboard</h3>
         <p class="scope">FastAPI receiver · Kafka · DuckDB / Parquet medallion · Streamlit · local prototype</p>
         <span class="project__link project__link--private">highway-lane-analytics-data-pipeline · private repository</span><br>
-        <a class="project__link project__link--portfolio" href="https://michiportfolio.vercel.app/projects/highway-lane-occupancy#hw-platform">Portfolio page · dashboard section</a>
+        <a class="project__link project__link--portfolio" href="https://michiportfolio.vercel.app/projects/highway-lane-analytics-data-pipeline">Portfolio page · data pipeline &amp; dashboard</a>
       </div>
       <div class="project__body">
         <p>A replay-fed data platform that receives the vision project's event batches, validates and de-duplicates them, publishes to Kafka, and builds bronze, silver, and gold layers for a four-page Streamlit dashboard.</p>
@@ -871,6 +897,7 @@
           <li>FastAPI receiver with bearer-token auth, batch limits, deterministic event keys, and de-duplication before publishing.</li>
           <li>Three Kafka topics keyed by camera_id; consumer quarantines invalid records and commits offsets only after a successful write.</li>
           <li>Silver facts for runs, events, tracks, and lane stints; gold aggregates lane usage, class mix, hogging, transitions, and run quality. Replay is idempotent.</li>
+          <li>Clips and thumbnails live in Nextcloud; the dashboard maps event metadata to those files and streams them inline through a server-side proxy, keeping credentials off the client.</li>
         </ul>
         <div class="stats">
           <div><b>111</b><span>events ingested</span></div>
@@ -883,8 +910,6 @@
         </div>
       </div>
     </article>
-
-    <div class="note"><strong>Scope note.</strong> Prototype on one camera profile and two short clips. Replay is not live inference; lane hogging is a rule-based indication, not a violation; vehicle counts are a lower bound because track IDs can switch after occlusion.</div>
   </div>
   <footer class="page-foot"><span>Ahmad Maulana Ibrahim · Selected Project Portfolio</span><span>03 / 06</span></footer>
 </section>
@@ -959,7 +984,11 @@
       </div>
     </article>
 
-    <div class="note"><strong>Scope notes.</strong> NYC covers January–September 2024 only; October–December are not loaded, so no full-year claim is made. NusaCommerce's Payment API path remains an exercise; dbt, Airflow, Kafka, and clickstream are not implemented yet. Analyses are descriptive, not causal.</div>
+    <div class="portfolio-cta">
+      <div class="kicker kicker--gold">Full portfolio</div>
+      <p>See more project detail, live dashboards, and evidence clips at <a href="https://michiportfolio.vercel.app">michiportfolio.vercel.app</a>.</p>
+    </div>
+
   </div>
   <footer class="page-foot"><span>Ahmad Maulana Ibrahim · Selected Project Portfolio</span><span>04 / 06</span></footer>
 </section>

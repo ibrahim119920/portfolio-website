@@ -544,6 +544,25 @@
   }
   .note strong { color: var(--ink); }
 
+  .portfolio-cta {
+    margin-top: 9mm;
+    padding-top: 4.5mm;
+    border-top: 0.35pt solid var(--line);
+  }
+  .portfolio-cta p {
+    margin: 2.4mm 0 0;
+    max-width: 150mm;
+    font-family: var(--serif);
+    font-size: 18pt;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .portfolio-cta a {
+    color: var(--gold);
+    border-bottom: 0.55pt solid var(--gold);
+  }
+
   .minor-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
