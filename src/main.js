@@ -4,6 +4,7 @@ import './styles.css';
 
 const analyticsEnabled = import.meta.env.PROD;
 if (analyticsEnabled) inject({ mode: 'production', disableAutoTrack: true });
+const liveDashboardHref = 'https://lane.syaifudin-fam.my.id/';
 let lastTrackedPath = null;
 
 function trackPageview(appId) {
@@ -668,7 +669,7 @@ const translations = {
     documentTitle: 'Ahmad Maulana Ibrahim — Portfolio',
     metaDescription: 'Portfolio Ahmad Maulana Ibrahim, mahasiswa Information Engineering UGM dengan proyek data engineering, backend/software, ML, dan desain arsitektur cloud.',
     systemMenus: 'Menu sistem', desktopApps: 'Aplikasi desktop',
-    portfolioStatus: 'Status portfolio', applications: 'Aplikasi', windowControls: 'Kontrol jendela', closeHelp: 'Tutup bantuan',
+    portfolioStatus: 'Status portfolio', applications: 'Aplikasi', windowControls: 'Kontrol jendela', closeHelp: 'Tutup bantuan', closeImage: 'Tutup gambar',
     menuHome: 'Beranda', menuWork: 'Karya', menuView: 'Tampilan', menuHelp: 'Bantuan',
     projects: 'Proyek', skills: 'Keahlian', learning: 'Pembelajaran', notes: 'Pembelajaran', home: 'Beranda', about: 'Profil', contact: 'Kontak',
     openSearch: 'Buka pencarian', showHelp: 'Tampilkan bantuan', switchLanguage: 'EN', switchLanguageAria: 'Beralih ke bahasa Inggris',
@@ -681,22 +682,22 @@ const translations = {
     homeKicker: 'PORTFOLIO MAHASISWA TEKNOLOGI INFORMASI',
     homeTitle: 'Data systems<br><em>built with care.</em>',
     homeIntro: 'Saya Ahmad Maulana Ibrahim, mahasiswa Information Engineering di Universitas Gadjah Mada. Saya membangun proyek data engineering dan backend/software, dengan ML dan desain cloud sebagai area pendukung.',
-    openProfile: 'Lihat profil', viewProjects: 'Lihat proyek', homeWelcome: 'SELAMAT DATANG DI PORTFOLIO',
+    openProfile: 'Lihat profil', viewProjects: 'Lihat proyek', liveDashboard: 'Dashboard live', homeWelcome: 'SELAMAT DATANG DI PORTFOLIO',
     homeWelcomeTitle: 'Karya<br>terpilih.',
     homeWelcomeBody: 'Jelajahi pekerjaan proyek, kontribusi organisasi, keahlian, dan kursus yang telah diselesaikan.',
-    featureOne: 'Data engineering', featureOneBody: 'Pipeline, kualitas data, dan pemodelan warehouse.',
-    featureTwo: 'Backend dan software', featureTwoBody: 'API, konsistensi database, dan aplikasi.',
-    featureThree: 'Area pendukung', featureThreeBody: 'Machine learning, simulasi, dan desain cloud.',
+    featureOne: 'Data engineering & dashboard', featureOneBody: 'Pipeline, kualitas data, dan dashboard.',
+    featureTwo: 'Backend/software', featureTwoBody: 'API, konsistensi database, dan aplikasi.',
+    featureThree: 'Pekerjaan proyek pendukung', featureThreeBody: 'Machine learning, simulasi, dan desain cloud.',
     currentFocus: 'PENDIDIKAN', focusBody: 'Teknologi Informasi · Universitas Gadjah Mada · 2024–perkiraan 2028.',
     homeStatus: 'Mahasiswa Teknologi Informasi',
     widgetStatus: 'Teknologi Informasi · Sleman, DIY',
-    widgetData: 'Data engineering', widgetDataSub: 'Pipeline · kualitas · warehouse',
+    widgetData: 'Data engineering & dashboard', widgetDataSub: 'Pipeline · kualitas · dashboard',
     widgetBackend: 'Backend/software', widgetBackendSub: 'API · database · sistem',
     widgetSupporting: 'Pekerjaan pendukung', widgetSupportingSub: 'ML · simulasi · desain cloud',
     widgetQuote: '“Proyek dengan konteks dan cakupan yang jelas.”', widgetQuoteCaption: 'Portfolio',
     aboutEyebrow: 'PROFIL / 001', aboutTitle: 'Tentang Ahmad', aboutDescription: 'Mahasiswa Information Engineering dengan pengalaman dari proyek individu dan kolaboratif.',
     positioningLead: 'Membangun sistem data dan software backend.',
-    projectWorkSummary: 'Dalam proyek, saya mengerjakan ingestion, kualitas data, konsistensi database, pengujian otomatis, dan layanan berbasis container.',
+    projectWorkSummary: 'Dalam proyek, saya mengerjakan ingestion, kualitas data, computer vision, konsistensi database, pengujian otomatis, layanan berbasis container, dan dashboard.',
     education: 'Pendidikan', university: 'Universitas', program: 'Program', graduation: 'Masa studi', gpa: 'GPA', location: 'Lokasi',
     organizationalExperience: 'Pengalaman organisasi', seasonal: 'Kepanitiaan',
     projectsEyebrow: 'KARYA / 003', projectsTitle: 'Proyek terpilih',
@@ -733,7 +734,7 @@ const translations = {
     documentTitle: 'Ahmad Maulana Ibrahim — Portfolio',
     metaDescription: 'Portfolio of Ahmad Maulana Ibrahim, Information Engineering undergraduate at UGM with data engineering, backend/software, ML, and cloud architecture design projects.',
     systemMenus: 'System menus', desktopApps: 'Desktop applications',
-    portfolioStatus: 'Portfolio status', applications: 'Applications', windowControls: 'Window controls', closeHelp: 'Close help',
+    portfolioStatus: 'Portfolio status', applications: 'Applications', windowControls: 'Window controls', closeHelp: 'Close help', closeImage: 'Close image',
     menuHome: 'Home', menuWork: 'Work', menuView: 'View', menuHelp: 'Help',
     projects: 'Projects', skills: 'Skills', learning: 'Learning', notes: 'Learning', home: 'Home', about: 'About', contact: 'Contact',
     openSearch: 'Open search', showHelp: 'Show help', switchLanguage: 'ID', switchLanguageAria: 'Switch to Indonesian',
@@ -746,22 +747,22 @@ const translations = {
     homeKicker: 'INFORMATION ENGINEERING PORTFOLIO',
     homeTitle: 'Data systems<br><em>built with care.</em>',
     homeIntro: 'I am Ahmad Maulana Ibrahim, an Information Engineering undergraduate at Universitas Gadjah Mada. I build data engineering and backend/software projects, with ML and cloud design as supporting areas.',
-    openProfile: 'View profile', viewProjects: 'View projects', homeWelcome: 'WELCOME TO THE PORTFOLIO',
+    openProfile: 'View profile', viewProjects: 'View projects', liveDashboard: 'Live dashboard', homeWelcome: 'WELCOME TO THE PORTFOLIO',
     homeWelcomeTitle: 'Selected<br>work.',
     homeWelcomeBody: 'Explore project work, organizational contributions, technical skills, and completed courses.',
-    featureOne: 'Data engineering', featureOneBody: 'Pipelines, data quality, and warehouse modeling.',
-    featureTwo: 'Backend and software', featureTwoBody: 'APIs, database consistency, and applications.',
-    featureThree: 'Supporting areas', featureThreeBody: 'Machine learning, simulation, and cloud design.',
+    featureOne: 'Data engineering & dashboards', featureOneBody: 'Pipelines, data quality, and dashboards.',
+    featureTwo: 'Backend/software', featureTwoBody: 'APIs, database consistency, and applications.',
+    featureThree: 'Supporting project work', featureThreeBody: 'Machine learning, simulation, and cloud design.',
     currentFocus: 'EDUCATION', focusBody: 'Information Engineering · Universitas Gadjah Mada · 2024–expected 2028.',
     homeStatus: 'Information Engineering undergraduate',
     widgetStatus: 'Information Engineering · Sleman, DIY',
-    widgetData: 'Data engineering', widgetDataSub: 'Pipelines · quality · warehouse',
+    widgetData: 'Data engineering & dashboards', widgetDataSub: 'Pipelines · quality · dashboards',
     widgetBackend: 'Backend/software', widgetBackendSub: 'APIs · databases · systems',
     widgetSupporting: 'Supporting project work', widgetSupportingSub: 'ML · simulation · cloud design',
     widgetQuote: '“Project work with clear context and scope.”', widgetQuoteCaption: 'Portfolio',
     aboutEyebrow: 'PROFILE / 001', aboutTitle: 'About Ahmad', aboutDescription: 'Information Engineering undergraduate with individual and collaborative project experience.',
     positioningLead: 'Building data systems and backend software.',
-    projectWorkSummary: 'Project work includes ingestion, data quality, database consistency, automated testing, and containerized services.',
+    projectWorkSummary: 'Project work includes ingestion, data quality, computer vision, database consistency, automated testing, containerized services, and dashboards.',
     education: 'Education', university: 'University', program: 'Program', graduation: 'Study period', gpa: 'GPA', location: 'Location',
     organizationalExperience: 'Organizational experience', seasonal: 'Seasonal',
     projectsEyebrow: 'WORK / 003', projectsTitle: 'Selected projects',
@@ -875,6 +876,7 @@ function renderHome() {
         <div class="button-row">
           <a class="button button--dark" href="/about" data-open-app="about">${t('openProfile')} <span aria-hidden="true">→</span></a>
           <a class="button button--light" href="/projects" data-open-app="projects">${t('viewProjects')} ${icon('arrow-up-right')}</a>
+          <a class="button button--light" href="${liveDashboardHref}" target="_blank" rel="noopener noreferrer">${t('liveDashboard')} ${icon('arrow-up-right')}</a>
         </div>
         <div class="identity-footnote"><span class="status-dot"></span><span>${t('homeStatus')}</span></div>
       </div>
@@ -921,7 +923,10 @@ function renderAbout() {
           <p>${escapeHtml(localized(profile.summary))}</p>
           <p>${escapeHtml(localized(profile.positioning))}</p>
           <p>${t('projectWorkSummary')}</p>
-          <a class="inline-link" href="/contact" data-open-app="contact">${localized({ id: 'Lihat kontak', en: 'View contact details' })} ${icon('arrow-up-right')}</a>
+          <div class="about-links">
+            <a class="inline-link" href="${liveDashboardHref}" target="_blank" rel="noopener noreferrer">${t('liveDashboard')} ${icon('arrow-up-right')}</a>
+            <a class="inline-link" href="/contact" data-open-app="contact">${localized({ id: 'Lihat kontak', en: 'View contact details' })} ${icon('arrow-up-right')}</a>
+          </div>
         </div>
         <aside class="profile-card" aria-label="${t('education')}">
           <div class="profile-card__top"><span class="profile-card__avatar">${escapeHtml(profile.initials)}</span><span class="profile-card__signal">${t('noEmploymentClaim')}</span></div>
@@ -3145,6 +3150,7 @@ const highwayData = {
   platform: {
     label: { id: 'Platform data dan dashboard', en: 'Data platform and dashboard' },
     heading: { id: 'Dari webhook ke dashboard', en: 'From webhook to dashboard' },
+    liveHref: liveDashboardHref,
     paragraphs: [
       {
         id: 'Receiver menerima batch berisi satu sampai dua ribu event di balik bearer token, memvalidasi payload, menduplikasi berdasarkan `event_id`, dan memublikasikan ke Kafka. Tiga topik — events, tracks, runs — dipartisi berdasarkan `camera_id` dengan retensi tujuh hari.',
@@ -3389,9 +3395,11 @@ function hwTable(caption, head, rows, className = '') {
 
 function hwFigure(src, alt, caption, ratio = '16 / 9', label = { id: 'Media pending', en: 'Media pending' }) {
   const hasSource = Boolean(src);
+  const enlargeLabel = hwLabel({ id: 'Perbesar gambar', en: 'Enlarge image' });
   return `<figure class="hw-figure${hasSource ? '' : ' is-pending'}">
     <div class="hw-figure__frame" style="--hw-ratio: ${escapeHtml(ratio)}">
       ${hasSource ? `<img src="${escapeHtml(src)}" alt="${hwLabel(alt)}" loading="lazy" decoding="async" onload="this.closest('.hw-figure').classList.add('is-loaded')" onerror="this.closest('.hw-figure').classList.add('is-pending'); this.remove()">` : ''}
+      ${hasSource ? `<button class="hw-figure__open" type="button" data-lightbox aria-label="${enlargeLabel}" title="${enlargeLabel}"><span aria-hidden="true">${icon('maximize-2')}</span></button>` : ''}
       <span class="hw-figure__pending"><span class="hw-pending">${hwLabel(label)}</span><small>${hwLabel(alt)}</small></span>
     </div>
     <figcaption>${hwRich(caption)}</figcaption>
@@ -3519,9 +3527,12 @@ function renderHighwayPipelinePage() {
         <p class="content-header__description">${escapeHtml(localized(projectField(project, 'scope')))}</p>
       </div>
       <div class="copy-mode-row">${copyModeToggle()}</div>
-      <section class="hw-cta" aria-labelledby="hwVisionFirstTitle">
-        <div><span class="hw-kicker">${hwLabel({ id: 'Mulai dari sini · 01', en: 'Start here · 01' })}</span><h3 id="hwVisionFirstTitle">${hwLabel({ id: 'Baca pipeline vision dulu', en: 'Read the vision pipeline first' })}</h3><p>${hwLabel({ id: 'Platform ini mengolah event dari pipeline kamera. Lihat bagaimana kendaraan dilacak, lajur ditentukan, dan klip bukti dibuat.', en: 'This platform processes events from the camera pipeline. See how vehicles are tracked, lanes are assigned, and evidence clips are produced.' })}</p></div>
-        <div class="hw-actions"><a class="inline-link" href="/projects/highway-lane-occupancy" data-open-app="highway">${hwLabel({ id: 'Buka Highway vision', en: 'Open Highway vision' })} ${icon('arrow-up-right')}</a></div>
+      <section class="hw-cta" aria-labelledby="hwLiveDashboardTitle">
+        <div><span class="hw-kicker">${hwLabel({ id: 'Dashboard live · 01', en: 'Live dashboard · 01' })}</span><h3 id="hwLiveDashboardTitle">${hwLabel({ id: 'Buka dashboard yang sedang berjalan', en: 'Open the running dashboard' })}</h3><p>${hwLabel({ id: 'Empat halaman di bawah ini berjalan di instance yang sudah di-deploy dengan data sesi replay. Buka dashboard live untuk melihat overview, lane usage, sinyal hogging, dan kualitas data secara langsung.', en: 'The four pages below run on the deployed instance using replay data. Open the live dashboard to browse the overview, lane usage, hogging signals, and data quality views directly.' })}</p></div>
+        <div class="hw-actions">
+          <a class="button button--light" href="${escapeHtml(data.platform.liveHref)}" target="_blank" rel="noopener noreferrer">${hwLabel({ id: 'Buka dashboard live', en: 'Open live dashboard' })} ${icon('arrow-up-right')}</a>
+          <a class="inline-link" href="/projects/highway-lane-occupancy" data-open-app="highway">${hwLabel({ id: 'Baca pipeline vision', en: 'Read the vision pipeline' })} ${icon('arrow-up-right')}</a>
+        </div>
       </section>
       <div class="hw">
         <header class="hw-hero">
@@ -3540,6 +3551,7 @@ function renderHighwayPipelinePage() {
         <section class="hw-cta" aria-labelledby="hwPipelineCtaTitle">
           <div><span class="hw-kicker">${hwLabel({ id: 'Kembali ke awal', en: 'Back to the start' })}</span><h3 id="hwPipelineCtaTitle">${hwLabel({ id: 'Lihat cara event dibuat', en: 'See how the events are made' })}</h3><p>${hwLabel({ id: 'Pipeline vision menangani deteksi kendaraan, penentuan lajur, aturan hogging, dan pembuatan klip bukti.', en: 'The vision pipeline handles vehicle detection, lane assignment, hogging rules, and evidence clip generation.' })}</p></div>
           <div class="hw-actions">
+            <a class="inline-link" href="${escapeHtml(data.platform.liveHref)}" target="_blank" rel="noopener noreferrer">${hwLabel({ id: 'Dashboard live', en: 'Live dashboard' })} ${icon('arrow-up-right')}</a>
             <a class="inline-link" href="/projects/highway-lane-occupancy" data-open-app="highway">${hwLabel({ id: 'Highway vision', en: 'Highway vision' })} ${icon('arrow-up-right')}</a>
             <a class="inline-link" href="/projects" data-open-app="projects">${hwLabel({ id: 'Semua proyek', en: 'All projects' })} ${icon('arrow-up-right')}</a>
           </div>
@@ -3807,6 +3819,39 @@ function closeHelp() {
   if (returnFocus instanceof HTMLElement) returnFocus.focus();
 }
 
+let lightboxReturnFocus = null;
+
+function openImageLightbox(trigger) {
+  const figure = trigger.closest('.hw-figure');
+  const image = figure?.querySelector('img');
+  if (!image) return;
+  const caption = figure.querySelector('figcaption')?.textContent?.trim() || '';
+  const dialog = $('#imageLightbox');
+  const preview = $('#imageLightboxImage');
+  const captionNode = $('#imageLightboxCaption');
+  lightboxReturnFocus = trigger;
+  preview.src = image.currentSrc || image.src;
+  preview.alt = image.alt || '';
+  captionNode.textContent = caption;
+  captionNode.hidden = !caption;
+  dialog.setAttribute('aria-label', image.alt || caption || 'Image preview');
+  dialog.hidden = false;
+  document.body.classList.add('is-lightbox-open');
+  $('#imageLightboxClose')?.focus();
+}
+
+function closeImageLightbox() {
+  const dialog = $('#imageLightbox');
+  if (!dialog || dialog.hidden) return;
+  dialog.hidden = true;
+  document.body.classList.remove('is-lightbox-open');
+  const preview = $('#imageLightboxImage');
+  preview.removeAttribute('src');
+  preview.alt = '';
+  if (lightboxReturnFocus instanceof HTMLElement) lightboxReturnFocus.focus();
+  lightboxReturnFocus = null;
+}
+
 function searchableItems() {
   const apps = Object.entries(appMeta).map(([id, meta]) => ({
     app: id,
@@ -3931,6 +3976,11 @@ document.addEventListener('click', (event) => {
   const routedAnchor = (element) => element.matches('a[href]')
     && (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0);
 
+  const lightboxTrigger = event.target.closest('[data-lightbox]');
+  if (lightboxTrigger) { openImageLightbox(lightboxTrigger); return; }
+  if (event.target.closest('[data-close-lightbox]')) { closeImageLightbox(); return; }
+  if (event.target.id === 'imageLightbox') { closeImageLightbox(); return; }
+
   const lakehouseControl = event.target.closest('[data-lh-stage], [data-lh-month], [data-lh-layer], [data-lh-cs]');
   if (lakehouseControl) {
     const { lhStage, lhMonth, lhLayer, lhCs } = lakehouseControl.dataset;
@@ -4044,6 +4094,7 @@ document.addEventListener('input', (event) => {
 });
 
 document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && !$('#imageLightbox').hidden) { closeImageLightbox(); return; }
   if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); openSearch(); }
   if (event.key === 'Enter' && document.activeElement?.getAttribute?.('role') === 'link') {
     event.preventDefault();

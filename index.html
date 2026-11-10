@@ -162,7 +162,7 @@
             </section>
             <section class="widget widget--queue">
               <div class="widget__eyebrow" data-i18n="homeStatus">Information Engineering undergraduate</div>
-              <div class="queue-item"><span class="queue-item__icon"><i data-lucide="database" aria-hidden="true"></i></span><span><strong data-i18n="widgetData">Data engineering</strong><small data-i18n="widgetDataSub">Pipelines · quality · warehouse</small></span><b>01</b></div>
+              <div class="queue-item"><span class="queue-item__icon"><i data-lucide="database" aria-hidden="true"></i></span><span><strong data-i18n="widgetData">Data engineering &amp; dashboards</strong><small data-i18n="widgetDataSub">Pipelines · quality · dashboards</small></span><b>01</b></div>
               <div class="queue-item"><span class="queue-item__icon"><i data-lucide="server" aria-hidden="true"></i></span><span><strong data-i18n="widgetBackend">Backend/software</strong><small data-i18n="widgetBackendSub">APIs · databases · systems</small></span><b>02</b></div>
               <div class="queue-item"><span class="queue-item__icon"><i data-lucide="chart-no-axes-combined" aria-hidden="true"></i></span><span><strong data-i18n="widgetSupporting">Supporting project work</strong><small data-i18n="widgetSupportingSub">ML · simulation · cloud design</small></span><b>03</b></div>
             </section>
@@ -216,6 +216,14 @@
             </div>
             <button class="button button--dark" type="button" data-close-help><span data-i18n="gotIt">Got it</span> <span>→</span></button>
           </section>
+        </div>
+
+        <div class="overlay image-lightbox" id="imageLightbox" hidden>
+          <figure class="image-lightbox__card" role="dialog" aria-modal="true" aria-label="Image preview">
+            <button class="icon-button image-lightbox__close" id="imageLightboxClose" type="button" data-close-lightbox aria-label="Close image" data-i18n-aria="closeImage"><i data-lucide="x" aria-hidden="true"></i></button>
+            <div class="image-lightbox__frame"><img id="imageLightboxImage" alt="" /></div>
+            <figcaption id="imageLightboxCaption" hidden></figcaption>
+          </figure>
         </div>
       </div>
     </div>
